@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CharityHub</string>
+    <string name="charityhub">CharityHub</string>
+    <string name="find_and_support_charities_easily">Find and support charities easily!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
