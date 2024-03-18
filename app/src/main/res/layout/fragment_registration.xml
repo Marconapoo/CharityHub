@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginFragment">
+    tools:context=".RegistrationFragment">
 
     <TextView
         android:id="@+id/charityhubTextView"
@@ -74,8 +74,26 @@
             android:hint="@string/password" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/confirmPasswordTextField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordTextField">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/confirmPasswordInputText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/confirm_password" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/registerButton"
         style="@style/Widget.Material3.Button.ElevatedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -83,21 +101,22 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:backgroundTint="#FFFFFF"
-        android:text="@string/log_in"
+        android:text="@string/start_donating"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/passwordTextField" />
+        app:layout_constraintTop_toBottomOf="@id/confirmPasswordTextField" />
 
     <Button
-        android:id="@+id/registerTextButton"
+        android:id="@+id/loginTextButton"
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="@string/not_registered_yet_start_here"
+        android:text="@string/already_registered_log_here"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginButton" />
+        app:layout_constraintTop_toBottomOf="@id/registerButton" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
