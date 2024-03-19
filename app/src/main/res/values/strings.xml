@@ -11,4 +11,5 @@
     <string name="start_donating">Start donating!</string>
     <string name="already_registered_log_here">Already registered? Log here!</string>
     <string name="confirm_password">Confirm password</string>
+    <string name="full_name">Full name</string>
 </resources>

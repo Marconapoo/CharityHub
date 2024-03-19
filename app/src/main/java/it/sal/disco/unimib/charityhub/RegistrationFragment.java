@@ -2,11 +2,22 @@ package it.sal.disco.unimib.charityhub;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import it.sal.disco.unimib.charityhub.model.Result;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,44 +26,19 @@ import android.view.ViewGroup;
  */
 public class RegistrationFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public RegistrationFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RegistrationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static RegistrationFragment newInstance(String param1, String param2) {
-        RegistrationFragment fragment = new RegistrationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        RegistrationFragment fragment = new RegistrationFragment();;
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -60,5 +46,40 @@ public class RegistrationFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_registration, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+
+        TextInputEditText inputEmail = view.findViewById(R.id.emailInputText);
+        TextInputEditText inputPassword = view.findViewById(R.id.passwordInputText);
+        TextInputEditText inputFullName = view.findViewById(R.id.fullNameInputText);
+        TextInputLayout emailTextField = view.findViewById(R.id.emailTextField);
+        TextInputLayout passwordTextField = view.findViewById(R.id.passwordTextField);
+        TextInputLayout fullNameTextField = view.findViewById(R.id.fullNameTextField);
+        Button registerButton = view.findViewById(R.id.registerButton);
+        Button logInTextButton = view.findViewById(R.id.loginTextButton);
+
+        registerButton.setOnClickListener(v -> {
+            String email = inputEmail.getText().toString();
+            String password = inputPassword.getText().toString();
+            String fullName = inputFullName.getText().toString();
+
+            userViewModel.getUserLiveData(email, password, fullName, false).observe(getViewLifecycleOwner(), result -> {
+                if(result.isSuccess()) {
+                    Navigation.findNavController(v).navigate(R.id.action_registrationFragment_to_mainActivity);
+                }
+                else {
+                    Log.e("Registration Fragment", ((Result.Error) result).getErrorMessage());
+                }
+            });
+        });
+
+        logInTextButton.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.action_registrationFragment_to_loginFragment);
+        });
+        super.onViewCreated(view, savedInstanceState);
     }
 }

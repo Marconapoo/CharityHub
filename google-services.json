@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "636670904051",
+    "project_id": "charityhub-b1aa5",
+    "storage_bucket": "charityhub-b1aa5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:636670904051:android:5422623dd05d80a6a99986",
+        "android_client_info": {
+          "package_name": "it.sal.disco.unimib.charityhub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1M9nuHE9qOLmH2g-dn1sAscRjvFGMFWo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

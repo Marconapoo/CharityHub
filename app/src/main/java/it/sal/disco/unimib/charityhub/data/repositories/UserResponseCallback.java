@@ -6,4 +6,5 @@ public interface UserResponseCallback {
     void onSuccessAuthentication(User user);
     void onFailureAuthentication(String error);
     void onSuccessLogout();
+    void onSuccessUserSaved(User user);
 }
