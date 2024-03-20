@@ -1,4 +1,4 @@
-package it.sal.disco.unimib.charityhub.data.source;
+package it.sal.disco.unimib.charityhub.data.source.user;
 
 import androidx.annotation.NonNull;
 
@@ -76,5 +76,16 @@ public class UserAuthenticationDataSource extends BaseUserAuthenticationDataSour
         };
         firebaseAuth.addAuthStateListener(authStateListener);
         firebaseAuth.signOut();
+    }
+
+    @Override
+    public User getLoggedUser() {
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if(firebaseUser != null) {
+            return new User(firebaseUser.getDisplayName(), firebaseUser.getEmail(), firebaseUser.getUid());
+        }
+        else {
+            return null;
+        }
     }
 }

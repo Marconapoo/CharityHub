@@ -1,15 +1,18 @@
-package it.sal.disco.unimib.charityhub.data.source;
+package it.sal.disco.unimib.charityhub.data.source.user;
 
 import it.sal.disco.unimib.charityhub.data.repositories.UserResponseCallback;
 import it.sal.disco.unimib.charityhub.model.User;
 
-public abstract class BaseUserDataRemoteDataSource {
-
+public abstract class BaseUserAuthenticationDataSource {
     protected UserResponseCallback userResponseCallback;
 
     public void setUserResponseCallback(UserResponseCallback userResponseCallback) {
         this.userResponseCallback = userResponseCallback;
     }
 
-    public abstract void saveUserData(User user);
+    public abstract void logIn(String email, String password);
+    public abstract void signIn(String email, String password, String fullName);
+    public abstract void logOut();
+    public abstract User getLoggedUser();
+
 }

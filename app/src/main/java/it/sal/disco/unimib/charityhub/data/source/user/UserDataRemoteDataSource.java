@@ -1,4 +1,4 @@
-package it.sal.disco.unimib.charityhub.data.source;
+package it.sal.disco.unimib.charityhub.data.source.user;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 

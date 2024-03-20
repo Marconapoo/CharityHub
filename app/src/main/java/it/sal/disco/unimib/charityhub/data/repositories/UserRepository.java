@@ -2,10 +2,10 @@ package it.sal.disco.unimib.charityhub.data.repositories;
 
 import androidx.lifecycle.MutableLiveData;
 
-import it.sal.disco.unimib.charityhub.data.source.BaseUserAuthenticationDataSource;
-import it.sal.disco.unimib.charityhub.data.source.BaseUserDataRemoteDataSource;
-import it.sal.disco.unimib.charityhub.data.source.UserAuthenticationDataSource;
-import it.sal.disco.unimib.charityhub.data.source.UserDataRemoteDataSource;
+import it.sal.disco.unimib.charityhub.data.source.user.BaseUserAuthenticationDataSource;
+import it.sal.disco.unimib.charityhub.data.source.user.BaseUserDataRemoteDataSource;
+import it.sal.disco.unimib.charityhub.data.source.user.UserAuthenticationDataSource;
+import it.sal.disco.unimib.charityhub.data.source.user.UserDataRemoteDataSource;
 import it.sal.disco.unimib.charityhub.model.Result;
 import it.sal.disco.unimib.charityhub.model.User;
 
@@ -19,6 +19,7 @@ public class UserRepository implements IUserRepository, UserResponseCallback {
         this.userAuthenticationDataSource = new UserAuthenticationDataSource();
         this.userDataRemoteDataSource = new UserDataRemoteDataSource();
         userAuthenticationDataSource.setUserResponseCallback(this);
+        userDataRemoteDataSource.setUserResponseCallback(this);
         this.userLiveData = new MutableLiveData<>();
     }
 
@@ -30,6 +31,12 @@ public class UserRepository implements IUserRepository, UserResponseCallback {
             userAuthenticationDataSource.signIn(email, password, fullName);
         return userLiveData;
     }
+
+    @Override
+    public User getLoggedUser() {
+        return userAuthenticationDataSource.getLoggedUser();
+    }
+
 
     @Override
     public void onSuccessAuthentication(User user) {

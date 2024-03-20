@@ -1,4 +1,4 @@
-package it.sal.disco.unimib.charityhub;
+package it.sal.disco.unimib.charityhub.ui.welcome;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 import it.sal.disco.unimib.charityhub.data.repositories.IUserRepository;
 import it.sal.disco.unimib.charityhub.data.repositories.UserRepository;
 import it.sal.disco.unimib.charityhub.model.Result;
+import it.sal.disco.unimib.charityhub.model.User;
 
 public class UserViewModel extends ViewModel {
 
@@ -22,5 +23,8 @@ public class UserViewModel extends ViewModel {
         return userLiveData;
     }
 
+    public User getLoggedUser() {
+        return userRepository.getLoggedUser();
+    }
 
 }

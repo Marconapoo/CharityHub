@@ -1,4 +1,4 @@
-package it.sal.disco.unimib.charityhub;
+package it.sal.disco.unimib.charityhub.ui.welcome;
 
 import android.os.Bundle;
 
@@ -17,15 +17,12 @@ import android.widget.Button;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import it.sal.disco.unimib.charityhub.R;
 import it.sal.disco.unimib.charityhub.model.Result;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RegistrationFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RegistrationFragment extends Fragment {
 
+    UserViewModel userViewModel;
 
     public RegistrationFragment() {
         // Required empty public constructor
@@ -51,7 +48,7 @@ public class RegistrationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 
         TextInputEditText inputEmail = view.findViewById(R.id.emailInputText);
         TextInputEditText inputPassword = view.findViewById(R.id.passwordInputText);
@@ -70,6 +67,7 @@ public class RegistrationFragment extends Fragment {
             userViewModel.getUserLiveData(email, password, fullName, false).observe(getViewLifecycleOwner(), result -> {
                 if(result.isSuccess()) {
                     Navigation.findNavController(v).navigate(R.id.action_registrationFragment_to_mainActivity);
+                    requireActivity().finish();
                 }
                 else {
                     Log.e("Registration Fragment", ((Result.Error) result).getErrorMessage());
@@ -81,5 +79,13 @@ public class RegistrationFragment extends Fragment {
             Navigation.findNavController(v).navigate(R.id.action_registrationFragment_to_loginFragment);
         });
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(userViewModel != null && userViewModel.getLoggedUser() != null) {
+            Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_mainActivity);
+        }
     }
 }
