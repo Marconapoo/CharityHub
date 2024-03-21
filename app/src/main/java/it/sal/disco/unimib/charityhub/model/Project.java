@@ -3,6 +3,8 @@ package it.sal.disco.unimib.charityhub.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Project implements Parcelable {
 
     private int id;
@@ -11,6 +13,7 @@ public class Project implements Parcelable {
     private String summary;
     private String country;
     private String city;
+    @SerializedName("imageLink")
     private String imageUrl;
     private float goal;
     private float funding;

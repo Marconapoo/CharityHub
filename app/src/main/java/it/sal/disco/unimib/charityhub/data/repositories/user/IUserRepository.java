@@ -1,4 +1,4 @@
-package it.sal.disco.unimib.charityhub.data.repositories;
+package it.sal.disco.unimib.charityhub.data.repositories.user;
 
 import androidx.lifecycle.MutableLiveData;
 

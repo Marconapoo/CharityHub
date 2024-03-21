@@ -1,4 +1,4 @@
-package it.sal.disco.unimib.charityhub.data.repositories;
+package it.sal.disco.unimib.charityhub.data.repositories.user;
 
 import it.sal.disco.unimib.charityhub.model.User;
 

@@ -3,8 +3,8 @@ package it.sal.disco.unimib.charityhub.ui.welcome;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import it.sal.disco.unimib.charityhub.data.repositories.IUserRepository;
-import it.sal.disco.unimib.charityhub.data.repositories.UserRepository;
+import it.sal.disco.unimib.charityhub.data.repositories.user.IUserRepository;
+import it.sal.disco.unimib.charityhub.data.repositories.user.UserRepository;
 import it.sal.disco.unimib.charityhub.model.Result;
 import it.sal.disco.unimib.charityhub.model.User;
 

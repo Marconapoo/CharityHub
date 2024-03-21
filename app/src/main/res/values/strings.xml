@@ -12,4 +12,5 @@
     <string name="already_registered_log_here">Already registered? Log here!</string>
     <string name="confirm_password">Confirm password</string>
     <string name="full_name">Full name</string>
+    <string name="find_out_more">Find out more</string>
 </resources>
