@@ -22,10 +22,13 @@ public class ProjectRepository implements IProjectRepository, ProjectCallback {
 
 
     public MutableLiveData<Result> getProjectsLiveData(String themeId, Integer nextProjectId) {
-        projectDataSource.getProjectsByTheme(themeId, nextProjectId);
+        loadProjects(themeId, nextProjectId);
         return projectsLiveData;
     }
 
+    public void loadProjects(String themeId, Integer nextProjectId) {
+        projectDataSource.getProjectsByTheme(themeId, nextProjectId);
+    }
     @Override
     public void onProjectsLoaded(ProjectsApiResponse projects) {
         Result.ProjectResponseSuccess result = new Result.ProjectResponseSuccess(projects);

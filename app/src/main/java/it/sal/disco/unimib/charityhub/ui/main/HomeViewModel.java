@@ -20,12 +20,12 @@ public class HomeViewModel extends ViewModel {
     }
 
     public MutableLiveData<Result> getProjectsLiveData(String themeId, Integer nextProjectId) {
-        getProjects(themeId, nextProjectId);
+        projectsLiveData = projectRepository.getProjectsLiveData(themeId, nextProjectId);
         return projectsLiveData;
     }
 
     public void getProjects(String themeId, Integer nextProjectId) {
-        projectsLiveData = projectRepository.getProjectsLiveData(themeId, nextProjectId);
+        projectRepository.loadProjects(themeId, nextProjectId);
     }
 
     public boolean isFirstLoading() {
@@ -58,5 +58,9 @@ public class HomeViewModel extends ViewModel {
 
     public void setTotalResults(int totalResults) {
         this.totalResults = totalResults;
+    }
+
+    public boolean isLastPage() {
+        return currentResults >= totalResults;
     }
 }

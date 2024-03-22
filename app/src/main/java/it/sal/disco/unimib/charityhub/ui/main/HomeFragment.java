@@ -30,6 +30,9 @@ public class HomeFragment extends Fragment {
 
 
     HomeViewModel homeViewModel;
+    List<Project> projectList;
+    ProjectAdapter projectAdapter;
+    RecyclerView recyclerView;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -57,29 +60,60 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
-        RecyclerView recyclerView = view.findViewById(R.id.projectsRV);
+        recyclerView = view.findViewById(R.id.projectsRV);
         homeViewModel.setFirstLoading(true);
-        List<Project> projectList = new ArrayList<>();
-        ProjectAdapter projectAdapter = new ProjectAdapter(projectList, requireContext());
+        projectList = new ArrayList<>();
+        projectAdapter = new ProjectAdapter(projectList, requireContext());
         recyclerView.setAdapter(projectAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setHasFixedSize(true);
-        homeViewModel.getProjectsLiveData("env", null).observe(getViewLifecycleOwner(), result -> {
-            if(result.isSuccess()) {
 
-                List<Project> fetchedProjects =  ((Result.ProjectResponseSuccess) result).getProjectsApiResponse().getProjects().getProject();
-                int startPosition = projectList.size();
-                projectList.addAll(fetchedProjects);
+        loadData(null);
 
-                projectAdapter.notifyItemRangeInserted(startPosition, fetchedProjects.size());
-            }
-            else {
-                Log.e("Home Fragment", ((Result.Error) result).getErrorMessage());
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+
+                // Se l'utente è vicino alla fine della lista e non stiamo già caricando, carica più dati
+                if (!homeViewModel.isLoading() && totalItemCount == lastVisibleItem + 1) {
+                    Log.e("Home Fragment", String.valueOf(projectAdapter.getProject(lastVisibleItem).getId()));
+                    // Carica più dati qui
+                    homeViewModel.setLoading(true);
+                    homeViewModel.getProjects("env", projectAdapter.getProject(lastVisibleItem).getId());
+                }
             }
         });
 
+    }
 
+    public void loadData(Integer lastProjectId) {
+        if(homeViewModel.isLoading())
+            return;
+        homeViewModel.setLoading(true);
+        homeViewModel.getProjectsLiveData("env", lastProjectId).observe(getViewLifecycleOwner(), result -> {
+            if (result.isSuccess()) {
+                homeViewModel.setLoading(false);
+                List<Project> fetchedProjects = ((Result.ProjectResponseSuccess) result).getProjectsApiResponse().getProjects().getProject();
+                int startPosition = projectList.size();
+                if(homeViewModel.isFirstLoading()) {
+                    projectList.addAll(fetchedProjects);
+                    homeViewModel.setFirstLoading(false);
+                }
+                else {
+                    fetchedProjects.remove(fetchedProjects.get(0));
+                    projectList.addAll(fetchedProjects);
+                }
+                Log.e("Home fragment", String.valueOf(projectList.size()));
+                recyclerView.post(() -> projectAdapter.notifyItemRangeInserted(startPosition, projectList.size()));
 
+            } else {
+                Log.e("Home Fragment", ((Result.Error) result).getErrorMessage());
+            }
+        });
     }
 
     @Override

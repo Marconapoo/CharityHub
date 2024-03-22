@@ -56,15 +56,16 @@
                 android:textStyle="italic" />
 
             <!-- Progress Bar -->
-            <ProgressBar
+            <com.google.android.material.progressindicator.LinearProgressIndicator
                 android:id="@+id/donationProgressBar"
-                style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:max="100"
                 android:progress="50"
-                android:progressTint="#28E357" />
+                app:indicatorColor="#2DFA1E" />
+
+
 
         </LinearLayout>
 

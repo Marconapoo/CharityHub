@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
         holder.title.setText(project.getTitle());
         holder.summary.setText(project.getSummary());
         Glide.with(context).load(project.getImageUrl()).into(holder.image);
+        holder.progressBar.setProgress((int) (project.getFunding()*100/project.getGoal()));
         // Set other views as needed
     }
 
@@ -49,12 +51,16 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
         return projects.size();
     }
 
+    public Project getProject(int projectId) {
+        return projects.get(projectId);
+    }
+
     public static class ProjectViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView image;
         private final TextView title;
         private final TextView summary;
-
+        private final ProgressBar progressBar;
         // Declare other views here
 
         public ProjectViewHolder(@NonNull View itemView) {
@@ -62,6 +68,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
             image = itemView.findViewById(R.id.projectImage);
             title = itemView.findViewById(R.id.projectTitle);
             summary = itemView.findViewById(R.id.projectSummary);
+            progressBar = itemView.findViewById(R.id.donationProgressBar);
             // Initialize other views here
         }
 
