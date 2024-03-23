@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,10 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        homeViewModel.setFirstLoading(true);
+        projectList = new ArrayList<>();
+
     }
 
     @Override
@@ -59,16 +65,32 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         recyclerView = view.findViewById(R.id.projectsRV);
-        homeViewModel.setFirstLoading(true);
-        projectList = new ArrayList<>();
         projectAdapter = new ProjectAdapter(projectList, requireContext());
+        recyclerView.setAdapter(null);
         recyclerView.setAdapter(projectAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
+        //recyclerView.setItemAnimator(null);
+        homeViewModel.setLoading(true);
 
-        loadData(null);
+
+        homeViewModel.getProjectsLiveData("env", null).observe(getViewLifecycleOwner(), result -> {
+            if (result.isSuccess()) {
+                homeViewModel.setLoading(false);
+                List<Project> fetchedProjects = ((Result.ProjectResponseSuccess) result).getProjectsApiResponse().getProjects().getProject();
+                int startPosition = projectList.size();
+                for(Project project : fetchedProjects) {
+                    if(!checkDuplicates(project)) {
+                        projectList.add(project);
+                    }
+                }
+                updateUi(startPosition);
+            } else {
+                Log.e("Home Fragment", ((Result.Error) result).getErrorMessage());
+                Snackbar.make(requireActivity().findViewById(android.R.id.content), ((Result.Error) result).getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+            }
+        });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -90,34 +112,23 @@ public class HomeFragment extends Fragment {
 
     }
 
-    public void loadData(Integer lastProjectId) {
-        if(homeViewModel.isLoading())
-            return;
-        homeViewModel.setLoading(true);
-        homeViewModel.getProjectsLiveData("env", lastProjectId).observe(getViewLifecycleOwner(), result -> {
-            if (result.isSuccess()) {
-                homeViewModel.setLoading(false);
-                List<Project> fetchedProjects = ((Result.ProjectResponseSuccess) result).getProjectsApiResponse().getProjects().getProject();
-                int startPosition = projectList.size();
-                if(homeViewModel.isFirstLoading()) {
-                    projectList.addAll(fetchedProjects);
-                    homeViewModel.setFirstLoading(false);
-                }
-                else {
-                    fetchedProjects.remove(fetchedProjects.get(0));
-                    projectList.addAll(fetchedProjects);
-                }
-                Log.e("Home fragment", String.valueOf(projectList.size()));
-                recyclerView.post(() -> projectAdapter.notifyItemRangeInserted(startPosition, projectList.size()));
-
-            } else {
-                Log.e("Home Fragment", ((Result.Error) result).getErrorMessage());
+    public boolean checkDuplicates(Project projects) {
+        for(Project p : projectList) {
+            if(p.getId() == projects.getId()) {
+                return true;
             }
-        });
+        }
+        return false;
+    }
+
+    public void updateUi(int startPosition) {
+        recyclerView.post(() -> projectAdapter.notifyItemRangeInserted(startPosition, projectList.size()));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+;        homeViewModel.setLoading(false);
     }
+
 }

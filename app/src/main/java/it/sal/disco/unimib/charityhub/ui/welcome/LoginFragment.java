@@ -89,6 +89,7 @@ public class LoginFragment extends Fragment {
         super.onStart();
         if(userViewModel != null && userViewModel.getLoggedUser() != null) {
             Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_mainActivity);
+            requireActivity().finish();
         }
     }
 }

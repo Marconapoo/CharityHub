@@ -55,6 +55,14 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
         return projects.get(projectId);
     }
 
+    public boolean isAdapterEmpty() {
+        return projects.isEmpty();
+    }
+
+    public void clearAdapter() {
+
+    }
+
     public static class ProjectViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView image;

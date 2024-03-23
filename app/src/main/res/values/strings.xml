@@ -13,4 +13,9 @@
     <string name="confirm_password">Confirm password</string>
     <string name="full_name">Full name</string>
     <string name="find_out_more">Find out more</string>
+    <string name="enviroment">Enviroment</string>
+    <string name="animal_welfare">Animal Welfare</string>
+    <string name="child_protection">Child Protection</string>
+    <string name="climate_action">Climate Action</string>
+    <string name="peace_and_reconciliation">Peace and Reconciliation</string>
 </resources>
