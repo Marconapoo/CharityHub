@@ -9,4 +9,6 @@ public abstract class BaseProjectDataSource {
     }
 
     public abstract void getProjectsByTheme(String themeID, Integer nextProjectId);
+
+    public abstract void getThemes();
 }

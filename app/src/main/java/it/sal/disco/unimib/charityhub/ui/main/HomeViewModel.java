@@ -10,6 +10,7 @@ public class HomeViewModel extends ViewModel {
 
     private final ProjectRepository projectRepository;
     private MutableLiveData<Result> projectsLiveData;
+    private  MutableLiveData<Result> themesLiveData;
     private boolean isLoading;
     private boolean isFirstLoading;
     private int currentResults;
@@ -62,5 +63,10 @@ public class HomeViewModel extends ViewModel {
 
     public boolean isLastPage() {
         return currentResults >= totalResults;
+    }
+
+    public MutableLiveData<Result> getThemesLiveData() {
+        themesLiveData = projectRepository.getThemesLiveData();
+        return themesLiveData;
     }
 }

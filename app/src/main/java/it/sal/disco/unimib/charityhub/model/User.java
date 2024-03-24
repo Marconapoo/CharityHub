@@ -9,23 +9,31 @@ public class User implements Parcelable {
     private String name;
     private String email;
     private String Uid;
+    private String countryOfInterest;
 
-    public User(String name, String email, String Uid) {
+    public User(String name, String email, String uid) {
         this.name = name;
         this.email = email;
-        this.Uid = Uid;
+        Uid = uid;
+    }
+
+    public User(String name, String email, String uid, String countryOfInterest) {
+        this.name = name;
+        this.email = email;
+        Uid = uid;
+        this.countryOfInterest = countryOfInterest;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setEmail(String email) {
@@ -40,12 +48,22 @@ public class User implements Parcelable {
         Uid = uid;
     }
 
+    public String getCountryOfInterest() {
+        return countryOfInterest;
+    }
 
+    public void setCountryOfInterest(String countryOfInterest) {
+        this.countryOfInterest = countryOfInterest;
+    }
 
-    @NonNull
     @Override
     public String toString() {
-        return "{ name : " + name + "\nemail: " + email;
+        return "User{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", Uid='" + Uid + '\'' +
+                ", countryOfInterest='" + countryOfInterest + '\'' +
+                '}';
     }
 
 
@@ -59,21 +77,24 @@ public class User implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.email);
         dest.writeString(this.Uid);
+        dest.writeString(this.countryOfInterest);
     }
 
     public void readFromParcel(Parcel source) {
         this.name = source.readString();
         this.email = source.readString();
         this.Uid = source.readString();
+        this.countryOfInterest = source.readString();
     }
 
     protected User(Parcel in) {
         this.name = in.readString();
         this.email = in.readString();
         this.Uid = in.readString();
+        this.countryOfInterest = in.readString();
     }
 
-    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+    public static final Creator<User> CREATOR = new Creator<User>() {
         @Override
         public User createFromParcel(Parcel source) {
             return new User(source);

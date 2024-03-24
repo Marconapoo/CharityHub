@@ -1,6 +1,7 @@
 package it.sal.disco.unimib.charityhub.data.service;
 
 import it.sal.disco.unimib.charityhub.model.ProjectsApiResponse;
+import it.sal.disco.unimib.charityhub.model.ThemesApiResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -27,6 +28,13 @@ public interface ProjectApiService {
 
     @GET("countries/{iso3166CountryCode}/projects")
     Call<ProjectsApiResponse> getAllProjectsByCountry(
+        @Query("api_key") String api_key,
+        @Header("Content-Type") String content_type,
+        @Header("Accept") String accept
+    );
+
+    @GET("themes")
+    Call<ThemesApiResponse> getThemes(
         @Query("api_key") String api_key,
         @Header("Content-Type") String content_type,
         @Header("Accept") String accept

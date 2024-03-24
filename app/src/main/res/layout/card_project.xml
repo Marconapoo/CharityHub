@@ -5,10 +5,7 @@
     android:id="@+id/card"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:layout_margin="8dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    android:layout_margin="8dp" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +16,7 @@
         <ImageView
             android:id="@+id/projectImage"
             android:layout_width="match_parent"
-            android:layout_height="194dp"
+            android:layout_height="200dp"
             android:scaleType="centerCrop" />
 
         <LinearLayout
@@ -36,6 +33,7 @@
                 android:text="Placeholder text"
                 android:textAppearance="?attr/textAppearanceTitleMedium" />
 
+            <!--
             <TextView
                 android:id="@+id/projectSummary"
                 android:layout_width="wrap_content"
@@ -43,7 +41,7 @@
                 android:layout_marginTop="8dp"
                 android:text="Placeholder text"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary" /> -->
 
             <TextView
                 android:id="@+id/currenProgressTextView"
@@ -63,7 +61,7 @@
                 android:layout_marginTop="8dp"
                 android:max="100"
                 android:progress="50"
-                app:indicatorColor="#2DFA1E" />
+                app:indicatorColor="#087800" />
 
 
 

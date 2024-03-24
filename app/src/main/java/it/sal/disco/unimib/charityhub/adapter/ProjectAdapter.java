@@ -40,7 +40,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
         Project project = projects.get(position);
         // Bind data to views in the ViewHolder
         holder.title.setText(project.getTitle());
-        holder.summary.setText(project.getSummary());
+        //holder.summary.setText(project.getSummary());
         Glide.with(context).load(project.getImageUrl()).into(holder.image);
         holder.progressBar.setProgress((int) (project.getFunding()*100/project.getGoal()));
         // Set other views as needed
@@ -67,7 +67,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
 
         private final ImageView image;
         private final TextView title;
-        private final TextView summary;
+        //private final TextView summary;
         private final ProgressBar progressBar;
         // Declare other views here
 
@@ -75,7 +75,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
             super(itemView);
             image = itemView.findViewById(R.id.projectImage);
             title = itemView.findViewById(R.id.projectTitle);
-            summary = itemView.findViewById(R.id.projectSummary);
+            //summary = itemView.findViewById(R.id.projectSummary);
             progressBar = itemView.findViewById(R.id.donationProgressBar);
             // Initialize other views here
         }

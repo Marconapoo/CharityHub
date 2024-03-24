@@ -5,7 +5,7 @@ public abstract class Result {
     private Result() {}
 
     public boolean isSuccess() {
-        return this instanceof UserResponseSuccess || this instanceof ProjectResponseSuccess;
+        return this instanceof UserResponseSuccess || this instanceof ProjectResponseSuccess || this instanceof ThemesResponseSuccess;
     }
 
     public static final class UserResponseSuccess extends Result {
@@ -28,6 +28,19 @@ public abstract class Result {
 
         public ProjectsApiResponse getProjectsApiResponse() {
             return projectsApiResponse;
+        }
+    }
+
+
+    public static final class ThemesResponseSuccess extends Result {
+        private final ThemesApiResponse themesApiResponse;
+
+        public ThemesResponseSuccess(ThemesApiResponse themesApiResponse) {
+            this.themesApiResponse = themesApiResponse;
+        }
+
+        public ThemesApiResponse getThemesApiResponse() {
+            return themesApiResponse;
         }
     }
 

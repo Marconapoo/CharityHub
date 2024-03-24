@@ -1,9 +1,11 @@
 package it.sal.disco.unimib.charityhub.ui.main;
 
+import android.net.ipsec.ike.ChildSaProposal;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,6 +17,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipDrawable;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
 import com.google.android.material.snackbar.Snackbar;
@@ -27,6 +32,8 @@ import it.sal.disco.unimib.charityhub.adapter.ProjectAdapter;
 import it.sal.disco.unimib.charityhub.data.repositories.project.ProjectRepository;
 import it.sal.disco.unimib.charityhub.model.Project;
 import it.sal.disco.unimib.charityhub.model.Result;
+import it.sal.disco.unimib.charityhub.model.Theme;
+import it.sal.disco.unimib.charityhub.model.ThemesApiResponse;
 
 public class HomeFragment extends Fragment {
 
@@ -35,6 +42,7 @@ public class HomeFragment extends Fragment {
     List<Project> projectList;
     ProjectAdapter projectAdapter;
     RecyclerView recyclerView;
+    Theme currentTheme;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -74,7 +82,38 @@ public class HomeFragment extends Fragment {
         //recyclerView.setItemAnimator(null);
         homeViewModel.setLoading(true);
 
+        ChipGroup chipGroup = view.findViewById(R.id.chipGroup);
 
+        homeViewModel.getThemesLiveData().observe(getViewLifecycleOwner(), result -> {
+            if(result.isSuccess()) {
+                ThemesApiResponse themesApiResponse = ((Result.ThemesResponseSuccess) result).getThemesApiResponse();
+                List<Theme> themes = themesApiResponse.getThemeData().getThemes();
+                for(Theme theme : themes) {
+                    Log.w("Home fragment", theme.getName());
+                    Chip chip = new Chip(requireContext());
+                    chip.setId(ViewCompat.generateViewId());
+                    chip.setText(theme.getName());
+                    chip.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Pulisci la lista dei progetti attualmente visualizzati
+                            int projectListSize = projectList.size();
+                            projectList.clear();
+                            // Notifica all'adapter che i dati sono cambiati
+                            projectAdapter.notifyItemRangeRemoved(0, projectListSize);
+                            homeViewModel.getProjects(theme.getId(), null);
+                            currentTheme = theme;
+                        }
+                    });
+                    ChipDrawable chipDrawable = ChipDrawable.createFromAttributes(requireContext(), null, 0, com.google.android.material.R.style.Widget_Material3_Chip_Filter);
+                    chip.setChipDrawable(chipDrawable);
+                    chipGroup.addView(chip);
+                }
+            }
+            else {
+                Log.e("Home fragment", ((Result.Error) result).getErrorMessage());
+            }
+        });
         homeViewModel.getProjectsLiveData("env", null).observe(getViewLifecycleOwner(), result -> {
             if (result.isSuccess()) {
                 homeViewModel.setLoading(false);
@@ -100,12 +139,17 @@ public class HomeFragment extends Fragment {
                 int totalItemCount = layoutManager.getItemCount();
                 int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
 
-                // Se l'utente è vicino alla fine della lista e non stiamo già caricando, carica più dati
-                if (!homeViewModel.isLoading() && totalItemCount == lastVisibleItem + 1) {
-                    Log.e("Home Fragment", String.valueOf(projectAdapter.getProject(lastVisibleItem).getId()));
-                    // Carica più dati qui
-                    homeViewModel.setLoading(true);
-                    homeViewModel.getProjects("env", projectAdapter.getProject(lastVisibleItem).getId());
+                if(totalItemCount > 0) {
+                    // Se l'utente è vicino alla fine della lista e non stiamo già caricando, carica più dati
+                    if (!homeViewModel.isLoading() && totalItemCount == lastVisibleItem + 1) {
+                        //Log.e("Home Fragment", String.valueOf(projectAdapter.getProject(lastVisibleItem).getId()));
+                        // Carica più dati qui
+                        homeViewModel.setLoading(true);
+                        if (currentTheme != null)
+                            homeViewModel.getProjects(currentTheme.getId(), projectAdapter.getProject(lastVisibleItem).getId());
+                        else
+                            homeViewModel.getProjects("env", projectAdapter.getProject(lastVisibleItem).getId());
+                    }
                 }
             }
         });
