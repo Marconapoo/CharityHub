@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
@@ -31,6 +32,7 @@ import it.sal.disco.unimib.charityhub.R;
 import it.sal.disco.unimib.charityhub.adapter.ProjectAdapter;
 import it.sal.disco.unimib.charityhub.data.repositories.project.ProjectRepository;
 import it.sal.disco.unimib.charityhub.model.Project;
+import it.sal.disco.unimib.charityhub.model.ProjectsApiResponse;
 import it.sal.disco.unimib.charityhub.model.Result;
 import it.sal.disco.unimib.charityhub.model.Theme;
 import it.sal.disco.unimib.charityhub.model.ThemesApiResponse;
@@ -59,7 +61,6 @@ public class HomeFragment extends Fragment {
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         homeViewModel.setFirstLoading(true);
         projectList = new ArrayList<>();
-
     }
 
     @Override
@@ -93,15 +94,13 @@ public class HomeFragment extends Fragment {
                     Chip chip = new Chip(requireContext());
                     chip.setId(ViewCompat.generateViewId());
                     chip.setText(theme.getName());
-                    chip.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Pulisci la lista dei progetti attualmente visualizzati
+                    chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                        if(isChecked) {
                             int projectListSize = projectList.size();
                             projectList.clear();
                             // Notifica all'adapter che i dati sono cambiati
                             projectAdapter.notifyItemRangeRemoved(0, projectListSize);
-                            homeViewModel.getProjects(theme.getId(), null);
+                            homeViewModel.searchProjects("country:it,theme:" +theme.getId(), null);
                             currentTheme = theme;
                         }
                     });
@@ -114,13 +113,16 @@ public class HomeFragment extends Fragment {
                 Log.e("Home fragment", ((Result.Error) result).getErrorMessage());
             }
         });
-        homeViewModel.getProjectsLiveData("env", null).observe(getViewLifecycleOwner(), result -> {
-            if (result.isSuccess()) {
+
+        homeViewModel.searchForProjects("country:it", null).observe(getViewLifecycleOwner(), result -> {
+            if(result.isSuccess()) {
                 homeViewModel.setLoading(false);
-                List<Project> fetchedProjects = ((Result.ProjectResponseSuccess) result).getProjectsApiResponse().getProjects().getProject();
+
+                ProjectsApiResponse projectResponseSuccess = ((Result.ProjectResponseSuccess) result).getProjectsApiResponse();
+                List<Project> fetchedProjects = ((Result.ProjectResponseSuccess) result).getProjectsApiResponse().getSearch().getResponse().getProjectData().getProjectList();
                 int startPosition = projectList.size();
-                for(Project project : fetchedProjects) {
-                    if(!checkDuplicates(project)) {
+                for (Project project : fetchedProjects) {
+                    if (!checkDuplicates(project)) {
                         projectList.add(project);
                     }
                 }
@@ -130,7 +132,6 @@ public class HomeFragment extends Fragment {
                 Snackbar.make(requireActivity().findViewById(android.R.id.content), ((Result.Error) result).getErrorMessage(), Snackbar.LENGTH_SHORT).show();
             }
         });
-
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -146,9 +147,10 @@ public class HomeFragment extends Fragment {
                         // Carica più dati qui
                         homeViewModel.setLoading(true);
                         if (currentTheme != null)
-                            homeViewModel.getProjects(currentTheme.getId(), projectAdapter.getProject(lastVisibleItem).getId());
+                            //homeViewModel.getProjects(currentTheme.getId(), projectAdapter.getProject(lastVisibleItem).getId());
+                            homeViewModel.searchProjects("country:it,theme:" + currentTheme.getId(), projectAdapter.getProject(lastVisibleItem).getId());
                         else
-                            homeViewModel.getProjects("env", projectAdapter.getProject(lastVisibleItem).getId());
+                            homeViewModel.searchProjects("country:it,theme:edu", projectAdapter.getProject(lastVisibleItem).getId());
                     }
                 }
             }

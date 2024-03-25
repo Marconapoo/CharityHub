@@ -24,19 +24,21 @@ public class ProjectRepository implements IProjectRepository, ProjectCallback {
     }
 
 
-    public MutableLiveData<Result> getProjectsLiveData(String themeId, Integer nextProjectId) {
-        loadProjects(themeId, nextProjectId);
-        return projectsLiveData;
+    public MutableLiveData<Result> searchForProjects(String filter, Integer nextProjectId) {
+        searchProjects(filter, nextProjectId);
+        return  projectsLiveData;
     }
+
+    public void searchProjects(String filter, Integer nextProjectId) {
+        projectDataSource.searchForProjects(filter, nextProjectId);
+    }
+
 
     public MutableLiveData<Result> getThemesLiveData() {
         projectDataSource.getThemes();
         return themesLiveData;
     }
 
-    public void loadProjects(String themeId, Integer nextProjectId) {
-        projectDataSource.getProjectsByTheme(themeId, nextProjectId);
-    }
     @Override
     public void onProjectsLoaded(ProjectsApiResponse projects) {
         Result.ProjectResponseSuccess result = new Result.ProjectResponseSuccess(projects);

@@ -10,30 +10,17 @@ import retrofit2.http.Query;
 
 public interface ProjectApiService {
 
-    @GET("themes/{themeId}/projects")
-    Call<ProjectsApiResponse> getProjectsByTheme(
-        @Path("themeId") String themeId,
+    @GET("services/search/projects")
+    Call<ProjectsApiResponse> searchForProjects(
         @Query("api_key") String api_key,
+        @Query("q") String query,
+        @Query("filter") String filter,
         @Query("nextProjectId") Integer projectId,
         @Header("Content-Type") String content_type,
         @Header("Accept") String accept
     );
 
-    @GET("all/projects/ids")
-    Call<ProjectsApiResponse> getAllProjectsIds(
-        @Query("api_key") String api_key,
-        @Header("Content-Type") String content_type,
-        @Header("Accept") String accept
-    );
-
-    @GET("countries/{iso3166CountryCode}/projects")
-    Call<ProjectsApiResponse> getAllProjectsByCountry(
-        @Query("api_key") String api_key,
-        @Header("Content-Type") String content_type,
-        @Header("Accept") String accept
-    );
-
-    @GET("themes")
+    @GET("projectservice/themes")
     Call<ThemesApiResponse> getThemes(
         @Query("api_key") String api_key,
         @Header("Content-Type") String content_type,

@@ -20,15 +20,14 @@ public class HomeViewModel extends ViewModel {
         projectRepository = new ProjectRepository();
     }
 
-    public MutableLiveData<Result> getProjectsLiveData(String themeId, Integer nextProjectId) {
-        projectsLiveData = projectRepository.getProjectsLiveData(themeId, nextProjectId);
+    public MutableLiveData<Result> searchForProjects(String filter, Integer nextProjectId) {
+        projectsLiveData = projectRepository.searchForProjects(filter, nextProjectId);
         return projectsLiveData;
     }
 
-    public void getProjects(String themeId, Integer nextProjectId) {
-        projectRepository.loadProjects(themeId, nextProjectId);
+    public void searchProjects(String filter, Integer nextProjectId) {
+        projectRepository.searchProjects(filter, nextProjectId);
     }
-
     public boolean isFirstLoading() {
         return isFirstLoading;
     }

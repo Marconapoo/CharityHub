@@ -18,5 +18,14 @@
         android:id="@+id/accountFragment"
         android:name="it.sal.disco.unimib.charityhub.ui.main.AccountFragment"
         android:label="fragment_account"
-        tools:layout="@layout/fragment_account" />
+        tools:layout="@layout/fragment_account" >
+        <action
+            android:id="@+id/action_accountFragment_to_welcomeActivity"
+            app:destination="@id/welcomeActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/welcomeActivity"
+        android:name="it.sal.disco.unimib.charityhub.ui.welcome.WelcomeActivity"
+        android:label="activity_welcome"
+        tools:layout="@layout/activity_welcome" />
 </navigation>

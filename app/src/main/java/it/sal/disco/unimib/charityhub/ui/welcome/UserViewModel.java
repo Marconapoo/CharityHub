@@ -27,4 +27,13 @@ public class UserViewModel extends ViewModel {
         return userRepository.getLoggedUser();
     }
 
+    public MutableLiveData<Result> logout() {
+        if (userLiveData == null) {
+            userLiveData = userRepository.logOut();
+        } else {
+            userRepository.logOut();
+        }
+        return userLiveData;
+    }
+
 }

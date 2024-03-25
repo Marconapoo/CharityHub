@@ -9,4 +9,5 @@ public interface IUserRepository {
 
     MutableLiveData<Result> getUserLiveData(String email, String password, String fullName, boolean isRegistered);
     User getLoggedUser();
+    MutableLiveData<Result> logOut();
 }

@@ -26,30 +26,28 @@ public class ProjectDataSource extends BaseProjectDataSource {
     }
 
     @Override
-    public void getProjectsByTheme(String themeID, Integer nextProjectId) {
-        Call<ProjectsApiResponse> projectsApiResponseCall = projectApiService.getProjectsByTheme(themeID, Constants.API_KEY, nextProjectId, "application/json", "application/json");
-
+    public void searchForProjects(String filter, Integer nextProjectId) {
+        Call<ProjectsApiResponse> projectsApiResponseCall = projectApiService.searchForProjects(Constants.API_KEY, "*", filter, nextProjectId,"application/json", "application/json");
         projectsApiResponseCall.enqueue(new Callback<ProjectsApiResponse>() {
             @Override
             public void onResponse(Call<ProjectsApiResponse> call, Response<ProjectsApiResponse> response) {
                 if(response.body() != null && response.isSuccessful()) {
-
-                    projectCallback.onProjectsLoaded(response.body());
+                    if(response.body().getSearch().getResponse().getNumberFound() > 0)
+                        projectCallback.onProjectsLoaded(response.body());
+                    else
+                        projectCallback.onFailureFromRemote("Nessun progetto trovato");
                 }
                 else {
-                    Log.e("Project Data Source", "Dentro on response");
-                    projectCallback.onFailureFromRemote(response.message());
+                    projectCallback.onFailureFromRemote("Nessun progetto trovato");
                 }
             }
 
             @Override
             public void onFailure(Call<ProjectsApiResponse> call, Throwable t) {
-                Log.e("Project Data Source", "Dentro on failure");
                 projectCallback.onFailureFromRemote(t.getLocalizedMessage());
             }
         });
     }
-
     @Override
     public void getThemes() {
         Call<ThemesApiResponse> themesApiResponseCall = projectApiService.getThemes(Constants.API_KEY, "application/json", "application/json");

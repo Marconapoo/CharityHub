@@ -12,10 +12,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import org.checkerframework.checker.units.qual.A;
 
 import it.sal.disco.unimib.charityhub.R;
 import it.sal.disco.unimib.charityhub.model.Result;
@@ -57,7 +61,15 @@ public class RegistrationFragment extends Fragment {
         TextInputLayout passwordTextField = view.findViewById(R.id.passwordTextField);
         TextInputLayout fullNameTextField = view.findViewById(R.id.fullNameTextField);
         Button registerButton = view.findViewById(R.id.registerButton);
-        Button logInTextButton = view.findViewById(R.id.loginTextButton);
+        Button logInTextButton = view.findViewById(R.id.loginTextButton);;
+
+        String[] countries = {"Andorra", ""};
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.country_item, countries);
+
+        AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.countryAutoCompleteTextView);
+
+        autoCompleteTextView.setAdapter(arrayAdapter);
 
         registerButton.setOnClickListener(v -> {
             String email = inputEmail.getText().toString();

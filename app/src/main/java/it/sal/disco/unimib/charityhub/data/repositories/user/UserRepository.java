@@ -37,6 +37,12 @@ public class UserRepository implements IUserRepository, UserResponseCallback {
         return userAuthenticationDataSource.getLoggedUser();
     }
 
+    @Override
+    public MutableLiveData<Result> logOut() {
+        userAuthenticationDataSource.logOut();
+        return userLiveData;
+    }
+
 
     @Override
     public void onSuccessAuthentication(User user) {

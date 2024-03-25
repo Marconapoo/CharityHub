@@ -8,7 +8,7 @@ public abstract class BaseProjectDataSource {
         this.projectCallback = projectCallback;
     }
 
-    public abstract void getProjectsByTheme(String themeID, Integer nextProjectId);
+    public abstract void searchForProjects(String filter, Integer nextProjectId);
 
     public abstract void getThemes();
 }
