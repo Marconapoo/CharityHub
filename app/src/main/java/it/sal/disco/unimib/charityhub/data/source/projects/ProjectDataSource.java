@@ -1,7 +1,5 @@
 package it.sal.disco.unimib.charityhub.data.source.projects;
 
-import android.util.Log;
-
 import it.sal.disco.unimib.charityhub.data.service.ProjectApiService;
 import it.sal.disco.unimib.charityhub.model.ProjectsApiResponse;
 import it.sal.disco.unimib.charityhub.model.ThemesApiResponse;
@@ -18,7 +16,7 @@ public class ProjectDataSource extends BaseProjectDataSource {
 
     public ProjectDataSource() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
+                .baseUrl(Constants.GLOBALGIVING_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

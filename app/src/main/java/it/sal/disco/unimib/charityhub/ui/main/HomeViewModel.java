@@ -3,14 +3,20 @@ package it.sal.disco.unimib.charityhub.ui.main;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import it.sal.disco.unimib.charityhub.data.repositories.countries.CountryRepository;
 import it.sal.disco.unimib.charityhub.data.repositories.project.ProjectRepository;
 import it.sal.disco.unimib.charityhub.model.Result;
 
 public class HomeViewModel extends ViewModel {
 
     private final ProjectRepository projectRepository;
+
+    private final CountryRepository countryRepository;
     private MutableLiveData<Result> projectsLiveData;
     private  MutableLiveData<Result> themesLiveData;
+    private MutableLiveData<Result> countriesLiveData;
+
+
     private boolean isLoading;
     private boolean isFirstLoading;
     private int currentResults;
@@ -18,6 +24,7 @@ public class HomeViewModel extends ViewModel {
 
     public HomeViewModel() {
         projectRepository = new ProjectRepository();
+        countryRepository = new CountryRepository();
     }
 
     public MutableLiveData<Result> searchForProjects(String filter, Integer nextProjectId) {
@@ -27,9 +34,6 @@ public class HomeViewModel extends ViewModel {
 
     public void searchProjects(String filter, Integer nextProjectId) {
         projectRepository.searchProjects(filter, nextProjectId);
-    }
-    public boolean isFirstLoading() {
-        return isFirstLoading;
     }
 
     public boolean isLoading() {
@@ -44,28 +48,17 @@ public class HomeViewModel extends ViewModel {
         isFirstLoading = firstLoading;
     }
 
-    public int getCurrentResults() {
-        return currentResults;
-    }
-
-    public void setCurrentResults(int currentResults) {
-        this.currentResults = currentResults;
-    }
-
-    public int getTotalResults() {
-        return totalResults;
-    }
-
-    public void setTotalResults(int totalResults) {
-        this.totalResults = totalResults;
-    }
-
-    public boolean isLastPage() {
-        return currentResults >= totalResults;
-    }
 
     public MutableLiveData<Result> getThemesLiveData() {
         themesLiveData = projectRepository.getThemesLiveData();
         return themesLiveData;
+    }
+
+    public MutableLiveData<Result> getCountriesLiveData() {
+        if(countriesLiveData == null) {
+            countriesLiveData = countryRepository.getCountriesLiveData();
+            return countriesLiveData;
+        }
+        return countriesLiveData;
     }
 }

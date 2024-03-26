@@ -1,11 +1,13 @@
 package it.sal.disco.unimib.charityhub.model;
 
+import java.util.List;
+
 public abstract class Result {
 
     private Result() {}
 
     public boolean isSuccess() {
-        return this instanceof UserResponseSuccess || this instanceof ProjectResponseSuccess || this instanceof ThemesResponseSuccess;
+        return this instanceof UserResponseSuccess || this instanceof ProjectResponseSuccess || this instanceof ThemesResponseSuccess || this instanceof CountriesResponseSucccess;
     }
 
     public static final class UserResponseSuccess extends Result {
@@ -44,6 +46,16 @@ public abstract class Result {
         }
     }
 
+    public static final class CountriesResponseSucccess extends Result {
+        private final List<Country> countriesResponse;
+
+        public CountriesResponseSucccess(List<Country> countriesApiResponse) {
+            this.countriesResponse = countriesApiResponse;
+        }
+        public List<Country> getCountriesResponse() {
+            return countriesResponse;
+        }
+    }
 
     public static final class Error extends Result {
         private final String errorMessage;

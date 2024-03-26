@@ -14,9 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.PopupMenu;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
@@ -31,6 +34,8 @@ import java.util.List;
 import it.sal.disco.unimib.charityhub.R;
 import it.sal.disco.unimib.charityhub.adapter.ProjectAdapter;
 import it.sal.disco.unimib.charityhub.data.repositories.project.ProjectRepository;
+import it.sal.disco.unimib.charityhub.model.CountriesApiResponse;
+import it.sal.disco.unimib.charityhub.model.Country;
 import it.sal.disco.unimib.charityhub.model.Project;
 import it.sal.disco.unimib.charityhub.model.ProjectsApiResponse;
 import it.sal.disco.unimib.charityhub.model.Result;
@@ -45,6 +50,8 @@ public class HomeFragment extends Fragment {
     ProjectAdapter projectAdapter;
     RecyclerView recyclerView;
     Theme currentTheme;
+    String selectCountryId;
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -61,6 +68,8 @@ public class HomeFragment extends Fragment {
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         homeViewModel.setFirstLoading(true);
         projectList = new ArrayList<>();
+        currentTheme = new Theme("edu", "Education");
+        selectCountryId = String.valueOf(R.id.IT);
     }
 
     @Override
@@ -75,6 +84,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.projectsRV);
+        Button countryButton = view.findViewById(R.id.selectCountryButton);
         projectAdapter = new ProjectAdapter(projectList, requireContext());
         recyclerView.setAdapter(null);
         recyclerView.setAdapter(projectAdapter);
@@ -84,6 +94,19 @@ public class HomeFragment extends Fragment {
         homeViewModel.setLoading(true);
 
         ChipGroup chipGroup = view.findViewById(R.id.chipGroup);
+
+        homeViewModel.getCountriesLiveData().observe(getViewLifecycleOwner(), result -> {
+            if(result.isSuccess()) {
+                List<Country> countriesApiResponse = ((Result.CountriesResponseSucccess) result).getCountriesResponse();
+                for(Country country : countriesApiResponse) {
+                    //TODO agginugi menu selezione nazioni
+                }
+            }
+            else {
+                Log.e("Home fragment", ((Result.Error) result).getErrorMessage());
+            }
+        });
+
 
         homeViewModel.getThemesLiveData().observe(getViewLifecycleOwner(), result -> {
             if(result.isSuccess()) {
@@ -100,7 +123,7 @@ public class HomeFragment extends Fragment {
                             projectList.clear();
                             // Notifica all'adapter che i dati sono cambiati
                             projectAdapter.notifyItemRangeRemoved(0, projectListSize);
-                            homeViewModel.searchProjects("country:it,theme:" +theme.getId(), null);
+                            homeViewModel.searchProjects("country:" + selectCountryId.toString()+ ",theme:" +theme.getId(), null);
                             currentTheme = theme;
                         }
                     });
@@ -114,12 +137,12 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        homeViewModel.searchForProjects("country:it", null).observe(getViewLifecycleOwner(), result -> {
+        homeViewModel.searchForProjects(null, null).observe(getViewLifecycleOwner(), result -> {
             if(result.isSuccess()) {
                 homeViewModel.setLoading(false);
 
                 ProjectsApiResponse projectResponseSuccess = ((Result.ProjectResponseSuccess) result).getProjectsApiResponse();
-                List<Project> fetchedProjects = ((Result.ProjectResponseSuccess) result).getProjectsApiResponse().getSearch().getResponse().getProjectData().getProjectList();
+                List<Project> fetchedProjects = projectResponseSuccess.getSearch().getResponse().getProjectData().getProjectList();
                 int startPosition = projectList.size();
                 for (Project project : fetchedProjects) {
                     if (!checkDuplicates(project)) {
