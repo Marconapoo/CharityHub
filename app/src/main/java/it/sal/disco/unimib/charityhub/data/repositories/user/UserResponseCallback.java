@@ -7,4 +7,6 @@ public interface UserResponseCallback {
     void onFailureAuthentication(String error);
     void onSuccessLogout();
     void onSuccessUserSaved(User user);
+    void onSuccessRegistration(User user);
+    void onCountryGotSuccess(User user);
 }

@@ -1,5 +1,7 @@
 package it.sal.disco.unimib.charityhub.ui.main;
 
+import android.app.Application;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -11,10 +13,10 @@ public class HomeViewModel extends ViewModel {
 
     private final ProjectRepository projectRepository;
 
-    private final CountryRepository countryRepository;
+
     private MutableLiveData<Result> projectsLiveData;
     private  MutableLiveData<Result> themesLiveData;
-    private MutableLiveData<Result> countriesLiveData;
+
 
 
     private boolean isLoading;
@@ -22,9 +24,9 @@ public class HomeViewModel extends ViewModel {
     private int currentResults;
     private int totalResults;
 
-    public HomeViewModel() {
-        projectRepository = new ProjectRepository();
-        countryRepository = new CountryRepository();
+    public HomeViewModel(Application application) {
+        projectRepository = new ProjectRepository(application);
+
     }
 
     public MutableLiveData<Result> searchForProjects(String filter, Integer nextProjectId) {
@@ -50,15 +52,11 @@ public class HomeViewModel extends ViewModel {
 
 
     public MutableLiveData<Result> getThemesLiveData() {
-        themesLiveData = projectRepository.getThemesLiveData();
+        if(themesLiveData == null) {
+            themesLiveData = projectRepository.getThemesLiveData();
+            return themesLiveData;
+        }
         return themesLiveData;
     }
 
-    public MutableLiveData<Result> getCountriesLiveData() {
-        if(countriesLiveData == null) {
-            countriesLiveData = countryRepository.getCountriesLiveData();
-            return countriesLiveData;
-        }
-        return countriesLiveData;
-    }
 }

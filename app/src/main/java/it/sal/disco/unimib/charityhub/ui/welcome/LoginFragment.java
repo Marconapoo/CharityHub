@@ -1,5 +1,8 @@
 package it.sal.disco.unimib.charityhub.ui.welcome;
 
+import static it.sal.disco.unimib.charityhub.utils.Constants.SHARED_PREFERENCES_COUNTRY_OF_INTEREST;
+import static it.sal.disco.unimib.charityhub.utils.Constants.SHARED_PREFERENCES_FILE_NAME;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +22,9 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import it.sal.disco.unimib.charityhub.R;
 import it.sal.disco.unimib.charityhub.model.Result;
+import it.sal.disco.unimib.charityhub.model.User;
+import it.sal.disco.unimib.charityhub.ui.main.HomeViewModelFactory;
+import it.sal.disco.unimib.charityhub.utils.SharedPreferencesUtil;
 
 public class LoginFragment extends Fragment {
 
@@ -36,6 +42,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userViewModel = new ViewModelProvider(requireActivity(), new HomeViewModelFactory(requireActivity().getApplication())).get(UserViewModel.class);
     }
 
     @Override
@@ -49,7 +56,7 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+
         TextInputEditText inputEmail = view.findViewById(R.id.emailInputText);
         TextInputEditText inputPassword = view.findViewById(R.id.passwordInputText);
         TextInputLayout emailTextField = view.findViewById(R.id.emailTextField);
@@ -61,8 +68,12 @@ public class LoginFragment extends Fragment {
             String email = inputEmail.getText().toString();
             String password = inputPassword.getText().toString();
             if(!email.isEmpty() && !password.isEmpty()) {
-                userViewModel.getUserLiveData(email, password, null, true).observe(getViewLifecycleOwner(), result -> {
+                userViewModel.getUserLiveData(email, password, null, null, true).observe(getViewLifecycleOwner(), result -> {
                     if(result.isSuccess()) {
+                        User user = ((Result.UserResponseSuccess) result).getUser();
+                        Log.w("Login Fragment", user.getCountryOfInterest());
+                        SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(requireActivity().getApplication());
+                        sharedPreferencesUtil.writeStringData(SHARED_PREFERENCES_FILE_NAME, SHARED_PREFERENCES_COUNTRY_OF_INTEREST, user.getCountryOfInterest());
                         Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_mainActivity);
                         requireActivity().finish();
                     }

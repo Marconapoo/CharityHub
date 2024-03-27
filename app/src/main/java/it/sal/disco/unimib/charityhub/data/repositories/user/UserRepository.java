@@ -1,7 +1,11 @@
 package it.sal.disco.unimib.charityhub.data.repositories.user;
 
+import android.app.Application;
+
 import androidx.lifecycle.MutableLiveData;
 
+import it.sal.disco.unimib.charityhub.data.source.projects.BaseProjectLocalDataSource;
+import it.sal.disco.unimib.charityhub.data.source.projects.ProjectLocalDataSource;
 import it.sal.disco.unimib.charityhub.data.source.user.BaseUserAuthenticationDataSource;
 import it.sal.disco.unimib.charityhub.data.source.user.BaseUserDataRemoteDataSource;
 import it.sal.disco.unimib.charityhub.data.source.user.UserAuthenticationDataSource;
@@ -15,20 +19,24 @@ public class UserRepository implements IUserRepository, UserResponseCallback {
     private final BaseUserAuthenticationDataSource userAuthenticationDataSource;
     private final BaseUserDataRemoteDataSource userDataRemoteDataSource;
 
-    public UserRepository() {
+    private final BaseProjectLocalDataSource projectLocalDataSource;
+
+
+    public UserRepository(Application application) {
         this.userAuthenticationDataSource = new UserAuthenticationDataSource();
         this.userDataRemoteDataSource = new UserDataRemoteDataSource();
+        this.projectLocalDataSource = new ProjectLocalDataSource(application);
         userAuthenticationDataSource.setUserResponseCallback(this);
         userDataRemoteDataSource.setUserResponseCallback(this);
         this.userLiveData = new MutableLiveData<>();
     }
 
     @Override
-    public MutableLiveData<Result> getUserLiveData(String email, String password, String fullName, boolean isRegistered) {
+    public MutableLiveData<Result> getUserLiveData(String email, String password, String fullName, String country, boolean isRegistered) {
         if(isRegistered)
             userAuthenticationDataSource.logIn(email, password);
         else
-            userAuthenticationDataSource.signIn(email, password, fullName);
+            userAuthenticationDataSource.signIn(email, password, fullName, country);
         return userLiveData;
     }
 
@@ -43,12 +51,9 @@ public class UserRepository implements IUserRepository, UserResponseCallback {
         return userLiveData;
     }
 
-
     @Override
     public void onSuccessAuthentication(User user) {
-        if(user != null) {
-            userDataRemoteDataSource.saveUserData(user);
-        }
+        userDataRemoteDataSource.getUserCountry(user);
     }
 
     @Override
@@ -59,12 +64,26 @@ public class UserRepository implements IUserRepository, UserResponseCallback {
 
     @Override
     public void onSuccessLogout() {
+        projectLocalDataSource.deleteAll();
         Result.UserResponseSuccess result = new Result.UserResponseSuccess(null);
         userLiveData.postValue(result);
     }
 
     @Override
     public void onSuccessUserSaved(User user) {
+        Result.UserResponseSuccess result = new Result.UserResponseSuccess(user);
+        userLiveData.postValue(result);
+    }
+
+    @Override
+    public void onSuccessRegistration(User user) {
+        if(user != null) {
+            userDataRemoteDataSource.saveUserData(user);
+        }
+    }
+
+    @Override
+    public void onCountryGotSuccess(User user) {
         Result.UserResponseSuccess result = new Result.UserResponseSuccess(user);
         userLiveData.postValue(result);
     }

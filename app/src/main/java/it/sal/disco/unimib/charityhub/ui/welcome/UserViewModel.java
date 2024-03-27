@@ -1,8 +1,11 @@
 package it.sal.disco.unimib.charityhub.ui.welcome;
 
+import android.app.Application;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import it.sal.disco.unimib.charityhub.data.repositories.countries.CountryRepository;
 import it.sal.disco.unimib.charityhub.data.repositories.user.IUserRepository;
 import it.sal.disco.unimib.charityhub.data.repositories.user.UserRepository;
 import it.sal.disco.unimib.charityhub.model.Result;
@@ -14,12 +17,17 @@ public class UserViewModel extends ViewModel {
 
     private MutableLiveData<Result> userLiveData;
 
-    public UserViewModel() {
-        userRepository = new UserRepository();
+    private final CountryRepository countryRepository;
+
+    private MutableLiveData<Result> countriesLiveData;
+
+    public UserViewModel(Application application) {
+        userRepository = new UserRepository(application);
+        countryRepository = new CountryRepository();
     }
 
-    public MutableLiveData<Result> getUserLiveData(String email, String password, String fullName, boolean isUserRegistered) {
-        userLiveData = userRepository.getUserLiveData(email, password, fullName, isUserRegistered);
+    public MutableLiveData<Result> getUserLiveData(String email, String password, String fullName, String country, boolean isUserRegistered) {
+        userLiveData = userRepository.getUserLiveData(email, password, fullName, country, isUserRegistered);
         return userLiveData;
     }
 
@@ -34,6 +42,14 @@ public class UserViewModel extends ViewModel {
             userRepository.logOut();
         }
         return userLiveData;
+    }
+
+    public MutableLiveData<Result> getCountriesLiveData() {
+        if(countriesLiveData == null) {
+            countriesLiveData = countryRepository.getCountriesLiveData();
+            return countriesLiveData;
+        }
+        return countriesLiveData;
     }
 
 }

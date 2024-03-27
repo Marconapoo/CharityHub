@@ -12,6 +12,7 @@ public class UserAuthenticationDataSource extends BaseUserAuthenticationDataSour
 
     private final FirebaseAuth firebaseAuth;
 
+
     public UserAuthenticationDataSource() {
         firebaseAuth = FirebaseAuth.getInstance();
     }
@@ -22,6 +23,7 @@ public class UserAuthenticationDataSource extends BaseUserAuthenticationDataSour
             if(task.isSuccessful()) {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                 if(firebaseUser != null) {
+
                     userResponseCallback.onSuccessAuthentication(new User(firebaseUser.getDisplayName(), firebaseUser.getEmail(), firebaseUser.getUid()));
                 }
                 else {
@@ -37,7 +39,7 @@ public class UserAuthenticationDataSource extends BaseUserAuthenticationDataSour
     }
 
     @Override
-    public void signIn(String email, String password, String fullName) {
+    public void signIn(String email, String password, String fullName, String country) {
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
@@ -45,7 +47,7 @@ public class UserAuthenticationDataSource extends BaseUserAuthenticationDataSour
                     UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(fullName).build();
                     firebaseUser.updateProfile(profileChangeRequest).addOnCompleteListener(task1 -> {
                         if(task1.isSuccessful()) {
-                            userResponseCallback.onSuccessAuthentication(new User(firebaseUser.getDisplayName(), firebaseUser.getEmail(), firebaseUser.getUid()));
+                            userResponseCallback.onSuccessRegistration(new User(firebaseUser.getDisplayName(), firebaseUser.getEmail(), firebaseUser.getUid(), country));
                         }
                         else {
                             userResponseCallback.onFailureAuthentication(task.getException().getLocalizedMessage());

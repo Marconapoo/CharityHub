@@ -41,6 +41,8 @@ import it.sal.disco.unimib.charityhub.model.ProjectsApiResponse;
 import it.sal.disco.unimib.charityhub.model.Result;
 import it.sal.disco.unimib.charityhub.model.Theme;
 import it.sal.disco.unimib.charityhub.model.ThemesApiResponse;
+import it.sal.disco.unimib.charityhub.utils.Constants;
+import it.sal.disco.unimib.charityhub.utils.SharedPreferencesUtil;
 
 public class HomeFragment extends Fragment {
 
@@ -50,7 +52,7 @@ public class HomeFragment extends Fragment {
     ProjectAdapter projectAdapter;
     RecyclerView recyclerView;
     Theme currentTheme;
-    String selectCountryId;
+    SharedPreferencesUtil sharedPreferencesUtil;
 
 
     public HomeFragment() {
@@ -65,11 +67,11 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        homeViewModel = new ViewModelProvider(requireActivity(), new HomeViewModelFactory(requireActivity().getApplication())).get(HomeViewModel.class);
         homeViewModel.setFirstLoading(true);
         projectList = new ArrayList<>();
+        sharedPreferencesUtil = new SharedPreferencesUtil(requireActivity().getApplication());
         currentTheme = new Theme("edu", "Education");
-        selectCountryId = String.valueOf(R.id.IT);
     }
 
     @Override
@@ -83,8 +85,11 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        String country = sharedPreferencesUtil.readStringData(
+                Constants.SHARED_PREFERENCES_FILE_NAME, Constants.SHARED_PREFERENCES_COUNTRY_OF_INTEREST);
+
         recyclerView = view.findViewById(R.id.projectsRV);
-        Button countryButton = view.findViewById(R.id.selectCountryButton);
         projectAdapter = new ProjectAdapter(projectList, requireContext());
         recyclerView.setAdapter(null);
         recyclerView.setAdapter(projectAdapter);
@@ -94,18 +99,6 @@ public class HomeFragment extends Fragment {
         homeViewModel.setLoading(true);
 
         ChipGroup chipGroup = view.findViewById(R.id.chipGroup);
-
-        homeViewModel.getCountriesLiveData().observe(getViewLifecycleOwner(), result -> {
-            if(result.isSuccess()) {
-                List<Country> countriesApiResponse = ((Result.CountriesResponseSucccess) result).getCountriesResponse();
-                for(Country country : countriesApiResponse) {
-                    //TODO agginugi menu selezione nazioni
-                }
-            }
-            else {
-                Log.e("Home fragment", ((Result.Error) result).getErrorMessage());
-            }
-        });
 
 
         homeViewModel.getThemesLiveData().observe(getViewLifecycleOwner(), result -> {
@@ -123,7 +116,7 @@ public class HomeFragment extends Fragment {
                             projectList.clear();
                             // Notifica all'adapter che i dati sono cambiati
                             projectAdapter.notifyItemRangeRemoved(0, projectListSize);
-                            homeViewModel.searchProjects("country:" + selectCountryId.toString()+ ",theme:" +theme.getId(), null);
+                            homeViewModel.searchProjects("country:" + country+ ",theme:" +theme.getId(), null);
                             currentTheme = theme;
                         }
                     });
@@ -137,7 +130,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        homeViewModel.searchForProjects(null, null).observe(getViewLifecycleOwner(), result -> {
+        homeViewModel.searchForProjects("country:"+country, null).observe(getViewLifecycleOwner(), result -> {
             if(result.isSuccess()) {
                 homeViewModel.setLoading(false);
 

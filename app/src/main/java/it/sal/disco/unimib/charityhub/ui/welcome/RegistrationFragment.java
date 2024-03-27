@@ -13,20 +13,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.checkerframework.checker.units.qual.A;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import it.sal.disco.unimib.charityhub.R;
+import it.sal.disco.unimib.charityhub.model.Country;
 import it.sal.disco.unimib.charityhub.model.Result;
+import it.sal.disco.unimib.charityhub.ui.main.HomeViewModelFactory;
+import it.sal.disco.unimib.charityhub.utils.Constants;
+import it.sal.disco.unimib.charityhub.utils.SharedPreferencesUtil;
 
 public class RegistrationFragment extends Fragment {
 
     UserViewModel userViewModel;
+    List<Country> countries;
 
     public RegistrationFragment() {
         // Required empty public constructor
@@ -40,6 +51,7 @@ public class RegistrationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userViewModel = new ViewModelProvider(requireActivity(), new HomeViewModelFactory(requireActivity().getApplication())).get(UserViewModel.class);
     }
 
     @Override
@@ -52,7 +64,6 @@ public class RegistrationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 
         TextInputEditText inputEmail = view.findViewById(R.id.emailInputText);
         TextInputEditText inputPassword = view.findViewById(R.id.passwordInputText);
@@ -63,20 +74,45 @@ public class RegistrationFragment extends Fragment {
         Button registerButton = view.findViewById(R.id.registerButton);
         Button logInTextButton = view.findViewById(R.id.loginTextButton);;
 
-        String[] countries = {"Andorra", ""};
+        countries = new ArrayList<>();
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.country_item, countries);
+        MaterialAutoCompleteTextView countryPicker = view.findViewById(R.id.countryAutoCompleteTextView);
 
-        AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.countryAutoCompleteTextView);
 
-        autoCompleteTextView.setAdapter(arrayAdapter);
+        userViewModel.getCountriesLiveData().observe(getViewLifecycleOwner(), result -> {
+            if(result.isSuccess()) {
+                List<Country> countriesApiResponse = ((Result.CountriesResponseSucccess) result).getCountriesResponse();
+                countriesApiResponse.sort(Comparator.comparing(country -> country.getName().getCommonName()));
+                countries.addAll(countriesApiResponse);
+                String[] countryNames = new String[countries.size()];
+                for(int i = 0; i < countries.size(); i++) {
+                    countryNames[i] = countries.get(i).getName().getCommonName();
+                }
+                countryPicker.setSimpleItems(countryNames);
+            }
+            else {
+                Log.e("Home fragment", ((Result.Error) result).getErrorMessage());
+            }
+        });
+
 
         registerButton.setOnClickListener(v -> {
             String email = inputEmail.getText().toString();
             String password = inputPassword.getText().toString();
             String fullName = inputFullName.getText().toString();
+            String countryCode = null;
 
-            userViewModel.getUserLiveData(email, password, fullName, false).observe(getViewLifecycleOwner(), result -> {
+            for(Country country : countries) {
+                if(countryPicker.getText().toString().equals(country.getName().getCommonName())) {
+                    countryCode = country.getCountryCode();
+                    break;
+                }
+            }
+
+            SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(getActivity().getApplication());
+
+            sharedPreferencesUtil.writeStringData(Constants.SHARED_PREFERENCES_FILE_NAME, Constants.SHARED_PREFERENCES_COUNTRY_OF_INTEREST, countryCode);
+            userViewModel.getUserLiveData(email, password, fullName,  countryCode, false).observe(getViewLifecycleOwner(), result -> {
                 if(result.isSuccess()) {
                     Navigation.findNavController(v).navigate(R.id.action_registrationFragment_to_mainActivity);
                     requireActivity().finish();
