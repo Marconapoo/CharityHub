@@ -1,5 +1,6 @@
 package it.sal.disco.unimib.charityhub.data.service;
 
+import it.sal.disco.unimib.charityhub.model.ImagesApiResponse;
 import it.sal.disco.unimib.charityhub.model.ProjectsApiResponse;
 import it.sal.disco.unimib.charityhub.model.ThemesApiResponse;
 import retrofit2.Call;
@@ -22,6 +23,14 @@ public interface ProjectApiService {
 
     @GET("projectservice/themes")
     Call<ThemesApiResponse> getThemes(
+        @Query("api_key") String api_key,
+        @Header("Content-Type") String content_type,
+        @Header("Accept") String accept
+    );
+
+    @GET("projectservice/projects/{projectid}/imagegallery")
+    Call<ImagesApiResponse> getImages(
+        @Path("projectid") String projectId,
         @Query("api_key") String api_key,
         @Header("Content-Type") String content_type,
         @Header("Accept") String accept

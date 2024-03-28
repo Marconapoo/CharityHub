@@ -7,7 +7,9 @@ public abstract class Result {
     private Result() {}
 
     public boolean isSuccess() {
-        return this instanceof UserResponseSuccess || this instanceof ProjectResponseSuccess || this instanceof ThemesResponseSuccess || this instanceof CountriesResponseSucccess;
+        return
+                this instanceof UserResponseSuccess || this instanceof ProjectResponseSuccess || this instanceof ThemesResponseSuccess || this instanceof CountriesResponseSucccess
+                || this instanceof ImagesResponseSuccess;
     }
 
     public static final class UserResponseSuccess extends Result {
@@ -57,6 +59,17 @@ public abstract class Result {
         }
     }
 
+    public static final class ImagesResponseSuccess extends Result {
+        private final ImagesApiResponse imagesApiResponse;
+
+        public ImagesResponseSuccess(ImagesApiResponse imagesApiResponse) {
+            this.imagesApiResponse = imagesApiResponse;
+        }
+
+        public ImagesApiResponse getImagesApiResponse() {
+            return imagesApiResponse;
+        }
+    }
     public static final class Error extends Result {
         private final String errorMessage;
 
@@ -68,4 +81,5 @@ public abstract class Result {
             return errorMessage;
         }
     }
+
 }

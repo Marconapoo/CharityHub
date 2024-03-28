@@ -11,4 +11,6 @@ public abstract class BaseProjectDataSource {
     public abstract void searchForProjects(String filter, Integer nextProjectId);
 
     public abstract void getThemes();
+
+    public abstract void getImages(String projectId);
 }

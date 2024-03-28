@@ -7,29 +7,35 @@ import com.google.gson.annotations.SerializedName;
 
 public class Project implements Parcelable {
 
+
     private int id;
-    private boolean isActive;
     private String title;
     private String summary;
-    private String country;
-    private String city;
+    @SerializedName("need")
+    private String challenge;
+    private String longTermImpact;
+    @SerializedName("activities")
+    private String solution;
     @SerializedName("imageLink")
     private String imageUrl;
     private float goal;
     private float funding;
+    @SerializedName("remaining")
     private float remainingFunding;
+    private int numberOfDonations;
 
-    public Project(int id, boolean isActive, String title, String summary, String country, String city, String imageUrl, float goal, float funding, float remainingFunding) {
+    public Project(int id, String title, String summary, String challenge, String longTermImpact, String solution, String imageUrl, float goal, float funding, float remainingFunding, int numberOfDonations) {
         this.id = id;
-        this.isActive = isActive;
         this.title = title;
         this.summary = summary;
-        this.country = country;
-        this.city = city;
+        this.challenge = challenge;
+        this.longTermImpact = longTermImpact;
+        this.solution = solution;
         this.imageUrl = imageUrl;
         this.goal = goal;
         this.funding = funding;
         this.remainingFunding = remainingFunding;
+        this.numberOfDonations = numberOfDonations;
     }
 
     public int getId() {
@@ -38,14 +44,6 @@ public class Project implements Parcelable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
     }
 
     public String getTitle() {
@@ -64,20 +62,28 @@ public class Project implements Parcelable {
         this.summary = summary;
     }
 
-    public String getCountry() {
-        return country;
+    public String getChallenge() {
+        return challenge;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setChallenge(String challenge) {
+        this.challenge = challenge;
     }
 
-    public String getCity() {
-        return city;
+    public String getLongTermImpact() {
+        return longTermImpact;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setLongTermImpact(String longTermImpact) {
+        this.longTermImpact = longTermImpact;
+    }
+
+    public String getSolution() {
+        return solution;
+    }
+
+    public void setSolution(String solution) {
+        this.solution = solution;
     }
 
     public String getImageUrl() {
@@ -112,19 +118,28 @@ public class Project implements Parcelable {
         this.remainingFunding = remainingFunding;
     }
 
+    public int getNumberOfDonations() {
+        return numberOfDonations;
+    }
+
+    public void setNumberOfDonations(int numberOfDonations) {
+        this.numberOfDonations = numberOfDonations;
+    }
+
     @Override
     public String toString() {
         return "Project{" +
                 "id=" + id +
-                ", isActive=" + isActive +
                 ", title='" + title + '\'' +
                 ", summary='" + summary + '\'' +
-                ", country='" + country + '\'' +
-                ", city='" + city + '\'' +
+                ", challenge='" + challenge + '\'' +
+                ", longTermImpact='" + longTermImpact + '\'' +
+                ", solution='" + solution + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", goal=" + goal +
                 ", funding=" + funding +
                 ", remainingFunding=" + remainingFunding +
+                ", numberOfDonations=" + numberOfDonations +
                 '}';
     }
 
@@ -137,44 +152,47 @@ public class Project implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.id);
-        dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
         dest.writeString(this.title);
         dest.writeString(this.summary);
-        dest.writeString(this.country);
-        dest.writeString(this.city);
+        dest.writeString(this.challenge);
+        dest.writeString(this.longTermImpact);
+        dest.writeString(this.solution);
         dest.writeString(this.imageUrl);
         dest.writeFloat(this.goal);
         dest.writeFloat(this.funding);
         dest.writeFloat(this.remainingFunding);
+        dest.writeInt(this.numberOfDonations);
     }
 
     public void readFromParcel(Parcel source) {
         this.id = source.readInt();
-        this.isActive = source.readByte() != 0;
         this.title = source.readString();
         this.summary = source.readString();
-        this.country = source.readString();
-        this.city = source.readString();
+        this.challenge = source.readString();
+        this.longTermImpact = source.readString();
+        this.solution = source.readString();
         this.imageUrl = source.readString();
         this.goal = source.readFloat();
         this.funding = source.readFloat();
         this.remainingFunding = source.readFloat();
+        this.numberOfDonations = source.readInt();
     }
 
     protected Project(Parcel in) {
         this.id = in.readInt();
-        this.isActive = in.readByte() != 0;
         this.title = in.readString();
         this.summary = in.readString();
-        this.country = in.readString();
-        this.city = in.readString();
+        this.challenge = in.readString();
+        this.longTermImpact = in.readString();
+        this.solution = in.readString();
         this.imageUrl = in.readString();
         this.goal = in.readFloat();
         this.funding = in.readFloat();
         this.remainingFunding = in.readFloat();
+        this.numberOfDonations = in.readInt();
     }
 
-    public static final Parcelable.Creator<Project> CREATOR = new Parcelable.Creator<Project>() {
+    public static final Creator<Project> CREATOR = new Creator<Project>() {
         @Override
         public Project createFromParcel(Parcel source) {
             return new Project(source);

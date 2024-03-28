@@ -106,7 +106,6 @@ public class HomeFragment extends Fragment {
                 ThemesApiResponse themesApiResponse = ((Result.ThemesResponseSuccess) result).getThemesApiResponse();
                 List<Theme> themes = themesApiResponse.getThemeData().getThemes();
                 for(Theme theme : themes) {
-                    Log.w("Home fragment", theme.getName());
                     Chip chip = new Chip(requireContext());
                     chip.setId(ViewCompat.generateViewId());
                     chip.setText(theme.getName());

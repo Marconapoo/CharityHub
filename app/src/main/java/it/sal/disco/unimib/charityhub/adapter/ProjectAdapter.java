@@ -1,14 +1,17 @@
 package it.sal.disco.unimib.charityhub.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +20,7 @@ import java.util.List;
 
 import it.sal.disco.unimib.charityhub.R;
 import it.sal.disco.unimib.charityhub.model.Project;
+import it.sal.disco.unimib.charityhub.ui.main.HomeFragmentDirections;
 
 public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder> {
 
@@ -42,6 +46,11 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
         holder.title.setText(project.getTitle());
         //holder.summary.setText(project.getSummary());
         Glide.with(context).load(project.getImageUrl()).into(holder.image);
+
+        holder.viewProjectButton.setOnClickListener(v -> {
+            HomeFragmentDirections.ActionHomeFragmentToProjectDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToProjectDetailsFragment(project);
+            Navigation.findNavController(v).navigate(action);
+        });
         holder.progressBar.setProgress((int) (project.getFunding()*100/project.getGoal()));
         // Set other views as needed
     }
@@ -69,6 +78,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
         private final TextView title;
         //private final TextView summary;
         private final ProgressBar progressBar;
+        private final Button viewProjectButton;
         // Declare other views here
 
         public ProjectViewHolder(@NonNull View itemView) {
@@ -77,6 +87,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
             title = itemView.findViewById(R.id.projectTitle);
             //summary = itemView.findViewById(R.id.projectSummary);
             progressBar = itemView.findViewById(R.id.donationProgressBar);
+            viewProjectButton = itemView.findViewById(R.id.viewProjectButton);
             // Initialize other views here
         }
 

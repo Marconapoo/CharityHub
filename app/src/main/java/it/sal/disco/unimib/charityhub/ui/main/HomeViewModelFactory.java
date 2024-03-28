@@ -24,6 +24,8 @@ public class HomeViewModelFactory implements ViewModelProvider.Factory {
             return (T) new HomeViewModel(application);
         else if(modelClass == UserViewModel.class)
             return (T) new UserViewModel(application);
+        else if(modelClass == ProjectDetailsViewModel.class)
+            return (T) new ProjectDetailsViewModel(application);
         throw new RuntimeException();
     }
 }

@@ -1,6 +1,7 @@
 package it.sal.disco.unimib.charityhub.data.source.projects;
 
 import it.sal.disco.unimib.charityhub.data.service.ProjectApiService;
+import it.sal.disco.unimib.charityhub.model.ImagesApiResponse;
 import it.sal.disco.unimib.charityhub.model.ProjectsApiResponse;
 import it.sal.disco.unimib.charityhub.model.ThemesApiResponse;
 import it.sal.disco.unimib.charityhub.utils.Constants;
@@ -64,6 +65,28 @@ public class ProjectDataSource extends BaseProjectDataSource {
             @Override
             public void onFailure(Call<ThemesApiResponse> call, Throwable t) {
                 projectCallback.onFailureThemesLoaded(t.getLocalizedMessage());
+            }
+        });
+    }
+
+    @Override
+    public void getImages(String projectId) {
+        Call<ImagesApiResponse> imagesApiResponseCall = projectApiService.getImages(projectId, Constants.API_KEY, "application/json", "application/json");
+
+        imagesApiResponseCall.enqueue(new Callback<ImagesApiResponse>() {
+            @Override
+            public void onResponse(Call<ImagesApiResponse> call, Response<ImagesApiResponse> response) {
+                if(response.body() != null && response.isSuccessful()) {
+                    projectCallback.onSuccessImagesLoaded(response.body());
+                }
+                else {
+                    projectCallback.onFailureImagesLoaded("No images were found");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ImagesApiResponse> call, Throwable t) {
+                    projectCallback.onFailureImagesLoaded(t.getLocalizedMessage());
             }
         });
     }
