@@ -16,7 +16,7 @@ public interface ProjectApiService {
         @Query("api_key") String api_key,
         @Query("q") String query,
         @Query("filter") String filter,
-        @Query("nextProjectId") Integer projectId,
+        @Query("start") Integer projectId,
         @Header("Content-Type") String content_type,
         @Header("Accept") String accept
     );

@@ -31,7 +31,7 @@ public class ProjectDataSource extends BaseProjectDataSource {
             @Override
             public void onResponse(Call<ProjectsApiResponse> call, Response<ProjectsApiResponse> response) {
                 if(response.body() != null && response.isSuccessful()) {
-                    if(response.body().getSearch().getResponse().getNumberFound() > 0)
+                    if(response.body().getSearch().getResponse().getNumberFound() > 0 && response.body().getSearch().getResponse().getProjectData() != null)
                         projectCallback.onProjectsLoaded(response.body());
                     else
                         projectCallback.onFailureFromRemote("Nessun progetto trovato");
