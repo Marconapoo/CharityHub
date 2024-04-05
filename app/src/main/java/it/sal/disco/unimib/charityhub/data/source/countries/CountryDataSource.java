@@ -5,8 +5,7 @@ import android.util.Log;
 import java.util.List;
 
 import it.sal.disco.unimib.charityhub.data.service.RestApiService;
-import it.sal.disco.unimib.charityhub.model.CountriesApiResponse;
-import it.sal.disco.unimib.charityhub.model.Country;
+import it.sal.disco.unimib.charityhub.model.countries.Country;
 import it.sal.disco.unimib.charityhub.utils.Constants;
 import retrofit2.Call;
 import retrofit2.Callback;

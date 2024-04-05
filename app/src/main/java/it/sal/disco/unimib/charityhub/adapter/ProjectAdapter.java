@@ -1,7 +1,6 @@
 package it.sal.disco.unimib.charityhub.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import it.sal.disco.unimib.charityhub.R;
-import it.sal.disco.unimib.charityhub.model.Project;
+import it.sal.disco.unimib.charityhub.model.projects.Project;
 import it.sal.disco.unimib.charityhub.ui.main.HomeFragmentDirections;
 
 public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder> {

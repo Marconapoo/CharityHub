@@ -1,4 +1,4 @@
-package it.sal.disco.unimib.charityhub.model;
+package it.sal.disco.unimib.charityhub.model.projects;
 
 public class Image {
 

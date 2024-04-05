@@ -1,7 +1,4 @@
-package it.sal.disco.unimib.charityhub.model;
-
-import com.google.gson.annotations.SerializedName;
-import java.util.List;
+package it.sal.disco.unimib.charityhub.model.countries;
 
 public class CountriesApiResponse {
 

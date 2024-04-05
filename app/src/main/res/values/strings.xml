@@ -19,4 +19,9 @@
     <string name="climate_action">Climate Action</string>
     <string name="peace_and_reconciliation">Peace and Reconciliation</string>
     <string name="select_a_country">Select a country</string>
+    <string name="summary">Summary</string>
+    <string name="challenge">Challenge</string>
+    <string name="solution">Solution</string>
+    <string name="long_term_impact">Long Term Impact</string>
+    <string name="donate_now">Donate now</string>
 </resources>

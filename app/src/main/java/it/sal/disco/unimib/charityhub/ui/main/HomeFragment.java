@@ -1,31 +1,23 @@
 package it.sal.disco.unimib.charityhub.ui.main;
 
-import android.net.ipsec.ike.ChildSaProposal;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.PopupMenu;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.search.SearchBar;
-import com.google.android.material.search.SearchView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -33,14 +25,11 @@ import java.util.List;
 
 import it.sal.disco.unimib.charityhub.R;
 import it.sal.disco.unimib.charityhub.adapter.ProjectAdapter;
-import it.sal.disco.unimib.charityhub.data.repositories.project.ProjectRepository;
-import it.sal.disco.unimib.charityhub.model.CountriesApiResponse;
-import it.sal.disco.unimib.charityhub.model.Country;
-import it.sal.disco.unimib.charityhub.model.Project;
-import it.sal.disco.unimib.charityhub.model.ProjectsApiResponse;
+import it.sal.disco.unimib.charityhub.model.projects.Project;
+import it.sal.disco.unimib.charityhub.model.projects.ProjectsApiResponse;
 import it.sal.disco.unimib.charityhub.model.Result;
-import it.sal.disco.unimib.charityhub.model.Theme;
-import it.sal.disco.unimib.charityhub.model.ThemesApiResponse;
+import it.sal.disco.unimib.charityhub.model.projects.Theme;
+import it.sal.disco.unimib.charityhub.model.projects.ThemesApiResponse;
 import it.sal.disco.unimib.charityhub.utils.Constants;
 import it.sal.disco.unimib.charityhub.utils.SharedPreferencesUtil;
 

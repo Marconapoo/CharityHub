@@ -38,6 +38,18 @@
         tools:layout="@layout/fragment_project_details" >
         <argument
             android:name="project"
-            app:argType="it.sal.disco.unimib.charityhub.model.Project" />
+            app:argType="it.sal.disco.unimib.charityhub.model.projects.Project" />
+        <action
+            android:id="@+id/action_projectDetailsFragment_to_donationFragment"
+            app:destination="@id/donationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/donationFragment"
+        android:name="it.sal.disco.unimib.charityhub.ui.main.DonationFragment"
+        android:label="fragment_donation"
+        tools:layout="@layout/fragment_donation" >
+        <argument
+            android:name="project"
+            app:argType="it.sal.disco.unimib.charityhub.model.projects.Project" />
     </fragment>
 </navigation>

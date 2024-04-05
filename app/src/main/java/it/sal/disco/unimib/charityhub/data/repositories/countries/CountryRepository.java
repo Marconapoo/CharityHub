@@ -7,8 +7,7 @@ import java.util.List;
 import it.sal.disco.unimib.charityhub.data.source.countries.BaseCountryDataSource;
 import it.sal.disco.unimib.charityhub.data.source.countries.CountryDataSource;
 import it.sal.disco.unimib.charityhub.data.source.countries.RestCallback;
-import it.sal.disco.unimib.charityhub.model.CountriesApiResponse;
-import it.sal.disco.unimib.charityhub.model.Country;
+import it.sal.disco.unimib.charityhub.model.countries.Country;
 import it.sal.disco.unimib.charityhub.model.Result;
 
 public class CountryRepository implements ICountryRepository, RestCallback {

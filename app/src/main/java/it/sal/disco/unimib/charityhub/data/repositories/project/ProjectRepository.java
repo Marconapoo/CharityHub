@@ -9,10 +9,10 @@ import it.sal.disco.unimib.charityhub.data.source.projects.BaseProjectLocalDataS
 import it.sal.disco.unimib.charityhub.data.source.projects.ProjectCallback;
 import it.sal.disco.unimib.charityhub.data.source.projects.ProjectDataSource;
 import it.sal.disco.unimib.charityhub.data.source.projects.ProjectLocalDataSource;
-import it.sal.disco.unimib.charityhub.model.ImagesApiResponse;
-import it.sal.disco.unimib.charityhub.model.ProjectsApiResponse;
+import it.sal.disco.unimib.charityhub.model.projects.ImagesApiResponse;
+import it.sal.disco.unimib.charityhub.model.projects.ProjectsApiResponse;
 import it.sal.disco.unimib.charityhub.model.Result;
-import it.sal.disco.unimib.charityhub.model.ThemesApiResponse;
+import it.sal.disco.unimib.charityhub.model.projects.ThemesApiResponse;
 
 public class ProjectRepository implements IProjectRepository, ProjectCallback {
 

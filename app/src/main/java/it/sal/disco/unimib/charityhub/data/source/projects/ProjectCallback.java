@@ -1,8 +1,8 @@
 package it.sal.disco.unimib.charityhub.data.source.projects;
 
-import it.sal.disco.unimib.charityhub.model.ImagesApiResponse;
-import it.sal.disco.unimib.charityhub.model.ProjectsApiResponse;
-import it.sal.disco.unimib.charityhub.model.ThemesApiResponse;
+import it.sal.disco.unimib.charityhub.model.projects.ImagesApiResponse;
+import it.sal.disco.unimib.charityhub.model.projects.ProjectsApiResponse;
+import it.sal.disco.unimib.charityhub.model.projects.ThemesApiResponse;
 
 public interface ProjectCallback {
 

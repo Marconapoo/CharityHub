@@ -1,8 +1,8 @@
 package it.sal.disco.unimib.charityhub.data.service;
 
-import it.sal.disco.unimib.charityhub.model.ImagesApiResponse;
-import it.sal.disco.unimib.charityhub.model.ProjectsApiResponse;
-import it.sal.disco.unimib.charityhub.model.ThemesApiResponse;
+import it.sal.disco.unimib.charityhub.model.projects.ImagesApiResponse;
+import it.sal.disco.unimib.charityhub.model.projects.ProjectsApiResponse;
+import it.sal.disco.unimib.charityhub.model.projects.ThemesApiResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;

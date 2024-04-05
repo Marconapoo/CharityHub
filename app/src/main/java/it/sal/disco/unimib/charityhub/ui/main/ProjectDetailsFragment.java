@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.carousel.CarouselLayoutManager;
@@ -25,9 +26,9 @@ import java.util.List;
 
 import it.sal.disco.unimib.charityhub.R;
 import it.sal.disco.unimib.charityhub.adapter.ImageAdapter;
-import it.sal.disco.unimib.charityhub.model.Image;
-import it.sal.disco.unimib.charityhub.model.ImagesApiResponse;
-import it.sal.disco.unimib.charityhub.model.Project;
+import it.sal.disco.unimib.charityhub.model.projects.Image;
+import it.sal.disco.unimib.charityhub.model.projects.ImagesApiResponse;
+import it.sal.disco.unimib.charityhub.model.projects.Project;
 import it.sal.disco.unimib.charityhub.model.Result;
 
 
@@ -44,6 +45,8 @@ public class ProjectDetailsFragment extends Fragment {
     RecyclerView recyclerView;
 
     ProjectDetailsViewModel projectDetailsViewModel;
+
+
     public ProjectDetailsFragment() {
         // Required empty public constructor
     }
@@ -79,13 +82,12 @@ public class ProjectDetailsFragment extends Fragment {
         imagesArrays = new ArrayList<>();
         imageAdapter = new ImageAdapter(imagesArrays, requireContext(), project);
         recyclerView.setLayoutManager(new CarouselLayoutManager(new FullScreenCarouselStrategy()));
-        recyclerView.setHasFixedSize(false);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(imageAdapter);
-
         SnapHelper snapHelper = new CarouselSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
 
-        Log.w("Details fragment", String.valueOf(project.getId()));
+        Log.w("Details fragment", project.getDonationOptions().getDonationOptionList().get(0).getDescription());
         projectDetailsViewModel.getImagesLiveData(String.valueOf(project.getId())).observe(getViewLifecycleOwner(), result -> {
             Log.e("Details fragment", "OBSERVER");
             if(result.isSuccess()) {
@@ -100,6 +102,10 @@ public class ProjectDetailsFragment extends Fragment {
                             break;
                     }
                 }
+                while(imagesArrays.size() < 4) {
+                    imagesArrays.add(new Image());
+                }
+
                 imageAdapter.notifyItemRangeInserted(0, imagesArrays.size());
             }
             else {

@@ -2,6 +2,11 @@ package it.sal.disco.unimib.charityhub.model;
 
 import java.util.List;
 
+import it.sal.disco.unimib.charityhub.model.countries.Country;
+import it.sal.disco.unimib.charityhub.model.projects.ImagesApiResponse;
+import it.sal.disco.unimib.charityhub.model.projects.ProjectsApiResponse;
+import it.sal.disco.unimib.charityhub.model.projects.ThemesApiResponse;
+
 public abstract class Result {
 
     private Result() {}

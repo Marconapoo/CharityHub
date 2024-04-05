@@ -1,34 +1,30 @@
 package it.sal.disco.unimib.charityhub.adapter;
 
 import android.content.Context;
-import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.google.android.material.carousel.MaskableFrameLayout;
-import com.google.android.material.carousel.OnMaskChangedListener;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.List;
 
 import it.sal.disco.unimib.charityhub.R;
-import it.sal.disco.unimib.charityhub.model.Image;
-import it.sal.disco.unimib.charityhub.model.ImagesApiResponse;
-import it.sal.disco.unimib.charityhub.model.Project;
+import it.sal.disco.unimib.charityhub.model.projects.DonationOptions;
+import it.sal.disco.unimib.charityhub.model.projects.Image;
+import it.sal.disco.unimib.charityhub.model.projects.Project;
+import it.sal.disco.unimib.charityhub.ui.main.ProjectDetailsFragmentDirections;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
 
@@ -52,32 +48,42 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
+        if(holder.normalPageLayout.getVisibility() != View.GONE) {
+            if(images.get(position) != null && images.get(position).getUrl() != null && !images.get(position).getUrl().isEmpty()) {
+                Glide.with(context).load(images.get(position).getUrl())
+                        .placeholder(R.drawable.charityhublogo_senzasfondo)
+                        .into(holder.image);
+            }
+        }
+
+        holder.donateButton.setOnClickListener(v -> {
+            ProjectDetailsFragmentDirections.ActionProjectDetailsFragmentToDonationFragment action = ProjectDetailsFragmentDirections.actionProjectDetailsFragmentToDonationFragment(project);
+            Navigation.findNavController(v).navigate(action);
+        });
         switch (position) {
             case 0:
                 holder.linearProgressIndicator.setProgress(25);
-                holder.title.setText("Summary");
+                holder.title.setText(R.string.summary);
                 holder.description.setText(project.getSummary());
                 break;
             case 1:
                 holder.linearProgressIndicator.setProgress(50);
-                holder.title.setText("Challenge");
+                holder.title.setText(R.string.challenge);
                 holder.description.setText(project.getChallenge());
                 break;
             case 2:
                 holder.linearProgressIndicator.setProgress(75);
-                holder.title.setText("Solution");
+                holder.title.setText(R.string.solution);
                 holder.description.setText(project.getSolution());
                 break;
             case 3:
                 holder.linearProgressIndicator.setProgress(100);
-                holder.title.setText("Long Term");
+                holder.title.setText(R.string.long_term_impact);
                 holder.description.setText(project.getLongTermImpact());
                 break;
             default:
                 break;
         }
-        Glide.with(context).load(images.get(position).getUrl()).into(holder.image);
-
     }
 
     @Override
@@ -96,13 +102,35 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         private final TextView title;
         private final TextView description;
         private final LinearProgressIndicator linearProgressIndicator;
+        private final ConstraintLayout normalPageLayout;
+        private final Button donateButton;
+        /*
+        private final ConstraintLayout lastPageLayout;
+        private final TextView currentMoneyText;
+        private final TextView totalMoneyText;
+        private final TextView numberOfDonationsText;
+        private final TextView remainingFundingText;
+        private final LinearProgressIndicator moneyProgressIndicator;
+        private final LinearLayout linearLayout;*/
+
+
+
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.carousel_image_view);
             title = itemView.findViewById(R.id.titleDetailTextView);
             description = itemView.findViewById(R.id.descriptionDetailTextView);
             linearProgressIndicator = itemView.findViewById(R.id.currentPage);
-
+            //lastPageLayout = itemView.findViewById(R.id.lastPageLayout);
+            normalPageLayout = itemView.findViewById(R.id.normalPageLayout);
+            donateButton = itemView.findViewById(R.id.donateButton);
+            /*
+            currentMoneyText = itemView.findViewById(R.id.currentMoneyAmount);
+            totalMoneyText = itemView.findViewById(R.id.totalMoneyAmount);
+            numberOfDonationsText = itemView.findViewById(R.id.numberOfDonations);
+            remainingFundingText = itemView.findViewById(R.id.moneyRemaining);
+            moneyProgressIndicator = itemView.findViewById(R.id.moneyLinearProgressIndicator);
+            linearLayout = itemView.findViewById(R.id.donationsLinearLayout);*/
         }
 
 
