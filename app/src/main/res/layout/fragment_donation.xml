@@ -6,7 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.main.DonationFragment">
 
-
     <TextView
         android:id="@+id/projectTitleDonation"
         app:layout_constraintTop_toTopOf="parent"
@@ -78,18 +77,16 @@
         android:layout_height="wrap_content"
         android:text="QUANTITA" />
 
-    <LinearLayout
-        android:id="@+id/donationsLinearLayout"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/donationRecyclerView"
         app:layout_constraintTop_toBottomOf="@id/moneyRemaining"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="30dp"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </LinearLayout>
-
-
+        android:layout_height="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

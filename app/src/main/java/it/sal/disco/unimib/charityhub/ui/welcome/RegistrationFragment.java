@@ -97,25 +97,31 @@ public class RegistrationFragment extends Fragment {
             String fullName = inputFullName.getText().toString();
             String countryCode = null;
 
-            for(Country country : countries) {
-                if(countryPicker.getText().toString().equals(country.getName().getCommonName())) {
+            for (Country country : countries) {
+                if (countryPicker.getText().toString().equals(country.getName().getCommonName())) {
                     countryCode = country.getCountryCode();
                     break;
                 }
             }
 
+
             SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(getActivity().getApplication());
 
             sharedPreferencesUtil.writeStringData(Constants.SHARED_PREFERENCES_FILE_NAME, Constants.SHARED_PREFERENCES_COUNTRY_OF_INTEREST, countryCode);
-            userViewModel.getUserLiveData(email, password, fullName,  countryCode, false).observe(getViewLifecycleOwner(), result -> {
-                if(result.isSuccess()) {
-                    Navigation.findNavController(v).navigate(R.id.action_registrationFragment_to_mainActivity);
-                    requireActivity().finish();
-                }
-                else {
-                    Log.e("Registration Fragment", ((Result.Error) result).getErrorMessage());
-                }
-            });
+            if (!userViewModel.isAuthenticationError()) {
+                userViewModel.getUserLiveData(email, password, fullName, countryCode, false).observe(getViewLifecycleOwner(), result -> {
+                    if (result.isSuccess()) {
+                        userViewModel.setAuthenticationError(false);
+                        Navigation.findNavController(v).navigate(R.id.action_registrationFragment_to_mainActivity);
+                        requireActivity().finish();
+                    } else {
+                        userViewModel.setAuthenticationError(true);
+                    }
+                });
+            }
+            else {
+                userViewModel.logUser(email, password, fullName, countryCode, false);
+            }
         });
 
         logInTextButton.setOnClickListener(v -> {

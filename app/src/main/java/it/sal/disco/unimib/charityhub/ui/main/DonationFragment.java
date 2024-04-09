@@ -5,19 +5,32 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import it.sal.disco.unimib.charityhub.R;
+import it.sal.disco.unimib.charityhub.adapter.DonationAdapter;
+import it.sal.disco.unimib.charityhub.model.projects.DonationOptions;
 import it.sal.disco.unimib.charityhub.model.projects.Project;
 
 public class DonationFragment extends Fragment {
 
 
     Project project;
+    RecyclerView recyclerView;
+    DonationAdapter donationAdapter;
+    List<DonationOptions.DonationOption> donationOptionList;
 
 
     public DonationFragment() {
@@ -47,8 +60,24 @@ public class DonationFragment extends Fragment {
 
         project = DonationFragmentArgs.fromBundle(requireArguments()).getProject();
 
-        TextView projectTitleTextView = view.findViewById(R.id.projectTitleDonation);
+        donationOptionList = new ArrayList<>();
+        donationOptionList.addAll(project.getDonationOptions().getDonationOptionList());
 
+        recyclerView = view.findViewById(R.id.donationRecyclerView);
+        donationAdapter = new DonationAdapter(donationOptionList);
+        recyclerView.setAdapter(donationAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setHasFixedSize(true);
+        TextView projectTitleTextView = view.findViewById(R.id.projectTitleDonation);
+        LinearProgressIndicator linearProgressIndicator = view.findViewById(R.id.moneyLinearProgressIndicator);
+        TextView numberOfDonationTextView = view.findViewById(R.id.numberOfDonations);
+        TextView donationRemainingTextView = view.findViewById(R.id.moneyRemaining);
+
+        String donationsNumber = project.getNumberOfDonations() + " donations";
+        String moneyRemaining = project.getRemainingFunding() + " to go";
+        numberOfDonationTextView.setText(donationsNumber);
+        donationRemainingTextView.setText(moneyRemaining);
+        linearProgressIndicator.setProgress((int) (project.getFunding()*100/project.getGoal()));
         projectTitleTextView.setText(project.getTitle());
 
 

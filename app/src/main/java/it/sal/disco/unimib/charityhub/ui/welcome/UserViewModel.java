@@ -21,13 +21,16 @@ public class UserViewModel extends ViewModel {
 
     private MutableLiveData<Result> countriesLiveData;
 
+
+    private boolean authenticationError;
+
     public UserViewModel(Application application) {
         userRepository = new UserRepository(application);
         countryRepository = new CountryRepository();
     }
 
     public MutableLiveData<Result> getUserLiveData(String email, String password, String fullName, String country, boolean isUserRegistered) {
-        userLiveData = userRepository.getUserLiveData(email, password, fullName, country, isUserRegistered);
+        logUser(email, password, fullName, country, isUserRegistered);
         return userLiveData;
     }
 
@@ -52,4 +55,15 @@ public class UserViewModel extends ViewModel {
         return countriesLiveData;
     }
 
+    public boolean isAuthenticationError() {
+        return authenticationError;
+    }
+
+    public void setAuthenticationError(boolean authenticationError) {
+        this.authenticationError = authenticationError;
+    }
+
+    public void logUser(String email, String password, String fullName, String country, boolean isUserRegistered) {
+        userLiveData = userRepository.getUserLiveData(email, password, fullName, country, isUserRegistered);
+    }
 }
