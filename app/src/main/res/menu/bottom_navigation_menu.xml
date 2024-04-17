@@ -10,4 +10,11 @@
         android:enabled="true"
         android:icon="@drawable/account_icon"
         android:title="Account"/>
+
+    <!--
+    <item
+        android:id="@+id/donationFragment"
+        android:enabled="true"
+        android:icon="@drawable/account_icon"
+        android:title="Support the project"/> -->
 </menu>

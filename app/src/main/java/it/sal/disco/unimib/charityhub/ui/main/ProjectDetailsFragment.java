@@ -34,16 +34,12 @@ import it.sal.disco.unimib.charityhub.model.Result;
 
 public class ProjectDetailsFragment extends Fragment {
 
-    TextView summmary;
-    TextView challenge;
-    TextView solution;
-    TextView longTermImpact;
     Project project;
     List<Image> imagesArrays;
 
     ImageAdapter imageAdapter;
     RecyclerView recyclerView;
-
+    Button donateButton;
     ProjectDetailsViewModel projectDetailsViewModel;
 
 
@@ -65,6 +61,8 @@ public class ProjectDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //((MainActivity) requireActivity()).bottomNavigationView.setVisibility(View.GONE);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_project_details, container, false);
     }
@@ -72,13 +70,9 @@ public class ProjectDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //summmary = view.findViewById(R.id.summary);
-        //challenge = view.findViewById(R.id.challenge);
-        //solution = view.findViewById(R.id.solution);
-        //longTermImpact = view.findViewById(R.id.longTermImpact);
         project = ProjectDetailsFragmentArgs.fromBundle(getArguments()).getProject();
         recyclerView = view.findViewById(R.id.images_recycler_view);
-
+        donateButton = view.findViewById(R.id.donateButton);
         imagesArrays = new ArrayList<>();
         imageAdapter = new ImageAdapter(imagesArrays, requireContext(), project);
         recyclerView.setLayoutManager(new CarouselLayoutManager(new FullScreenCarouselStrategy()));
@@ -113,9 +107,20 @@ public class ProjectDetailsFragment extends Fragment {
             }
         });
 
-        //setUpUI();
+        donateButton.setOnClickListener(v -> {
+            if(project != null) {
+                ProjectDetailsFragmentDirections.ActionProjectDetailsFragmentToDonationFragment action = ProjectDetailsFragmentDirections.actionProjectDetailsFragmentToDonationFragment(project);
+                Navigation.findNavController(v).navigate(action);
+            }
+        });
+
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        //((MainActivity) requireActivity()).bottomNavigationView.setVisibility(View.VISIBLE);
+    }
 
     /*
     public void setUpUI() {

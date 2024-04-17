@@ -12,9 +12,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.TextView;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import it.sal.disco.unimib.charityhub.R;
+import it.sal.disco.unimib.charityhub.model.User;
 import it.sal.disco.unimib.charityhub.ui.welcome.UserViewModel;
 
 public class AccountFragment extends Fragment {
@@ -52,6 +57,13 @@ public class AccountFragment extends Fragment {
 
         Log.e("Account fragment", userViewModel.getLoggedUser().getName());
 
+        User user = userViewModel.getLoggedUser();
+        TextInputEditText fullName = view.findViewById(R.id.fullNameEditText);
+        TextInputEditText email = view.findViewById(R.id.emailEditText);
+        AutoCompleteTextView country = view.findViewById(R.id.countryEdit);
+        country.setText(user.getCountryOfInterest());
+        fullName.setText(user.getName());
+        email.setText(user.getEmail());
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,5 +73,7 @@ public class AccountFragment extends Fragment {
                 });
             }
         });
+
+
     }
 }

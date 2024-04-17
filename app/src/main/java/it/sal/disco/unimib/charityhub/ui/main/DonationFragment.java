@@ -72,7 +72,13 @@ public class DonationFragment extends Fragment {
         LinearProgressIndicator linearProgressIndicator = view.findViewById(R.id.moneyLinearProgressIndicator);
         TextView numberOfDonationTextView = view.findViewById(R.id.numberOfDonations);
         TextView donationRemainingTextView = view.findViewById(R.id.moneyRemaining);
+        TextView currentMoneyRaisedTextView = view.findViewById(R.id.currentMoneyAmount);
+        TextView totalMoneyNeededTextView = view.findViewById(R.id.totalMoneyAmount);
 
+        String raisedMoney = "€" + project.getFunding();
+        String totalMoneyNeeded = "raised of " + project.getGoal();
+        currentMoneyRaisedTextView.setText(raisedMoney);
+        totalMoneyNeededTextView.setText(totalMoneyNeeded);
         String donationsNumber = project.getNumberOfDonations() + " donations";
         String moneyRemaining = project.getRemainingFunding() + " to go";
         numberOfDonationTextView.setText(donationsNumber);
