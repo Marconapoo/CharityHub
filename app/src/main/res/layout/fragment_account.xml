@@ -64,7 +64,6 @@
 
         <AutoCompleteTextView
             android:id="@+id/countryEdit"
-            android:hint="@string/select_a_country"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

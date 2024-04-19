@@ -16,17 +16,30 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 import it.sal.disco.unimib.charityhub.R;
+import it.sal.disco.unimib.charityhub.model.Result;
 import it.sal.disco.unimib.charityhub.model.User;
+import it.sal.disco.unimib.charityhub.model.countries.Country;
 import it.sal.disco.unimib.charityhub.ui.welcome.UserViewModel;
+import it.sal.disco.unimib.charityhub.utils.Constants;
+import it.sal.disco.unimib.charityhub.utils.SharedPreferencesUtil;
 
 public class AccountFragment extends Fragment {
 
     UserViewModel userViewModel;
-
-
+    User user;
+    SharedPreferencesUtil sharedPreferencesUtil;
+    List<Country> countryList;
+    MaterialAutoCompleteTextView countryPicker;
+    String[] countryNames;
+    String currentCountry;
     public AccountFragment() {
         // Required empty public constructor
     }
@@ -40,6 +53,22 @@ public class AccountFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userViewModel = new ViewModelProvider(requireActivity(), new HomeViewModelFactory(requireActivity().getApplication())).get(UserViewModel.class);
+        countryList = new ArrayList<>();
+        userViewModel.getCountriesLiveData().observe(this, result -> {
+            if(result.isSuccess()) {
+                List<Country> countriesApiResponse = ((Result.CountriesResponseSucccess) result).getCountriesResponse();
+                countriesApiResponse.sort(Comparator.comparing(country -> country.getName().getCommonName()));
+                countryList.addAll(countriesApiResponse);
+                countryNames = new String[countryList.size()];
+                for(int i = 0; i < countryList.size(); i++) {
+                    countryNames[i] = countryList.get(i).getName().getCommonName();
+                }
+                setCountries(countryNames);
+            }
+            else {
+                Log.e("Account fragment", ((Result.Error) result).getErrorMessage());
+            }
+        });
     }
 
     @Override
@@ -54,26 +83,36 @@ public class AccountFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Button logOutButton = view.findViewById(R.id.logoutButton);
+        countryPicker = view.findViewById(R.id.countryEdit);
 
-        Log.e("Account fragment", userViewModel.getLoggedUser().getName());
-
-        User user = userViewModel.getLoggedUser();
+        //Log.e("Account fragment", userViewModel.getLoggedUser().getCountryOfInterest());
+        sharedPreferencesUtil = new SharedPreferencesUtil(requireActivity().getApplication());
+        user = userViewModel.getLoggedUser();
+        currentCountry = sharedPreferencesUtil.readStringData(Constants.SHARED_PREFERENCES_FILE_NAME, Constants.SHARED_PREFERENCES_COUNTRY_OF_INTEREST);
         TextInputEditText fullName = view.findViewById(R.id.fullNameEditText);
         TextInputEditText email = view.findViewById(R.id.emailEditText);
-        AutoCompleteTextView country = view.findViewById(R.id.countryEdit);
-        country.setText(user.getCountryOfInterest());
+        countryPicker.setText(currentCountry);
         fullName.setText(user.getName());
         email.setText(user.getEmail());
-        logOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userViewModel.logout().observe(getViewLifecycleOwner(), result -> {
-                    Navigation.findNavController(v).navigate(R.id.action_accountFragment_to_welcomeActivity);
-                    requireActivity().finish();
-                });
+
+        logOutButton.setOnClickListener(v -> userViewModel.logout().observe(getViewLifecycleOwner(), result -> {
+            Navigation.findNavController(v).navigate(R.id.action_accountFragment_to_welcomeActivity);
+            requireActivity().finish();
+        }));
+
+
+    }
+
+    public void setCountries(String[] countryNames) {
+        for(Country country : countryList) {
+            if(country.getCountryCode().equals(currentCountry)) {
+                currentCountry = country.getName().getCommonName();
+                break;
             }
-        });
-
-
+        }
+        if(countryPicker != null) {
+            countryPicker.setSimpleItems(countryNames);
+            countryPicker.setText(currentCountry);
+        }
     }
 }

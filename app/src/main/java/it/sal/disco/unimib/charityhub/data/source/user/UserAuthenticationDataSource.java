@@ -2,9 +2,12 @@ package it.sal.disco.unimib.charityhub.data.source.user;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import it.sal.disco.unimib.charityhub.model.User;
 
@@ -23,6 +26,7 @@ public class UserAuthenticationDataSource extends BaseUserAuthenticationDataSour
             if(task.isSuccessful()) {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                 if(firebaseUser != null) {
+
 
                     userResponseCallback.onSuccessAuthentication(new User(firebaseUser.getDisplayName(), firebaseUser.getEmail(), firebaseUser.getUid()));
                 }
@@ -90,4 +94,5 @@ public class UserAuthenticationDataSource extends BaseUserAuthenticationDataSour
             return null;
         }
     }
+
 }

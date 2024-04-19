@@ -63,6 +63,7 @@ public class LoginFragment extends Fragment {
         TextInputLayout passwordTextField = view.findViewById(R.id.passwordTextField);
         Button logInButton = view.findViewById(R.id.loginButton);
         Button registerButton = view.findViewById(R.id.registerTextButton);
+        userViewModel.setAuthenticationError(false);
 
         logInButton.setOnClickListener(v -> {
             String email = inputEmail.getText().toString();
@@ -79,11 +80,13 @@ public class LoginFragment extends Fragment {
                             Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_mainActivity);
                             requireActivity().finish();
                         } else {
+
                             userViewModel.setAuthenticationError(true);
                         }
                     });
                 }
                 else {
+                    Log.w("Login Fragment", "TEST");
                     userViewModel.logUser(email, password, null, null, true);
                 }
             }

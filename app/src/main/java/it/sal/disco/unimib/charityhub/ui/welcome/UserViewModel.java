@@ -20,6 +20,7 @@ public class UserViewModel extends ViewModel {
     private final CountryRepository countryRepository;
 
     private MutableLiveData<Result> countriesLiveData;
+    private MutableLiveData<String> userCountry;
 
 
     private boolean authenticationError;
@@ -66,4 +67,5 @@ public class UserViewModel extends ViewModel {
     public void logUser(String email, String password, String fullName, String country, boolean isUserRegistered) {
         userLiveData = userRepository.getUserLiveData(email, password, fullName, country, isUserRegistered);
     }
+
 }

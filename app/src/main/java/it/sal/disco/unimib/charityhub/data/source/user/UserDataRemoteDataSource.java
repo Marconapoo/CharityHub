@@ -34,8 +34,8 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
                 .document(user.getEmail())
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    user.setCountryOfInterest(documentSnapshot.getString("countryOfInterest"));
-                    userResponseCallback.onCountryGotSuccess(user);
+                    String country = documentSnapshot.getString("countryOfInterest");
+                    userResponseCallback.onCountryGotSuccess(new User(user.getName(), user.getEmail(), user.getUid(), country));
                 })
                 .addOnFailureListener(e -> userResponseCallback.onFailureAuthentication(e.getLocalizedMessage()));
     }

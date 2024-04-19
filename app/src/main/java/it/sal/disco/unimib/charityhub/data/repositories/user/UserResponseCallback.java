@@ -9,4 +9,5 @@ public interface UserResponseCallback {
     void onSuccessUserSaved(User user);
     void onSuccessRegistration(User user);
     void onCountryGotSuccess(User user);
+
 }
