@@ -14,4 +14,6 @@ public abstract class BaseUserDataRemoteDataSource {
     public abstract void saveUserData(User user);
 
     public abstract void getUserCountry(User user);
+
+    public abstract void changeUserInformation(String email, String fullName, String country);
 }

@@ -9,5 +9,7 @@ public interface UserResponseCallback {
     void onSuccessUserSaved(User user);
     void onSuccessRegistration(User user);
     void onCountryGotSuccess(User user);
+    void onSuccessAuthInfoChanged(String newFullName, String newEmail, String newCountry);
+    void onSuccessInfoChanged(User user);
 
 }

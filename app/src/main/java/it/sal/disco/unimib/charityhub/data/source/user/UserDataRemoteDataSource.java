@@ -1,10 +1,5 @@
 package it.sal.disco.unimib.charityhub.data.source.user;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import it.sal.disco.unimib.charityhub.model.User;
@@ -40,4 +35,8 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
                 .addOnFailureListener(e -> userResponseCallback.onFailureAuthentication(e.getLocalizedMessage()));
     }
 
+    @Override
+    public void changeUserInformation(String email, String fullName, String country) {
+
+    }
 }

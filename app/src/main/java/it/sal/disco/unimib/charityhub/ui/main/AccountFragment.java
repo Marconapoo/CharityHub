@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -83,15 +84,21 @@ public class AccountFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Button logOutButton = view.findViewById(R.id.logoutButton);
+        Button editButton = view.findViewById(R.id.editButton);
         countryPicker = view.findViewById(R.id.countryEdit);
+        TextInputEditText fullName = view.findViewById(R.id.fullNameEditText);
+        TextInputEditText email = view.findViewById(R.id.emailEditText);
+        TextInputLayout fullNameText = view.findViewById(R.id.fullName);
+        TextInputLayout emailText = view.findViewById(R.id.email);
+        TextInputLayout countryText = view.findViewById(R.id.countryPicker);
+        Button confirmButton = view.findViewById(R.id.confirmButton);
+        Button undoButton = view.findViewById(R.id.undoButton);
 
         //Log.e("Account fragment", userViewModel.getLoggedUser().getCountryOfInterest());
         sharedPreferencesUtil = new SharedPreferencesUtil(requireActivity().getApplication());
         user = userViewModel.getLoggedUser();
         currentCountry = sharedPreferencesUtil.readStringData(Constants.SHARED_PREFERENCES_FILE_NAME, Constants.SHARED_PREFERENCES_COUNTRY_OF_INTEREST);
-        TextInputEditText fullName = view.findViewById(R.id.fullNameEditText);
-        TextInputEditText email = view.findViewById(R.id.emailEditText);
-        countryPicker.setText(currentCountry);
+
         fullName.setText(user.getName());
         email.setText(user.getEmail());
 
@@ -100,6 +107,50 @@ public class AccountFragment extends Fragment {
             requireActivity().finish();
         }));
 
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fullNameText.setEnabled(true);
+                emailText.setEnabled(true);
+                countryText.setEnabled(true);
+                countryPicker.setText("");
+                logOutButton.setVisibility(View.GONE);
+                editButton.setVisibility(View.GONE);
+                confirmButton.setVisibility(View.VISIBLE);
+                undoButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        confirmButton.setOnClickListener(v -> {
+            String newFullName, newEmail, newCountry;
+            if(fullName.getText() != null && !fullName.getText().toString().equals(user.getName())) {
+                newFullName = fullName.getText().toString();
+            }
+            if(email.getText() != null && !email.getText().toString().equals(user.getEmail())) {
+                newEmail = email.getText().toString();
+            }
+            if(countryPicker.getText() != null) {
+                for(Country country : countryList) {
+                    if(country.getName().getCommonName().equals(countryPicker.getText().toString()) && !currentCountry.equals(country.getCountryCode())) {
+                        newCountry = country.getCountryCode();
+                        break;
+                    }
+                }
+            }
+        });
+
+        undoButton.setOnClickListener(v -> {
+            fullName.setText(user.getName());
+            email.setText(user.getEmail());
+            countryPicker.setText(currentCountry);
+            fullNameText.setEnabled(false);
+            emailText.setEnabled(false);
+            countryText.setEnabled(false);
+            logOutButton.setVisibility(View.VISIBLE);
+            editButton.setVisibility(View.VISIBLE);
+            confirmButton.setVisibility(View.GONE);
+            undoButton.setVisibility(View.GONE);
+        });
 
     }
 
@@ -111,8 +162,10 @@ public class AccountFragment extends Fragment {
             }
         }
         if(countryPicker != null) {
+            Log.w("Account fragment", "" + countryNames.length);
             countryPicker.setSimpleItems(countryNames);
             countryPicker.setText(currentCountry);
         }
     }
+
 }

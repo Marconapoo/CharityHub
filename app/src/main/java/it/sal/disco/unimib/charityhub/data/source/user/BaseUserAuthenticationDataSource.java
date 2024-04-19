@@ -13,6 +13,7 @@ public abstract class BaseUserAuthenticationDataSource {
     public abstract void logIn(String email, String password);
     public abstract void signIn(String email, String password, String fullName, String country);
     public abstract void logOut();
+    public abstract void changeUserInformation(String newFullName, String newEmail, String newCountry);
     public abstract User getLoggedUser();
 
 }
