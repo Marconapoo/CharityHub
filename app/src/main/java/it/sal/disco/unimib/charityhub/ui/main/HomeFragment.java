@@ -150,6 +150,12 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
+        String newCountry = sharedPreferencesUtil.readStringData(Constants.SHARED_PREFERENCES_FILE_NAME, Constants.SHARED_PREFERENCES_COUNTRY_OF_INTEREST);
+        if(!newCountry.equals(country)) {
+            projectList.clear();
+            country = newCountry;
+            homeViewModel.searchProjects("country:" + country, null);
+        }
 
         recyclerView = view.findViewById(R.id.projectsRV);
         projectAdapter = new ProjectAdapter(projectList, requireContext());

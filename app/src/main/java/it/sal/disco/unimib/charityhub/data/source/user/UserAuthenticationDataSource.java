@@ -1,7 +1,11 @@
 package it.sal.disco.unimib.charityhub.data.source.user;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -79,44 +83,6 @@ public class UserAuthenticationDataSource extends BaseUserAuthenticationDataSour
         };
         firebaseAuth.addAuthStateListener(authStateListener);
         firebaseAuth.signOut();
-    }
-
-    @Override
-    public void changeUserInformation(String newFullName, String newEmail, String newCountry) {
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        if(newFullName != null) {
-            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                    .setDisplayName(newFullName)
-                    .build();
-
-            firebaseUser.updateProfile(profileUpdates)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            if(newEmail != null) {
-                                firebaseUser.verifyBeforeUpdateEmail(newEmail)
-                                        .addOnCompleteListener(task1 -> {
-                                            if(task1.isSuccessful()) {
-                                                userResponseCallback.onSuccessAuthInfoChanged(newFullName, newEmail, newCountry);
-                                            }
-                                        })
-                                        .addOnFailureListener(e -> userResponseCallback.onFailureAuthentication(e.getLocalizedMessage()));
-                            }
-                        }
-                    })
-                    .addOnFailureListener(e -> userResponseCallback.onFailureAuthentication(e.getLocalizedMessage()));
-        }
-        else if(newEmail != null) {
-            firebaseUser.verifyBeforeUpdateEmail(newEmail)
-                    .addOnCompleteListener(task1 -> {
-                        if(task1.isSuccessful()) {
-                            userResponseCallback.onSuccessAuthInfoChanged(null, newEmail, newCountry);
-                        }
-                    })
-                    .addOnFailureListener(e -> userResponseCallback.onFailureAuthentication(e.getLocalizedMessage()));
-        }
-        else {
-            userResponseCallback.onSuccessAuthInfoChanged(null, null, newCountry);
-        }
     }
 
     @Override

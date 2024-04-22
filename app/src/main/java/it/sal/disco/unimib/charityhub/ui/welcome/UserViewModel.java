@@ -68,12 +68,12 @@ public class UserViewModel extends ViewModel {
         userLiveData = userRepository.getUserLiveData(email, password, fullName, country, isUserRegistered);
     }
 
-    public MutableLiveData<Result> changeUserInfo(String newFullName, String newEmail, String newCountry) {
-        changeUserInformation(newFullName, newEmail, newCountry);
+    public MutableLiveData<Result> changeUserCountry(User user) {
+        changeUserInformation(user);
         return userLiveData;
     }
 
-    public void changeUserInformation(String newFullName, String newEmail, String newCountry) {
-        userLiveData = userRepository.changeUserInformation(newFullName, newEmail, newCountry);
+    public void changeUserInformation(User user) {
+        userLiveData = userRepository.changeUserCountry(user);
     }
 }

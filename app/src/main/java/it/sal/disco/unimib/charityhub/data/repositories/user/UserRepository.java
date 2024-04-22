@@ -52,8 +52,8 @@ public class UserRepository implements IUserRepository, UserResponseCallback {
     }
 
     @Override
-    public MutableLiveData<Result> changeUserInformation(String newFullName, String newEmail, String newCountry) {
-        userAuthenticationDataSource.changeUserInformation(newFullName, newEmail, newCountry);
+    public MutableLiveData<Result> changeUserCountry(User user) {
+        userDataRemoteDataSource.changeUserCountry(user);
         return userLiveData;
     }
 
@@ -94,14 +94,11 @@ public class UserRepository implements IUserRepository, UserResponseCallback {
         userLiveData.postValue(result);
     }
 
-    @Override
-    public void onSuccessAuthInfoChanged(String newFullName, String newEmail, String newCountry) {
-
-    }
 
     @Override
     public void onSuccessInfoChanged(User user) {
-
+        Result.UserResponseSuccess result = new Result.UserResponseSuccess(user);
+        userLiveData.postValue(result);
     }
 
 

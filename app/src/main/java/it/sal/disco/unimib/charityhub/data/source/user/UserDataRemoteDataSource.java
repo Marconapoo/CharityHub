@@ -1,6 +1,16 @@
 package it.sal.disco.unimib.charityhub.data.source.user;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import it.sal.disco.unimib.charityhub.model.User;
 
@@ -16,7 +26,7 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
     @Override
     public void saveUserData(User user) {
         db.collection("Users")
-                .document(user.getEmail())
+                .document(user.getUid())
                 .set(user)
                 .addOnSuccessListener(unused -> userResponseCallback.onSuccessUserSaved(user))
                 .addOnFailureListener(e -> userResponseCallback.onFailureAuthentication(e.getLocalizedMessage()));
@@ -26,7 +36,7 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
     @Override
     public void getUserCountry(User user) {
         db.collection("Users")
-                .document(user.getEmail())
+                .document(user.getUid())
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     String country = documentSnapshot.getString("countryOfInterest");
@@ -36,7 +46,18 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
     }
 
     @Override
-    public void changeUserInformation(String email, String fullName, String country) {
-
+    public void changeUserCountry(User user) {
+        DocumentReference documentReference = db.collection("Users").document(user.getUid());
+        documentReference
+                .set(user)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        userResponseCallback.onSuccessInfoChanged(user);
+                    }
+                    else {
+                        userResponseCallback.onFailureAuthentication(task.getException().getLocalizedMessage());
+                    }
+                })
+                .addOnFailureListener(e -> userResponseCallback.onFailureAuthentication(e.getLocalizedMessage()));
     }
 }

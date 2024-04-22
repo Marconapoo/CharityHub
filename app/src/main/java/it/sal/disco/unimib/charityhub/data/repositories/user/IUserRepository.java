@@ -11,5 +11,5 @@ public interface IUserRepository {
     User getLoggedUser();
     MutableLiveData<Result> logOut();
 
-    MutableLiveData<Result> changeUserInformation(String newFullName, String newEmail, String newCountry);
+    MutableLiveData<Result> changeUserCountry(User user);
 }
