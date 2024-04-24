@@ -1,6 +1,11 @@
 package it.sal.disco.unimib.charityhub.ui.main;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,13 +14,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.android.material.carousel.CarouselLayoutManager;
 import com.google.android.material.carousel.CarouselSnapHelper;
@@ -26,10 +24,11 @@ import java.util.List;
 
 import it.sal.disco.unimib.charityhub.R;
 import it.sal.disco.unimib.charityhub.adapter.ImageAdapter;
+import it.sal.disco.unimib.charityhub.model.Result;
 import it.sal.disco.unimib.charityhub.model.projects.Image;
 import it.sal.disco.unimib.charityhub.model.projects.ImagesApiResponse;
 import it.sal.disco.unimib.charityhub.model.projects.Project;
-import it.sal.disco.unimib.charityhub.model.Result;
+import it.sal.disco.unimib.charityhub.utils.Constants;
 
 
 public class ProjectDetailsFragment extends Fragment {
@@ -90,7 +89,7 @@ public class ProjectDetailsFragment extends Fragment {
 
                 for(ImagesApiResponse.ImagesArray images : imagesApiResponse.getImagesObject().getImagesArrays()) {
                     for(Image image : images.getImageLinks()) {
-                        if(image.getSize().equals("orginal"))
+                        if(image.getSize().equals(Constants.IMAGE_ORIGINAL_SIZE_FIELD))
                             imagesArrays.add(image);
                         if(imagesArrays.size() == 4)
                             break;

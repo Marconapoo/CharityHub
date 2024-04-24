@@ -3,6 +3,8 @@ package it.sal.disco.unimib.charityhub.model.projects;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Objects;
+
 public class Theme implements Parcelable {
     private String id;
     private String name;
@@ -26,6 +28,19 @@ public class Theme implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Theme theme = (Theme) o;
+        return theme.getId().equals(this.id) && theme.getName().equals(this.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
     }
 
     @Override

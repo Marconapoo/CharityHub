@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class HomeFragment extends Fragment {
     String country;
     List<Theme> loadedThemes;
     ChipGroup chipGroup;
+    CircularProgressIndicator circularProgressIndicator;
 
     int currentSet;
 
@@ -71,11 +73,11 @@ public class HomeFragment extends Fragment {
                 Constants.SHARED_PREFERENCES_FILE_NAME, Constants.SHARED_PREFERENCES_COUNTRY_OF_INTEREST);
 
 
-        homeViewModel.searchForProjects("country:"+country, null).observe(this, result -> {
+        homeViewModel.searchForProjects(Constants.COUNTRY_FILTER+country, null).observe(this, result -> {
             Log.w("Home fragment", "OBSERVER");
             if(result.isSuccess()) {
+                homeViewModel.setFirstLoading(false);
                 homeViewModel.setLoading(false);
-
                 ProjectsApiResponse projectResponseSuccess = ((Result.ProjectResponseSuccess) result).getProjectsApiResponse();
 
                 List<Project> fetchedProjects = projectResponseSuccess.getSearch().getResponse().getProjectData().getProjectList();
@@ -88,6 +90,7 @@ public class HomeFragment extends Fragment {
                 }
                 updateUi(startPosition);
             } else {
+                homeViewModel.setLoading(false);
                 Log.e("Home Fragment", ((Result.Error) result).getErrorMessage());
                 Snackbar.make(requireActivity().findViewById(android.R.id.content), ((Result.Error) result).getErrorMessage(), Snackbar.LENGTH_SHORT).show();
             }
@@ -108,33 +111,40 @@ public class HomeFragment extends Fragment {
     }
 
     private void showThemes() {
-        Log.e("Home fragment", "themes: " + loadedThemes.size());
         for(Theme theme : loadedThemes) {
             Chip chip = new Chip(requireContext());
             chip.setId(ViewCompat.generateViewId());
             chip.setText(theme.getName());
-            chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if(isChecked) {
-                    currentSet = 0;
-                    int projectListSize = projectList.size();
-                    projectList.clear();
-                    // Notifica all'adapter che i dati sono cambiati
-                    projectAdapter.notifyItemRangeRemoved(0, projectListSize);
-                    homeViewModel.searchProjects("country:" + country+ ",theme:" +theme.getId(), currentSet);
-                    currentTheme = theme;
-                }
-                else {
-                    currentSet = 0;
-                    int projectListSize = projectList.size();
-                    projectList.clear();
-                    projectAdapter.notifyItemRangeRemoved(0, projectListSize);
-                    homeViewModel.searchProjects("country:" + country, currentSet);
-                }
-            });
             ChipDrawable chipDrawable = ChipDrawable.createFromAttributes(requireContext(), null, 0, com.google.android.material.R.style.Widget_Material3_Chip_Filter);
             chip.setChipDrawable(chipDrawable);
+            if(homeViewModel.getCurrentTheme() != null && homeViewModel.getCurrentTheme().equals(theme)) {
+                Log.w("HomeFragment", "TEMA ATTUALE : " + homeViewModel.getCurrentTheme().getName());
+                currentTheme = theme;
+                chip.setChecked(true);
+            }
             chipGroup.addView(chip);
         }
+
+    }
+
+    private void loadProjectsByTheme(Theme theme) {
+        currentSet = 0;
+        int projectListSize = projectList.size();
+        projectList.clear();
+        projectAdapter.notifyItemRangeRemoved(0, projectListSize);
+        homeViewModel.setLoading(true);
+        homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country + "," + Constants.THEME_FILTER + theme.getId(), currentSet);
+        currentTheme = theme;
+    }
+
+    private void loadProjectsWithoutTheme() {
+        currentSet = 0;
+        int projectListSize = projectList.size();
+        projectList.clear();
+        homeViewModel.setLoading(true);
+        projectAdapter.notifyItemRangeRemoved(0, projectListSize);
+        currentTheme = null;
+        homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country, currentSet);
     }
 
     @Override
@@ -149,14 +159,35 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        chipGroup = view.findViewById(R.id.chipGroup);
+        circularProgressIndicator = view.findViewById(R.id.progressIndicator);
         String newCountry = sharedPreferencesUtil.readStringData(Constants.SHARED_PREFERENCES_FILE_NAME, Constants.SHARED_PREFERENCES_COUNTRY_OF_INTEREST);
         if(!newCountry.equals(country)) {
             projectList.clear();
             country = newCountry;
-            homeViewModel.searchProjects("country:" + country, null);
+            homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country, null);
         }
 
+        // Controlla se è stato selezionato un tema e carica i progetti corrispondenti
+
+        chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(@NonNull ChipGroup group, int checkedId) {
+                Chip chip = group.findViewById(checkedId);
+                if(checkedId == View.NO_ID && !homeViewModel.isLoading()) {
+                    loadProjectsWithoutTheme();
+                }
+                else if (chip != null) {
+                    Theme selectedTheme = getThemeByName(chip.getText().toString());
+                    if (selectedTheme != null && !homeViewModel.isLoading()) {
+                        loadProjectsByTheme(selectedTheme);
+                    } else if (!homeViewModel.isLoading()){
+                        Log.w("Home Fragment", "Carico senza temi");
+                        loadProjectsWithoutTheme();
+                    }
+                }
+            }
+        });
         recyclerView = view.findViewById(R.id.projectsRV);
         projectAdapter = new ProjectAdapter(projectList, requireContext());
         recyclerView.setAdapter(null);
@@ -165,9 +196,15 @@ public class HomeFragment extends Fragment {
         recyclerView.setHasFixedSize(false);
         //recyclerView.setItemAnimator(null);
 
+        if(!homeViewModel.isFirstLoading()) {
+            if (currentTheme != null) {
+                loadProjectsByTheme(currentTheme);
+            } else {
+                loadProjectsWithoutTheme();
+            }
+        }
         currentSet = 0;
 
-        chipGroup = view.findViewById(R.id.chipGroup);
 
 
         if(loadedThemes.size() > 0) {
@@ -178,26 +215,26 @@ public class HomeFragment extends Fragment {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int totalItemCount = layoutManager.getItemCount();
-                int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                int totalItemCount = 0;
+                int lastVisibleItem = 0;
+                if(layoutManager != null) {
+                    totalItemCount = layoutManager.getItemCount();
+                    lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                }
 
                 if(totalItemCount > 0) {
-                    // Se l'utente è vicino alla fine della lista e non stiamo già caricando, carica più dati
                     if (!homeViewModel.isLoading() && totalItemCount == lastVisibleItem + 1) {
-                        //Log.e("Home Fragment", String.valueOf(projectAdapter.getProject(lastVisibleItem).getId()));
-                        // Carica più dati qui
                         homeViewModel.setLoading(true);
+                        circularProgressIndicator.setVisibility(View.VISIBLE);
                         if (currentTheme != null) {
-                            Log.w("Home fragment", String.valueOf(projectAdapter.getProject(lastVisibleItem).getId()) + " " + currentSet);
-                            //homeViewModel.getProjects(currentTheme.getId(), projectAdapter.getProject(lastVisibleItem).getId());
+                            Log.w("Home Fragment", "CARICO CON TEMA: " + currentTheme.getName());
                             currentSet += 10;
-                            homeViewModel.searchProjects("country:" + country + ",theme:" + currentTheme.getId(), currentSet);
+                            homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country + "," + Constants.THEME_FILTER + currentTheme.getId(), currentSet);
                         }
                         else {
-
-                            Log.w("Home fragment", String.valueOf(projectAdapter.getProject(lastVisibleItem).getId()));
+                            Log.w("Home Fragment", "CARICO SENZA TEMA");
                             currentSet += 10;
-                            homeViewModel.searchProjects("country:" + country, currentSet);
+                            homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country, currentSet);
                         }
                     }
                 }
@@ -217,13 +254,30 @@ public class HomeFragment extends Fragment {
 
 
     public void updateUi(int startPosition) {
+        //circularProgressIndicator.setVisibility(View.GONE);
         recyclerView.post(() -> projectAdapter.notifyItemRangeInserted(startPosition, projectList.size()));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(currentTheme != null) {
+            homeViewModel.setCurrentTheme(currentTheme);
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-;        homeViewModel.setLoading(false);
+        homeViewModel.setLoading(false);
     }
 
+    public Theme getThemeByName(String themeName) {
+        for(Theme theme : loadedThemes) {
+            if(themeName.equals(theme.getName())) {
+                return theme;
+            }
+        }
+        return null;
+    }
 }

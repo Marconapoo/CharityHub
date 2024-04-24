@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 import it.sal.disco.unimib.charityhub.data.repositories.countries.CountryRepository;
 import it.sal.disco.unimib.charityhub.data.repositories.project.ProjectRepository;
 import it.sal.disco.unimib.charityhub.model.Result;
+import it.sal.disco.unimib.charityhub.model.projects.Theme;
 
 public class HomeViewModel extends ViewModel {
 
@@ -20,6 +21,7 @@ public class HomeViewModel extends ViewModel {
 
 
     private boolean isLoading;
+    private Theme currentTheme;
     private boolean isFirstLoading;
     private int currentResults;
     private int totalResults;
@@ -46,6 +48,10 @@ public class HomeViewModel extends ViewModel {
         isLoading = loading;
     }
 
+    public boolean isFirstLoading() {
+        return isFirstLoading;
+    }
+
     public void setFirstLoading(boolean firstLoading) {
         isFirstLoading = firstLoading;
     }
@@ -59,4 +65,11 @@ public class HomeViewModel extends ViewModel {
         return themesLiveData;
     }
 
+    public void setCurrentTheme(Theme currentTheme) {
+        this.currentTheme = currentTheme;
+    }
+
+    public Theme getCurrentTheme() {
+        return currentTheme;
+    }
 }

@@ -183,6 +183,9 @@ public class AccountFragment extends Fragment {
         }
     }
 
-
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        firstCountryChange = true;
+    }
 }
