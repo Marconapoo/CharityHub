@@ -42,6 +42,7 @@ public class AccountFragment extends Fragment {
     String[] countryNames;
     String currentCountry;
     String newCountry;
+    String currentCountryName;
     boolean firstCountryChange;
     public AccountFragment() {
         // Required empty public constructor
@@ -158,7 +159,8 @@ public class AccountFragment extends Fragment {
         });
 
         undoButton.setOnClickListener(v -> {
-            countryPicker.setText(currentCountry);
+            if(currentCountryName != null)
+                countryPicker.setText(currentCountryName);
             countryText.setEnabled(false);
             logOutButton.setVisibility(View.VISIBLE);
             editButton.setVisibility(View.VISIBLE);
@@ -169,7 +171,7 @@ public class AccountFragment extends Fragment {
     }
 
     public void setCountries(String[] countryNames) {
-        String currentCountryName = null;
+        currentCountryName = null;
         for(Country country : countryList) {
             if(country.getCountryCode().equals(currentCountry)) {
                 currentCountryName = country.getName().getCommonName();

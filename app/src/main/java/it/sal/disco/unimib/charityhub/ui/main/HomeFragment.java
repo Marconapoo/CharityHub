@@ -79,7 +79,6 @@ public class HomeFragment extends Fragment {
                 homeViewModel.setFirstLoading(false);
                 homeViewModel.setLoading(false);
                 ProjectsApiResponse projectResponseSuccess = ((Result.ProjectResponseSuccess) result).getProjectsApiResponse();
-
                 List<Project> fetchedProjects = projectResponseSuccess.getSearch().getResponse().getProjectData().getProjectList();
                 Log.e("Home fragment", String.valueOf(fetchedProjects.size()));
                 int startPosition = projectList.size();
@@ -91,6 +90,9 @@ public class HomeFragment extends Fragment {
                 updateUi(startPosition);
             } else {
                 homeViewModel.setLoading(false);
+                if(circularProgressIndicator != null) {
+                    circularProgressIndicator.setVisibility(View.GONE);
+                }
                 Log.e("Home Fragment", ((Result.Error) result).getErrorMessage());
                 Snackbar.make(requireActivity().findViewById(android.R.id.content), ((Result.Error) result).getErrorMessage(), Snackbar.LENGTH_SHORT).show();
             }
@@ -133,6 +135,8 @@ public class HomeFragment extends Fragment {
         projectList.clear();
         projectAdapter.notifyItemRangeRemoved(0, projectListSize);
         homeViewModel.setLoading(true);
+        if(circularProgressIndicator != null)
+            circularProgressIndicator.setVisibility(View.VISIBLE);
         homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country + "," + Constants.THEME_FILTER + theme.getId(), currentSet);
         currentTheme = theme;
     }
@@ -144,6 +148,8 @@ public class HomeFragment extends Fragment {
         homeViewModel.setLoading(true);
         projectAdapter.notifyItemRangeRemoved(0, projectListSize);
         currentTheme = null;
+        if(circularProgressIndicator != null)
+            circularProgressIndicator.setVisibility(View.VISIBLE);
         homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country, currentSet);
     }
 
@@ -254,8 +260,12 @@ public class HomeFragment extends Fragment {
 
 
     public void updateUi(int startPosition) {
-        //circularProgressIndicator.setVisibility(View.GONE);
-        recyclerView.post(() -> projectAdapter.notifyItemRangeInserted(startPosition, projectList.size()));
+
+        recyclerView.post(() -> {
+            if(circularProgressIndicator != null)
+                circularProgressIndicator.setVisibility(View.GONE);
+            projectAdapter.notifyItemRangeInserted(startPosition, projectList.size());
+        });
     }
 
     @Override
