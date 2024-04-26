@@ -16,6 +16,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -39,6 +40,7 @@ public class AccountFragment extends Fragment {
     SharedPreferencesUtil sharedPreferencesUtil;
     List<Country> countryList;
     MaterialAutoCompleteTextView countryPicker;
+    CircularProgressIndicator circularProgressIndicator;
     String[] countryNames;
     String currentCountry;
     String newCountry;
@@ -89,6 +91,7 @@ public class AccountFragment extends Fragment {
         Button logOutButton = view.findViewById(R.id.logoutButton);
         Button editButton = view.findViewById(R.id.editButton);
         countryPicker = view.findViewById(R.id.countryEdit);
+        circularProgressIndicator = view.findViewById(R.id.progressIndicator);
         TextInputEditText fullName = view.findViewById(R.id.fullNameEditText);
         TextInputEditText email = view.findViewById(R.id.emailEditText);
         TextInputLayout fullNameText = view.findViewById(R.id.fullName);
@@ -124,6 +127,7 @@ public class AccountFragment extends Fragment {
 
         confirmButton.setOnClickListener(v -> {
             newCountry = null;
+            circularProgressIndicator.setVisibility(View.VISIBLE);
             if (countryPicker.getText() != null) {
                 for (Country country : countryList) {
                     if (country.getName().getCommonName().equals(countryPicker.getText().toString()) && !currentCountry.equals(country.getCountryCode())) {
@@ -142,6 +146,7 @@ public class AccountFragment extends Fragment {
                             sharedPreferencesUtil.writeStringData(Constants.SHARED_PREFERENCES_FILE_NAME, Constants.SHARED_PREFERENCES_COUNTRY_OF_INTEREST, newCountry);
                             currentCountry = newCountry;
                             countryText.setEnabled(false);
+                            circularProgressIndicator.setVisibility(View.GONE);
                             logOutButton.setVisibility(View.VISIBLE);
                             editButton.setVisibility(View.VISIBLE);
                             confirmButton.setVisibility(View.GONE);

@@ -22,6 +22,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import it.sal.disco.unimib.charityhub.R;
@@ -102,11 +103,44 @@ public class HomeFragment extends Fragment {
             if(result.isSuccess()) {
                 ThemesApiResponse themesApiResponse = ((Result.ThemesResponseSuccess) result).getThemesApiResponse();
                 List<Theme> themes = themesApiResponse.getThemeData().getThemes();
-                Log.e("HOME FRAGMENT", "OBSERVER THEMES" + themes.size());
+                for(Theme theme : themes) {
+                    Log.w("Home Fragment", "new Theme(\"" + theme.getId() + "\", \"" +theme.getName() + "\"),");
+                }
                 loadedThemes.addAll(themes);
                 showThemes();
             }
             else {
+                List<Theme> themes = new ArrayList<>();
+                Collections.addAll(themes, new Theme("animals", "Animal Welfare"),
+                        new Theme("children", "Child Protection"),
+                        new Theme("climate", "Climate Action"),
+                        new Theme("democ", "Peace and Reconciliation"),
+                        new Theme("disaster", "Disaster Response"),
+                        new Theme("ecdev", "Economic Growth"),
+                        new Theme("edu", "Education"),
+                        new Theme("env", "Ecosystem Restoration"),
+                        new Theme("gender", "Gender Equality"),
+                        new Theme("health", "Physical Health"),
+                        new Theme("human", "Ending Human Trafficking"),
+                        new Theme("rights", "Justice and Human Rights"),
+                        new Theme("sport", "Sport"),
+                        new Theme("tech", "Digital Literacy"),
+                        new Theme("hunger", "Food Security"),
+                        new Theme("art", "Arts and Culture"),
+                        new Theme("lgbtq", "LGBTQIA+ Equality"),
+                        new Theme("covid-19", "COVID-19"),
+                        new Theme("water", "Clean Water"),
+                        new Theme("disability", "Disability Rights"),
+                        new Theme("endabuse", "Ending Abuse"),
+                        new Theme("mentalhealth", "Mental Health"),
+                        new Theme("justice", "Racial Justice"),
+                        new Theme("refugee", "Refugee Rights"),
+                        new Theme("reproductive", "Reproductive Health"),
+                        new Theme("housing", "Safe Housing"),
+                        new Theme("agriculture", "Sustainable Agriculture"),
+                        new Theme("wildlife", "Wildlife Conservation"));
+                loadedThemes.addAll(themes);
+                showThemes();
                 Log.e("Home fragment", ((Result.Error) result).getErrorMessage());
             }
         });
@@ -261,11 +295,15 @@ public class HomeFragment extends Fragment {
 
     public void updateUi(int startPosition) {
 
-        recyclerView.post(() -> {
+        try {
             if(circularProgressIndicator != null)
                 circularProgressIndicator.setVisibility(View.GONE);
             projectAdapter.notifyItemRangeInserted(startPosition, projectList.size());
-        });
+        } catch (Exception e) {
+            Log.e("HOME FRAGMENT", "Errore in updateUI: " + e.getMessage());
+            if(circularProgressIndicator != null)
+                projectAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
