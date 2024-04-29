@@ -23,6 +23,7 @@ public class HomeViewModel extends ViewModel {
     private boolean isLoading;
     private Theme currentTheme;
     private boolean isFirstLoading;
+    private boolean noMoreProjects;
     private int currentResults;
     private int totalResults;
 
@@ -71,5 +72,13 @@ public class HomeViewModel extends ViewModel {
 
     public Theme getCurrentTheme() {
         return currentTheme;
+    }
+
+    public void setNoMoreProjects(boolean noMoreProjects) {
+        this.noMoreProjects = noMoreProjects;
+    }
+
+    public boolean isNoMoreProjects() {
+        return noMoreProjects;
     }
 }

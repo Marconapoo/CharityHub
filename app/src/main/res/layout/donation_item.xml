@@ -7,6 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     style="?attr/materialCardViewElevatedStyle"
+    android:backgroundTint="@color/jasper"
     android:clickable="true"
     android:focusable="true">
 
@@ -22,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
+            android:textColor="@color/white"
             android:layout_marginBottom="10dp"
             android:text="Soldi" />
 
@@ -30,6 +32,7 @@
             style="@style/TextAppearance.Material3.TitleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"

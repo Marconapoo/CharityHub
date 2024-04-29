@@ -3,13 +3,21 @@ package it.sal.disco.unimib.charityhub.model.projects;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
+@Entity
 public class Project implements Parcelable {
 
 
+    @PrimaryKey
     private int id;
+    @ColumnInfo(name = "project_name")
     private String title;
+
     private String summary;
     @SerializedName("need")
     private String challenge;

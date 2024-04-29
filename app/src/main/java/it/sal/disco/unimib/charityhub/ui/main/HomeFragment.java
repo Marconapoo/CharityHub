@@ -79,6 +79,7 @@ public class HomeFragment extends Fragment {
             if(result.isSuccess()) {
                 homeViewModel.setFirstLoading(false);
                 homeViewModel.setLoading(false);
+                homeViewModel.setNoMoreProjects(false);
                 ProjectsApiResponse projectResponseSuccess = ((Result.ProjectResponseSuccess) result).getProjectsApiResponse();
                 List<Project> fetchedProjects = projectResponseSuccess.getSearch().getResponse().getProjectData().getProjectList();
                 Log.e("Home fragment", String.valueOf(fetchedProjects.size()));
@@ -91,6 +92,7 @@ public class HomeFragment extends Fragment {
                 updateUi(startPosition);
             } else {
                 homeViewModel.setLoading(false);
+                homeViewModel.setNoMoreProjects(true);
                 if(circularProgressIndicator != null) {
                     circularProgressIndicator.setVisibility(View.GONE);
                 }
@@ -263,7 +265,7 @@ public class HomeFragment extends Fragment {
                 }
 
                 if(totalItemCount > 0) {
-                    if (!homeViewModel.isLoading() && totalItemCount == lastVisibleItem + 1) {
+                    if (!homeViewModel.isLoading() && totalItemCount == lastVisibleItem + 1 && !homeViewModel.isNoMoreProjects()) {
                         homeViewModel.setLoading(true);
                         circularProgressIndicator.setVisibility(View.VISIBLE);
                         if (currentTheme != null) {
