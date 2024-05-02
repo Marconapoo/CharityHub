@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.material.divider.MaterialDivider;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class DonationFragment extends Fragment {
     RecyclerView recyclerView;
     DonationAdapter donationAdapter;
     List<DonationOptions.DonationOption> donationOptionList;
+    MaterialDivider divider;
 
 
     public DonationFragment() {
@@ -74,7 +76,6 @@ public class DonationFragment extends Fragment {
         TextView donationRemainingTextView = view.findViewById(R.id.moneyRemaining);
         TextView currentMoneyRaisedTextView = view.findViewById(R.id.currentMoneyAmount);
         TextView totalMoneyNeededTextView = view.findViewById(R.id.totalMoneyAmount);
-
         String raisedMoney = "€" + project.getFunding();
         String totalMoneyNeeded = "raised of " + project.getGoal();
         currentMoneyRaisedTextView.setText(raisedMoney);

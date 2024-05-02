@@ -1,6 +1,7 @@
 package it.sal.disco.unimib.charityhub.ui.main;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -32,15 +33,27 @@ public class HomeViewModel extends ViewModel {
 
     }
 
-    public MutableLiveData<Result> searchForProjects(String filter, Integer nextProjectId) {
-        projectsLiveData = projectRepository.searchForProjects(filter, nextProjectId);
+    public MutableLiveData<Result> searchForProjects(String filter, Integer nextProjectId, boolean isConnected, String country) {
+        Log.e("HOME VIEW MODEL", "HOME CI SONO");
+        projectsLiveData = projectRepository.searchForProjects(filter, nextProjectId, isConnected, country);
         return projectsLiveData;
     }
 
-    public void searchProjects(String filter, Integer nextProjectId) {
+    public MutableLiveData<Result> getDownloadedProjects() {
+        projectsLiveData = projectRepository.getDownloadedProjects();
+        return projectsLiveData;
+    }
+    public void searchProjects(String filter, Integer nextProjectId, boolean remoteLoading) {
         projectRepository.searchProjects(filter, nextProjectId);
     }
 
+    public void getProjectsByTheme(String themeName, String country) {
+        projectRepository.getProjectsByTheme(themeName, country);
+    }
+
+    public void getProjectsByCountry(String country) {
+        projectRepository.getProjectsByCountry(country);
+    }
     public boolean isLoading() {
         return isLoading;
     }

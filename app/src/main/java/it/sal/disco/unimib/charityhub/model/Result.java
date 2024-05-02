@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.sal.disco.unimib.charityhub.model.countries.Country;
 import it.sal.disco.unimib.charityhub.model.projects.ImagesApiResponse;
+import it.sal.disco.unimib.charityhub.model.projects.Project;
 import it.sal.disco.unimib.charityhub.model.projects.ProjectsApiResponse;
 import it.sal.disco.unimib.charityhub.model.projects.ThemesApiResponse;
 
@@ -29,10 +30,19 @@ public abstract class Result {
 
     public static final class ProjectResponseSuccess extends Result {
 
-        private final ProjectsApiResponse projectsApiResponse;
+        private  ProjectsApiResponse projectsApiResponse;
+        private  List<Project> projectList;
 
         public ProjectResponseSuccess(ProjectsApiResponse projectsApiResponse) {
             this.projectsApiResponse = projectsApiResponse;
+        }
+
+        public ProjectResponseSuccess(List<Project> projectList) {
+            this.projectList = projectList;
+        }
+
+        public List<Project> getProjectList() {
+            return projectList;
         }
 
         public ProjectsApiResponse getProjectsApiResponse() {

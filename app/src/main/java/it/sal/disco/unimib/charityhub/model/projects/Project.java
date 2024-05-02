@@ -4,7 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
@@ -31,9 +33,28 @@ public class Project implements Parcelable {
     @SerializedName("remaining")
     private float remainingFunding;
     private int numberOfDonations;
+    private String iso3166CountryCode;
     private DonationOptions donationOptions;
+    private String themeName;
 
-    public Project(int id, String title, String summary, String challenge, String longTermImpact, String solution, String imageUrl, float goal, float funding, float remainingFunding, int numberOfDonations, DonationOptions donationOptions) {
+
+    @Ignore
+    public Project(int id, String title, String summary, String challenge, String longTermImpact, String solution, String imageUrl, float goal, float funding, float remainingFunding, int numberOfDonations, String iso3166CountryCode) {
+        this.id = id;
+        this.title = title;
+        this.summary = summary;
+        this.challenge = challenge;
+        this.longTermImpact = longTermImpact;
+        this.solution = solution;
+        this.imageUrl = imageUrl;
+        this.goal = goal;
+        this.funding = funding;
+        this.remainingFunding = remainingFunding;
+        this.numberOfDonations = numberOfDonations;
+        this.iso3166CountryCode = iso3166CountryCode;
+    }
+
+    public Project(int id, String title, String summary, String challenge, String longTermImpact, String solution, String imageUrl, float goal, float funding, float remainingFunding, int numberOfDonations, DonationOptions donationOptions, String themeName) {
         this.id = id;
         this.title = title;
         this.summary = summary;
@@ -46,6 +67,7 @@ public class Project implements Parcelable {
         this.remainingFunding = remainingFunding;
         this.numberOfDonations = numberOfDonations;
         this.donationOptions = donationOptions;
+        this.themeName = themeName;
     }
 
 
@@ -226,4 +248,21 @@ public class Project implements Parcelable {
                 ", donationOptions=" + donationOptions +
                 '}';
     }
+
+    public String getIso3166CountryCode() {
+        return iso3166CountryCode;
+    }
+
+    public void setIso3166CountryCode(String iso3166CountryCode) {
+        this.iso3166CountryCode = iso3166CountryCode;
+    }
+
+    public String getThemeName() {
+        return themeName;
+    }
+
+    public void setThemeName(String themeName) {
+        this.themeName = themeName;
+    }
+
 }

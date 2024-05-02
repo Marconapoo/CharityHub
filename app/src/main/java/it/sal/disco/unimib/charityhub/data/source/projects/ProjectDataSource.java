@@ -1,5 +1,7 @@
 package it.sal.disco.unimib.charityhub.data.source.projects;
 
+import android.util.Log;
+
 import it.sal.disco.unimib.charityhub.data.service.ProjectApiService;
 import it.sal.disco.unimib.charityhub.model.projects.ImagesApiResponse;
 import it.sal.disco.unimib.charityhub.model.projects.ProjectsApiResponse;
@@ -26,15 +28,20 @@ public class ProjectDataSource extends BaseProjectDataSource {
 
     @Override
     public void searchForProjects(String filter, Integer nextProjectId) {
+        Log.e("DATA SOURCE", "DATA CI SONO");
         Call<ProjectsApiResponse> projectsApiResponseCall = projectApiService.searchForProjects(Constants.API_KEY, "*", filter, nextProjectId,"application/json", "application/json");
         projectsApiResponseCall.enqueue(new Callback<ProjectsApiResponse>() {
             @Override
             public void onResponse(Call<ProjectsApiResponse> call, Response<ProjectsApiResponse> response) {
                 if(response.body() != null && response.isSuccessful()) {
-                    if(response.body().getSearch().getResponse().getNumberFound() > 0 && response.body().getSearch().getResponse().getProjectData() != null)
+                    Log.e("DATA SOURCE", "DATA CI SONO");
+                    if(response.body().getSearch().getResponse().getNumberFound() > 0 && response.body().getSearch().getResponse().getProjectData() != null) {
+                        Log.e("DATA SOURCE", "DATA CI SONO");
                         projectCallback.onProjectsLoaded(response.body());
-                    else
+                    }
+                    else {
                         projectCallback.onFailureFromRemote("Nessun progetto trovato");
+                    }
                 }
                 else {
                     projectCallback.onFailureFromRemote("Nessun progetto trovato");
@@ -43,6 +50,7 @@ public class ProjectDataSource extends BaseProjectDataSource {
 
             @Override
             public void onFailure(Call<ProjectsApiResponse> call, Throwable t) {
+                Log.e("DATA SOURCE", "DATA CI SONO");
                 projectCallback.onFailureFromRemote(t.getLocalizedMessage());
             }
         });

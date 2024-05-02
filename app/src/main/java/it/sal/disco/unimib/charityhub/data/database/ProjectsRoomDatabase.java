@@ -5,13 +5,16 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import it.sal.disco.unimib.charityhub.model.projects.Project;
+import it.sal.disco.unimib.charityhub.utils.Converters;
 
 @Database(entities = {Project.class}, version = 1)
+@TypeConverters({Converters.class})
 public abstract class ProjectsRoomDatabase extends RoomDatabase {
 
     public abstract ProjectDAO projectDAO();

@@ -1,6 +1,9 @@
 package it.sal.disco.unimib.charityhub.data.database;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import java.util.List;
@@ -16,5 +19,13 @@ public interface ProjectDAO {
     @Query("SELECT * FROM project WHERE id = :id")
     List<Project> getProjects(int id);
 
+    @Query("SELECT * FROM project WHERE iso3166CountryCode = :country")
+    List<Project> getProjectsByCountry(String country);
+
+    @Query("SELECT * FROM project WHERE themeName = :themeName AND iso3166CountryCode = :country")
+    List<Project> getProjectsByTheme(String themeName, String country);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertProjects(List<Project> projectList);
 
 }

@@ -95,7 +95,7 @@ public class RegistrationFragment extends Fragment {
             String email = inputEmail.getText().toString();
             String password = inputPassword.getText().toString();
             String fullName = inputFullName.getText().toString();
-            String countryCode = null;
+            String countryCode = countryPicker.getText().toString();
 
             for (Country country : countries) {
                 if (countryPicker.getText().toString().equals(country.getName().getCommonName())) {

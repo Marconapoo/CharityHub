@@ -1,6 +1,7 @@
 package it.sal.disco.unimib.charityhub.data.source.projects;
 
 import android.app.Application;
+import android.util.Log;
 
 import java.util.List;
 
@@ -21,23 +22,40 @@ public class ProjectLocalDataSource extends BaseProjectLocalDataSource {
         this.sharedPreferencesUtil = new SharedPreferencesUtil(application);
     }
 
-
+    @Override
     public void insertProjects(ProjectsApiResponse projectsApiResponse) {
         ProjectsRoomDatabase.databaseWriteExecutor.execute(() -> {
-            List<Project> allProjects = projectDAO.getAll();
             List<Project> projectList = projectsApiResponse.getSearch().getResponse().getProjectData().getProjectList();
 
-            if(projectList != null) {
-                for(Project project : allProjects) {
-                    if(projectList.contains(project)) {
-
-                    }
-                }
-            }
-
+            projectDAO.insertProjects(projectList);
+            Log.w("Local Data Source", projectsApiResponse.toString());
+            projectCallback.onLocalSuccess(projectsApiResponse);
         });
     }
 
+    @Override
+    public void getProjects() {
+        ProjectsRoomDatabase.databaseWriteExecutor.execute(() -> {
+            List<Project> projectList = projectDAO.getAll();
+            projectCallback.onProjectsLocalSuccess(projectList);
+        });
+    }
+
+    @Override
+    public void getProjectsByCountry(String country) {
+        ProjectsRoomDatabase.databaseWriteExecutor.execute(() -> {
+            List<Project> projectList = projectDAO.getProjectsByCountry(country);
+            projectCallback.onProjectsLocalSuccess(projectList);
+        });
+    }
+
+    @Override
+    public void getProjectsByTheme(String theme, String country) {
+        ProjectsRoomDatabase.databaseWriteExecutor.execute(() -> {
+            List<Project> projectList = projectDAO.getProjectsByTheme(theme, country);
+            projectCallback.onProjectsLocalSuccess(projectList);
+        });
+    }
 
     @Override
     public void deleteAll() {
