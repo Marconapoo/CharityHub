@@ -59,6 +59,9 @@ public class ProjectLocalDataSource extends BaseProjectLocalDataSource {
 
     @Override
     public void deleteAll() {
-        sharedPreferencesUtil.deleteAll(Constants.SHARED_PREFERENCES_FILE_NAME);
+        ProjectsRoomDatabase.databaseWriteExecutor.execute(() -> {
+            projectDAO.deleteAll();
+            sharedPreferencesUtil.deleteAll(Constants.SHARED_PREFERENCES_FILE_NAME);
+        });
     }
 }

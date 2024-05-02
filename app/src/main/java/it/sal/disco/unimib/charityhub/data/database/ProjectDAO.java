@@ -28,4 +28,6 @@ public interface ProjectDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertProjects(List<Project> projectList);
 
+    @Query("DELETE FROM project")
+    void deleteAll();
 }

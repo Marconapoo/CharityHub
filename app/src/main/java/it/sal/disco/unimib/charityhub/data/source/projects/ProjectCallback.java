@@ -22,4 +22,5 @@ public interface ProjectCallback {
     void onFailureImagesLoaded(String noImagesWereFound);
     void onLocalSuccess(ProjectsApiResponse projectsApiResponse);
     void onProjectsLocalSuccess(List<Project> projectList);
+
 }
