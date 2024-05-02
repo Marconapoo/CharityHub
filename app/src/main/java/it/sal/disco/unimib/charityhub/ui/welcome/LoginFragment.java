@@ -74,7 +74,6 @@ public class LoginFragment extends Fragment {
                         if (result.isSuccess()) {
                             userViewModel.setAuthenticationError(false);
                             User user = ((Result.UserResponseSuccess) result).getUser();
-                            Log.w("Login Fragment", user.getCountryOfInterest());
                             SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(requireActivity().getApplication());
                             sharedPreferencesUtil.writeStringData(SHARED_PREFERENCES_FILE_NAME, SHARED_PREFERENCES_COUNTRY_OF_INTEREST, user.getCountryOfInterest());
                             Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_mainActivity);

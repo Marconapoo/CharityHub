@@ -229,14 +229,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onCheckedChanged(@NonNull ChipGroup group, int checkedId) {
                 Chip chip = group.findViewById(checkedId);
-                if(checkedId == View.NO_ID && !homeViewModel.isLoading() && isConnected()) {
+                if(checkedId == View.NO_ID && !homeViewModel.isLoading()) {
                     loadProjectsWithoutTheme();
                 }
                 else if (chip != null) {
                     Theme selectedTheme = getThemeByName(chip.getText().toString());
-                    if (selectedTheme != null && !homeViewModel.isLoading() && isConnected()) {
+                    if (selectedTheme != null && !homeViewModel.isLoading()) {
                         loadProjectsByTheme(selectedTheme);
-                    } else if (!homeViewModel.isLoading() && isConnected()){
+                    } else if (!homeViewModel.isLoading()){
                         Log.w("Home Fragment", "Carico senza temi");
                         loadProjectsWithoutTheme();
                     }
@@ -285,12 +285,12 @@ public class HomeFragment extends Fragment {
                         if (currentTheme != null) {
                             Log.w("Home Fragment", "CARICO CON TEMA: " + currentTheme.getName());
                             currentSet += 10;
-                            homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country + "," + Constants.THEME_FILTER + currentTheme.getId(), currentSet, true);
+                            homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country + "," + Constants.THEME_FILTER + currentTheme.getId(), totalItemCount, true);
                         }
                         else {
                             Log.w("Home Fragment", "CARICO SENZA TEMA");
                             currentSet += 10;
-                            homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country, currentSet, true);
+                            homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country, totalItemCount, true);
                         }
                     }
                 }

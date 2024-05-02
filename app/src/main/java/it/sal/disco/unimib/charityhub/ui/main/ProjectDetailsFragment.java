@@ -103,6 +103,11 @@ public class ProjectDetailsFragment extends Fragment {
             }
             else {
                 Log.e("Details Fragment", ((Result.Error) result).getErrorMessage());
+                while(imagesArrays.size() < 4) {
+                    imagesArrays.add(new Image());
+                }
+
+                imageAdapter.notifyItemRangeInserted(0, imagesArrays.size());
             }
         });
 
