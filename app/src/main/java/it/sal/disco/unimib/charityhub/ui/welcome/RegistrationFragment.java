@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -68,6 +69,7 @@ public class RegistrationFragment extends Fragment {
         TextInputLayout fullNameTextField = view.findViewById(R.id.fullNameTextField);
         Button registerButton = view.findViewById(R.id.registerButton);
         Button logInTextButton = view.findViewById(R.id.loginTextButton);;
+        CircularProgressIndicator circularProgressIndicator = view.findViewById(R.id.progressIndicator);
 
         countries = new ArrayList<>();
 
@@ -92,6 +94,7 @@ public class RegistrationFragment extends Fragment {
 
 
         registerButton.setOnClickListener(v -> {
+            circularProgressIndicator.setVisibility(View.VISIBLE);
             String email = inputEmail.getText().toString();
             String password = inputPassword.getText().toString();
             String fullName = inputFullName.getText().toString();
@@ -110,6 +113,7 @@ public class RegistrationFragment extends Fragment {
             sharedPreferencesUtil.writeStringData(Constants.SHARED_PREFERENCES_FILE_NAME, Constants.SHARED_PREFERENCES_COUNTRY_OF_INTEREST, countryCode);
             if (!userViewModel.isAuthenticationError()) {
                 userViewModel.getUserLiveData(email, password, fullName, countryCode, false).observe(getViewLifecycleOwner(), result -> {
+                    circularProgressIndicator.setVisibility(View.GONE);
                     if (result.isSuccess()) {
                         userViewModel.setAuthenticationError(false);
                         Navigation.findNavController(v).navigate(R.id.action_registrationFragment_to_mainActivity);

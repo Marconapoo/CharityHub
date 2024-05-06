@@ -41,10 +41,7 @@ public class ProjectRepository implements IProjectRepository, ProjectCallback {
 
 
     public MutableLiveData<Result> searchForProjects(String filter, Integer nextProjectId, boolean isConnected, String country) {
-        if(isConnected)
-            searchProjects(filter, nextProjectId);
-        else
-            projectLocalDataSource.getProjectsByCountry(country);
+        projectLocalDataSource.getProjectsByCountry(country);
         return projectsLiveData;
     }
 

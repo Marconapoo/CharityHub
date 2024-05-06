@@ -88,7 +88,7 @@ public class HomeFragment extends Fragment {
                     else {
                         fetchedProjects = ((Result.ProjectResponseSuccess) result).getProjectList();
                     }
-                    Log.e("Home fragment", String.valueOf(fetchedProjects.size()));
+                    Log.e("Home fragment", "Progetti trovati: " + String.valueOf(fetchedProjects.size()));
                     int startPosition = projectList.size();
                     for (Project project : fetchedProjects) {
                         if (!checkDuplicates(project)) {
@@ -215,6 +215,7 @@ public class HomeFragment extends Fragment {
         if(newCountry != null && !newCountry.equals(country)) {
             projectList.clear();
             country = newCountry;
+            Log.w("HOME FRAGMENT", "NUOVA NAZIONE " + newCountry);
             //homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country, null, false);
             homeViewModel.getProjectsByCountry(country);
         }
@@ -225,21 +226,18 @@ public class HomeFragment extends Fragment {
 
         // Controlla se è stato selezionato un tema e carica i progetti corrispondenti
 
-        chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(@NonNull ChipGroup group, int checkedId) {
-                Chip chip = group.findViewById(checkedId);
-                if(checkedId == View.NO_ID && !homeViewModel.isLoading()) {
+        chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            Chip chip = group.findViewById(checkedId);
+            if(checkedId == View.NO_ID && !homeViewModel.isLoading()) {
+                loadProjectsWithoutTheme();
+            }
+            else if (chip != null) {
+                Theme selectedTheme = getThemeByName(chip.getText().toString());
+                if (selectedTheme != null && !homeViewModel.isLoading()) {
+                    loadProjectsByTheme(selectedTheme);
+                } else if (!homeViewModel.isLoading()){
+                    Log.w("Home Fragment", "Carico senza temi");
                     loadProjectsWithoutTheme();
-                }
-                else if (chip != null) {
-                    Theme selectedTheme = getThemeByName(chip.getText().toString());
-                    if (selectedTheme != null && !homeViewModel.isLoading()) {
-                        loadProjectsByTheme(selectedTheme);
-                    } else if (!homeViewModel.isLoading()){
-                        Log.w("Home Fragment", "Carico senza temi");
-                        loadProjectsWithoutTheme();
-                    }
                 }
             }
         });
@@ -249,16 +247,6 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(projectAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setHasFixedSize(false);
-        //recyclerView.setItemAnimator(null);
-
-        /*
-        if(!homeViewModel.isFirstLoading()) {
-            if (currentTheme != null) {
-                loadProjectsByTheme(currentTheme);
-            } else {
-                loadProjectsWithoutTheme();
-            }
-        }*/
         currentSet = 0;
 
 
@@ -278,19 +266,20 @@ public class HomeFragment extends Fragment {
                     lastVisibleItem = layoutManager.findLastVisibleItemPosition();
                 }
 
-                if(totalItemCount > 0) {
+                if(totalItemCount > 0 && dy > 0) {
                     if (isConnected() && !homeViewModel.isLoading() && totalItemCount == lastVisibleItem + 1 && !homeViewModel.isNoMoreProjects()) {
                         homeViewModel.setLoading(true);
                         circularProgressIndicator.setVisibility(View.VISIBLE);
                         if (currentTheme != null) {
                             Log.w("Home Fragment", "CARICO CON TEMA: " + currentTheme.getName());
-                            currentSet += 10;
-                            homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country + "," + Constants.THEME_FILTER + currentTheme.getId(), totalItemCount, true);
+                            currentSet = (int) (10 * Math.ceil((double)totalItemCount/10) + 1);
+                            homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country + "," + Constants.THEME_FILTER + currentTheme.getId(), currentSet, true);
                         }
                         else {
-                            Log.w("Home Fragment", "CARICO SENZA TEMA");
-                            currentSet += 10;
-                            homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country, totalItemCount, true);
+                            Log.w("Home Fragment", "CARICO SENZA TEMA " + totalItemCount);
+                            currentSet = (int) (10 * Math.ceil((double)totalItemCount/10) + 1);
+                            Log.w("HOME FRAMGNET", "CURRENT SET " + currentSet);
+                            homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country, currentSet, true);
                         }
                     }
                 }
