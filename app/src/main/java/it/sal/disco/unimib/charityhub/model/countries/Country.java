@@ -7,8 +7,19 @@ public class Country {
     @SerializedName("name")
     private CountryName name;
 
+    private String countryName;
+
     @SerializedName("cca2")
     private String countryCode;
+
+    public Country(String countryCode, String name) {
+        this.countryCode = countryCode;
+        this.countryName = name;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
 
     public CountryName getName() {
         return name;
