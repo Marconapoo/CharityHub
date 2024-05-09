@@ -63,12 +63,14 @@ public class RegistrationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-
+        super.onViewCreated(view, savedInstanceState);
         TextInputEditText inputEmail = view.findViewById(R.id.emailInputText);
         TextInputEditText inputPassword = view.findViewById(R.id.passwordInputText);
         TextInputEditText inputFullName = view.findViewById(R.id.fullNameInputText);
         TextInputLayout emailTextField = view.findViewById(R.id.emailTextField);
         TextInputLayout passwordTextField = view.findViewById(R.id.passwordTextField);
+        TextInputLayout confirmPasswordTextField = view.findViewById(R.id.confirmPasswordTextField);
+        TextInputEditText inputConfirmPassword = view.findViewById(R.id.confirmPasswordInputText);
         TextInputLayout fullNameTextField = view.findViewById(R.id.fullNameTextField);
         Button registerButton = view.findViewById(R.id.registerButton);
         Button logInTextButton = view.findViewById(R.id.loginTextButton);;
@@ -82,44 +84,65 @@ public class RegistrationFragment extends Fragment {
         getCountries();
 
         registerButton.setOnClickListener(v -> {
-            circularProgressIndicator.setVisibility(View.VISIBLE);
             String email = inputEmail.getText().toString();
             String password = inputPassword.getText().toString();
             String fullName = inputFullName.getText().toString();
             String countryCode = countryPicker.getText().toString();
 
-            for (Country country : countries) {
-                if (countryPicker.getText().toString().equals(country.getCountryName())) {
-                    countryCode = country.getCountryCode();
-                    break;
+            if(!email.isEmpty() && !password.isEmpty() && !countryCode.isEmpty() && !fullName.isEmpty()) {
+                if(password.equals(inputConfirmPassword.getText().toString())) {
+                    circularProgressIndicator.setVisibility(View.VISIBLE);
+                    for (Country country : countries) {
+                        if (countryPicker.getText().toString().equals(country.getCountryName())) {
+                            countryCode = country.getCountryCode();
+                            break;
+                        }
+                    }
+
+
+                    SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(getActivity().getApplication());
+
+                    sharedPreferencesUtil.writeStringData(Constants.SHARED_PREFERENCES_FILE_NAME, Constants.SHARED_PREFERENCES_COUNTRY_OF_INTEREST, countryCode);
+                    if (!userViewModel.isAuthenticationError()) {
+                        userViewModel.getUserLiveData(email, password, fullName, countryCode, false).observe(getViewLifecycleOwner(), result -> {
+                            circularProgressIndicator.setVisibility(View.GONE);
+                            if (result.isSuccess()) {
+                                userViewModel.setAuthenticationError(false);
+                                Navigation.findNavController(v).navigate(R.id.action_registrationFragment_to_mainActivity);
+                                requireActivity().finish();
+                            } else {
+                                emailTextField.setError("Email or password are not correct");
+                                passwordTextField.setError("Email or password are not correct");
+                                userViewModel.setAuthenticationError(true);
+                            }
+                        });
+                    } else {
+                        userViewModel.logUser(email, password, fullName, countryCode, false);
+                    }
+                }
+                else {
+                    confirmPasswordTextField.setError("Passwords don't match");
                 }
             }
-
-
-            SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(getActivity().getApplication());
-
-            sharedPreferencesUtil.writeStringData(Constants.SHARED_PREFERENCES_FILE_NAME, Constants.SHARED_PREFERENCES_COUNTRY_OF_INTEREST, countryCode);
-            if (!userViewModel.isAuthenticationError()) {
-                userViewModel.getUserLiveData(email, password, fullName, countryCode, false).observe(getViewLifecycleOwner(), result -> {
-                    circularProgressIndicator.setVisibility(View.GONE);
-                    if (result.isSuccess()) {
-                        userViewModel.setAuthenticationError(false);
-                        Navigation.findNavController(v).navigate(R.id.action_registrationFragment_to_mainActivity);
-                        requireActivity().finish();
-                    } else {
-                        userViewModel.setAuthenticationError(true);
-                    }
-                });
-            }
             else {
-                userViewModel.logUser(email, password, fullName, countryCode, false);
+                if(password.isEmpty()) {
+                    passwordTextField.setError("Please insert a password");
+                }
+                if(email.isEmpty()) {
+                    emailTextField.setError("Please insert an email");
+                }
+                if(countryCode.isEmpty()) {
+                    countryPicker.setError("Please insert a country");
+                }
+                if(fullName.isEmpty()) {
+                    fullNameTextField.setError("Please insert a name");
+                }
             }
         });
-
         logInTextButton.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.action_registrationFragment_to_loginFragment);
         });
-        super.onViewCreated(view, savedInstanceState);
+
     }
 
     public void getCountries() {

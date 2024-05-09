@@ -95,6 +95,7 @@ public class HomeFragment extends Fragment {
                             projectList.add(project);
                         }
                     }
+                    Log.e("Home fragment", "Numero progetti attuali " + projectList.size());
                     updateUi(startPosition);
                 } else {
                     homeViewModel.setLoading(false);
@@ -212,7 +213,16 @@ public class HomeFragment extends Fragment {
         chipGroup = view.findViewById(R.id.chipGroup);
         circularProgressIndicator = view.findViewById(R.id.progressIndicator);
         String newCountry = sharedPreferencesUtil.readStringData(Constants.SHARED_PREFERENCES_FILE_NAME, Constants.SHARED_PREFERENCES_COUNTRY_OF_INTEREST);
+        recyclerView = view.findViewById(R.id.projectsRV);
+        projectAdapter = new ProjectAdapter(projectList, requireContext());
+        recyclerView.setAdapter(null);
+        recyclerView.setAdapter(projectAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setHasFixedSize(false);
+        currentSet = 0;
+        homeViewModel.setNoMoreProjects(false);
         if(newCountry != null && !newCountry.equals(country)) {
+            circularProgressIndicator.setVisibility(View.VISIBLE);
             projectList.clear();
             country = newCountry;
             Log.w("HOME FRAGMENT", "NUOVA NAZIONE " + newCountry);
@@ -220,7 +230,8 @@ public class HomeFragment extends Fragment {
             homeViewModel.getProjectsByCountry(country);
         }
 
-        if(projectList.isEmpty()) {
+        if(projectList.isEmpty() && homeViewModel.isFirstLoading()) {
+            circularProgressIndicator.setVisibility(View.VISIBLE);
             homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country, null, true);
         }
 
@@ -241,14 +252,6 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
-        recyclerView = view.findViewById(R.id.projectsRV);
-        projectAdapter = new ProjectAdapter(projectList, requireContext());
-        recyclerView.setAdapter(null);
-        recyclerView.setAdapter(projectAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        recyclerView.setHasFixedSize(false);
-        currentSet = 0;
-
 
 
         if(loadedThemes.size() > 0) {
@@ -266,7 +269,8 @@ public class HomeFragment extends Fragment {
                     lastVisibleItem = layoutManager.findLastVisibleItemPosition();
                 }
 
-                if(totalItemCount > 0 && dy > 0) {
+                Log.d("HOME FRAGMENT", lastVisibleItem + " , " + totalItemCount + homeViewModel.isLoading() + homeViewModel.isNoMoreProjects() + isConnected());
+                if(totalItemCount > 1 && dy > 0) {
                     if (isConnected() && !homeViewModel.isLoading() && totalItemCount == lastVisibleItem + 1 && !homeViewModel.isNoMoreProjects()) {
                         homeViewModel.setLoading(true);
                         circularProgressIndicator.setVisibility(View.VISIBLE);
@@ -280,6 +284,15 @@ public class HomeFragment extends Fragment {
                             currentSet = (int) (10 * Math.ceil((double)totalItemCount/10) + 1);
                             Log.w("HOME FRAMGNET", "CURRENT SET " + currentSet);
                             homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country, currentSet, true);
+                        }
+                    }
+                } else if(totalItemCount == 0 || (totalItemCount == 1)) {
+                    if(isConnected() && !homeViewModel.isLoading()) {
+                        if (currentTheme != null) {
+                            circularProgressIndicator.setVisibility(View.VISIBLE);
+                            Log.w("Home Fragment", "CARICO CON TEMA: " + currentTheme.getName());
+                            currentSet = (int) (10 * Math.ceil((double) totalItemCount / 10) + 1);
+                            homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country + "," + Constants.THEME_FILTER + currentTheme.getId(), currentSet, true);
                         }
                     }
                 }
@@ -299,7 +312,6 @@ public class HomeFragment extends Fragment {
 
 
     public void updateUi(int startPosition) {
-
         try {
             if(circularProgressIndicator != null)
                 circularProgressIndicator.setVisibility(View.GONE);

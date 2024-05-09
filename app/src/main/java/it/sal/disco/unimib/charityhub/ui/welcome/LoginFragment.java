@@ -68,10 +68,10 @@ public class LoginFragment extends Fragment {
         userViewModel.setAuthenticationError(false);
 
         logInButton.setOnClickListener(v -> {
-            circularProgressIndicator.setVisibility(View.VISIBLE);
             String email = inputEmail.getText().toString();
             String password = inputPassword.getText().toString();
             if(!email.isEmpty() && !password.isEmpty()) {
+                circularProgressIndicator.setVisibility(View.VISIBLE);
                 if(!userViewModel.isAuthenticationError()) {
                     userViewModel.getUserLiveData(email, password, null, null, true).observe(getViewLifecycleOwner(), result -> {
                         circularProgressIndicator.setVisibility(View.GONE);
@@ -83,7 +83,8 @@ public class LoginFragment extends Fragment {
                             Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_mainActivity);
                             requireActivity().finish();
                         } else {
-
+                            emailTextField.setError("Email or password are not correct");
+                            passwordTextField.setError("Email or password are not correct");
                             userViewModel.setAuthenticationError(true);
                         }
                     });
@@ -96,6 +97,9 @@ public class LoginFragment extends Fragment {
             else {
                 if(password.isEmpty()) {
                     passwordTextField.setError("Please insert a password");
+                }
+                if(email.isEmpty()) {
+                    emailTextField.setError(("Please insert an email"));
                 }
             }
         });
