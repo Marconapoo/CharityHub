@@ -1,6 +1,7 @@
 package it.sal.disco.unimib.charityhub.data.repositories.user;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -22,7 +23,7 @@ public class UserRepository implements IUserRepository, UserResponseCallback {
     private final BaseProjectLocalDataSource projectLocalDataSource;
 
 
-    public UserRepository(Application application) {
+    public UserRepository(Context application) {
         this.userAuthenticationDataSource = new UserAuthenticationDataSource();
         this.userDataRemoteDataSource = new UserDataRemoteDataSource();
         this.projectLocalDataSource = new ProjectLocalDataSource(application);

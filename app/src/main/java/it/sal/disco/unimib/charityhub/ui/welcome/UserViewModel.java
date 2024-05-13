@@ -1,6 +1,7 @@
 package it.sal.disco.unimib.charityhub.ui.welcome;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -25,7 +26,7 @@ public class UserViewModel extends ViewModel {
 
     private boolean authenticationError;
 
-    public UserViewModel(Application application) {
+    public UserViewModel(Context application) {
         userRepository = new UserRepository(application);
         countryRepository = new CountryRepository();
     }

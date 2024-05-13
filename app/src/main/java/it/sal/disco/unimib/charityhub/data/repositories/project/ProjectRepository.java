@@ -1,6 +1,7 @@
 package it.sal.disco.unimib.charityhub.data.repositories.project;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -28,7 +29,7 @@ public class ProjectRepository implements IProjectRepository, ProjectCallback {
     private final BaseProjectLocalDataSource projectLocalDataSource;
 
 
-    public ProjectRepository(Application application) {
+    public ProjectRepository(Context application) {
         projectDataSource = new ProjectDataSource();
         projectLocalDataSource = new ProjectLocalDataSource(application);
         projectLocalDataSource.setProjectCallback(this);
@@ -78,6 +79,7 @@ public class ProjectRepository implements IProjectRepository, ProjectCallback {
     public void onProjectsLoaded(ProjectsApiResponse projects) {
         //Result.ProjectResponseSuccess result = new Result.ProjectResponseSuccess(projects);
         //projectsLiveData.postValue(result);
+        Log.w("PROJECT REPOSITORY", projects.getSearch().getResponse().getProjectData().getProjectList().get(0).getTitle());
         projectLocalDataSource.insertProjects(projects);
     }
 

@@ -6,9 +6,9 @@ import android.content.SharedPreferences;
 
 public class SharedPreferencesUtil {
 
-    private final Application application;
+    private final Context application;
 
-    public SharedPreferencesUtil(Application application) {
+    public SharedPreferencesUtil(Context application) {
         this.application = application;
     }
 

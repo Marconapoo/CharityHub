@@ -1,6 +1,7 @@
 package it.sal.disco.unimib.charityhub.ui.main;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -28,7 +29,7 @@ public class HomeViewModel extends ViewModel {
     private int currentResults;
     private int totalResults;
 
-    public HomeViewModel(Application application) {
+    public HomeViewModel(Context application) {
         projectRepository = new ProjectRepository(application);
 
     }

@@ -1,6 +1,7 @@
 package it.sal.disco.unimib.charityhub.ui.main;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
@@ -10,9 +11,9 @@ import it.sal.disco.unimib.charityhub.ui.welcome.UserViewModel;
 
 public class HomeViewModelFactory implements ViewModelProvider.Factory {
 
-    private final Application application;
+    private final Context application;
 
-    public HomeViewModelFactory(Application application) {
+    public HomeViewModelFactory(Context application) {
         this.application = application;
     }
 

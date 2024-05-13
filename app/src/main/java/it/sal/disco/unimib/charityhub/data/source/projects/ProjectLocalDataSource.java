@@ -1,6 +1,7 @@
 package it.sal.disco.unimib.charityhub.data.source.projects;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class ProjectLocalDataSource extends BaseProjectLocalDataSource {
     private final SharedPreferencesUtil sharedPreferencesUtil;
     private final ProjectDAO projectDAO;
 
-    public ProjectLocalDataSource(Application application) {
+    public ProjectLocalDataSource(Context application) {
         projectDAO = ProjectsRoomDatabase.getDatabase(application).projectDAO();
         this.sharedPreferencesUtil = new SharedPreferencesUtil(application);
     }
@@ -26,9 +27,10 @@ public class ProjectLocalDataSource extends BaseProjectLocalDataSource {
     public void insertProjects(ProjectsApiResponse projectsApiResponse) {
         ProjectsRoomDatabase.databaseWriteExecutor.execute(() -> {
             List<Project> projectList = projectsApiResponse.getSearch().getResponse().getProjectData().getProjectList();
-
+            for(Project project : projectList) {
+                Log.w("PROJECT LOCAL DATA SOURCE", project.getTitle());
+            }
             projectDAO.insertProjects(projectList);
-            Log.w("Local Data Source", projectsApiResponse.toString());
             projectCallback.onLocalSuccess(projectsApiResponse);
         });
     }

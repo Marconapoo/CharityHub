@@ -1,6 +1,7 @@
 package it.sal.disco.unimib.charityhub.ui.main;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -14,7 +15,7 @@ public class ProjectDetailsViewModel extends ViewModel {
     private final IProjectRepository projectRepository;
     private MutableLiveData<Result> imagesLiveData;
 
-    public ProjectDetailsViewModel(Application application) {
+    public ProjectDetailsViewModel(Context application) {
         projectRepository = new ProjectRepository(application);
     }
 

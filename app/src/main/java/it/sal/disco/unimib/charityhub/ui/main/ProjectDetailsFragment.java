@@ -54,7 +54,7 @@ public class ProjectDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        projectDetailsViewModel = new ViewModelProvider(this, new HomeViewModelFactory(requireActivity().getApplication())).get(ProjectDetailsViewModel.class);
+        projectDetailsViewModel = new ViewModelProvider(this, new HomeViewModelFactory(requireActivity().getApplicationContext())).get(ProjectDetailsViewModel.class);
     }
 
     @Override

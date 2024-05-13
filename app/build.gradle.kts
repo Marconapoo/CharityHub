@@ -28,6 +28,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        unitTests.isIncludeAndroidResources = true
+    }
 }
 
 dependencies {
@@ -52,8 +57,10 @@ dependencies {
 
 
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    testImplementation("androidx.test:core:1.5.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation("org.mockito:mockito-core:3.+")
+    testImplementation ("org.robolectric:robolectric:4.12")
 
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
