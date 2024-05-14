@@ -19,18 +19,18 @@ public class UserRepository implements IUserRepository, UserResponseCallback {
     private final MutableLiveData<Result> userLiveData;
     private final BaseUserAuthenticationDataSource userAuthenticationDataSource;
     private final BaseUserDataRemoteDataSource userDataRemoteDataSource;
-
     private final BaseProjectLocalDataSource projectLocalDataSource;
 
 
-    public UserRepository(Context application) {
-        this.userAuthenticationDataSource = new UserAuthenticationDataSource();
-        this.userDataRemoteDataSource = new UserDataRemoteDataSource();
-        this.projectLocalDataSource = new ProjectLocalDataSource(application);
+    public UserRepository(BaseUserAuthenticationDataSource userAuthenticationDataSource, BaseUserDataRemoteDataSource userDataRemoteDataSource, BaseProjectLocalDataSource localDataSource) {
+        this.userAuthenticationDataSource = userAuthenticationDataSource;
+        this.userDataRemoteDataSource = userDataRemoteDataSource;
+        this.projectLocalDataSource = localDataSource;
         userAuthenticationDataSource.setUserResponseCallback(this);
         userDataRemoteDataSource.setUserResponseCallback(this);
         this.userLiveData = new MutableLiveData<>();
     }
+
 
     @Override
     public MutableLiveData<Result> getUserLiveData(String email, String password, String fullName, String country, boolean isRegistered) {

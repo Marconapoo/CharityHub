@@ -7,14 +7,15 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import it.sal.disco.unimib.charityhub.data.repositories.project.ProjectRepository;
 import it.sal.disco.unimib.charityhub.ui.welcome.UserViewModel;
 
 public class HomeViewModelFactory implements ViewModelProvider.Factory {
 
-    private final Context application;
+    private final ProjectRepository projectRepository;
 
-    public HomeViewModelFactory(Context application) {
-        this.application = application;
+    public HomeViewModelFactory(ProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
     }
 
 
@@ -22,11 +23,9 @@ public class HomeViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if(modelClass == HomeViewModel.class)
-            return (T) new HomeViewModel(application);
-        else if(modelClass == UserViewModel.class)
-            return (T) new UserViewModel(application);
+            return (T) new HomeViewModel(projectRepository);
         else if(modelClass == ProjectDetailsViewModel.class)
-            return (T) new ProjectDetailsViewModel(application);
+            return (T) new ProjectDetailsViewModel(projectRepository);
         throw new RuntimeException();
     }
 }

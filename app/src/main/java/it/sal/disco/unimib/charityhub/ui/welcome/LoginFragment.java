@@ -22,6 +22,10 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import it.sal.disco.unimib.charityhub.R;
+import it.sal.disco.unimib.charityhub.data.repositories.user.UserRepository;
+import it.sal.disco.unimib.charityhub.data.source.projects.ProjectLocalDataSource;
+import it.sal.disco.unimib.charityhub.data.source.user.UserAuthenticationDataSource;
+import it.sal.disco.unimib.charityhub.data.source.user.UserDataRemoteDataSource;
 import it.sal.disco.unimib.charityhub.model.Result;
 import it.sal.disco.unimib.charityhub.model.User;
 import it.sal.disco.unimib.charityhub.ui.main.HomeViewModelFactory;
@@ -43,7 +47,11 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userViewModel = new ViewModelProvider(requireActivity(), new HomeViewModelFactory(requireActivity().getApplicationContext())).get(UserViewModel.class);
+        UserAuthenticationDataSource userAuthenticationDataSource = new UserAuthenticationDataSource();
+        UserDataRemoteDataSource userDataRemoteDataSource = new UserDataRemoteDataSource();
+        ProjectLocalDataSource projectLocalDataSource = new ProjectLocalDataSource(requireActivity().getApplicationContext());
+        UserRepository userRepository = new UserRepository(userAuthenticationDataSource, userDataRemoteDataSource, projectLocalDataSource);
+        userViewModel = new ViewModelProvider(requireActivity(), new UserViewModelFactory(userRepository)).get(UserViewModel.class);
     }
 
     @Override

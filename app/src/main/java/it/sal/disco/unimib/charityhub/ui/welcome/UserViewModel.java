@@ -26,8 +26,8 @@ public class UserViewModel extends ViewModel {
 
     private boolean authenticationError;
 
-    public UserViewModel(Context application) {
-        userRepository = new UserRepository(application);
+    public UserViewModel(UserRepository userRepository) {
+        this.userRepository = userRepository;
         countryRepository = new CountryRepository();
     }
 

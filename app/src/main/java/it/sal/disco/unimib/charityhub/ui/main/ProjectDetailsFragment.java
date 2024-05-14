@@ -24,6 +24,9 @@ import java.util.List;
 
 import it.sal.disco.unimib.charityhub.R;
 import it.sal.disco.unimib.charityhub.adapter.ImageAdapter;
+import it.sal.disco.unimib.charityhub.data.repositories.project.ProjectRepository;
+import it.sal.disco.unimib.charityhub.data.source.projects.ProjectDataSource;
+import it.sal.disco.unimib.charityhub.data.source.projects.ProjectLocalDataSource;
 import it.sal.disco.unimib.charityhub.model.Result;
 import it.sal.disco.unimib.charityhub.model.projects.Image;
 import it.sal.disco.unimib.charityhub.model.projects.ImagesApiResponse;
@@ -54,7 +57,10 @@ public class ProjectDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        projectDetailsViewModel = new ViewModelProvider(this, new HomeViewModelFactory(requireActivity().getApplicationContext())).get(ProjectDetailsViewModel.class);
+        ProjectDataSource projectDataSource = new ProjectDataSource();
+        ProjectLocalDataSource projectLocalDataSource = new ProjectLocalDataSource(requireActivity().getApplicationContext());
+        ProjectRepository projectRepository = new ProjectRepository(projectDataSource, projectLocalDataSource);
+        projectDetailsViewModel = new ViewModelProvider(this, new HomeViewModelFactory(projectRepository)).get(ProjectDetailsViewModel.class);
     }
 
     @Override

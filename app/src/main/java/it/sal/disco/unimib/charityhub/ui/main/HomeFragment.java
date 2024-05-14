@@ -30,6 +30,10 @@ import java.util.List;
 
 import it.sal.disco.unimib.charityhub.R;
 import it.sal.disco.unimib.charityhub.adapter.ProjectAdapter;
+import it.sal.disco.unimib.charityhub.data.repositories.project.ProjectRepository;
+import it.sal.disco.unimib.charityhub.data.source.projects.BaseProjectLocalDataSource;
+import it.sal.disco.unimib.charityhub.data.source.projects.ProjectDataSource;
+import it.sal.disco.unimib.charityhub.data.source.projects.ProjectLocalDataSource;
 import it.sal.disco.unimib.charityhub.model.projects.Project;
 import it.sal.disco.unimib.charityhub.model.projects.ProjectsApiResponse;
 import it.sal.disco.unimib.charityhub.model.Result;
@@ -66,7 +70,10 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        homeViewModel = new ViewModelProvider(this, new HomeViewModelFactory(requireActivity().getApplicationContext())).get(HomeViewModel.class);
+        ProjectDataSource projectDataSource = new ProjectDataSource();
+        ProjectLocalDataSource projectLocalDataSource = new ProjectLocalDataSource(requireActivity().getApplicationContext());
+        ProjectRepository projectRepository = new ProjectRepository(projectDataSource, projectLocalDataSource);
+        homeViewModel = new ViewModelProvider(this, new HomeViewModelFactory(projectRepository)).get(HomeViewModel.class);
         homeViewModel.setFirstLoading(true);
         projectList = new ArrayList<>();
         loadedThemes = new ArrayList<>();

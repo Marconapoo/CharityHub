@@ -70,7 +70,7 @@ public class Project implements Parcelable {
         this.themeName = themeName;
     }
 
-
+    public Project() {}
     @Override
     public int describeContents() {
         return 0;

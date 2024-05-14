@@ -22,16 +22,16 @@ import it.sal.disco.unimib.charityhub.model.projects.ThemesApiResponse;
 public class ProjectRepository implements IProjectRepository, ProjectCallback {
 
 
-    private final BaseProjectDataSource projectDataSource;
-    private final MutableLiveData<Result> projectsLiveData;
-    private final MutableLiveData<Result> themesLiveData;
-    private final MutableLiveData<Result> imagesLiveData;
-    private final BaseProjectLocalDataSource projectLocalDataSource;
+    private  BaseProjectDataSource projectDataSource;
+    private  MutableLiveData<Result> projectsLiveData;
+    private  MutableLiveData<Result> themesLiveData;
+    private  MutableLiveData<Result> imagesLiveData;
+    private  BaseProjectLocalDataSource projectLocalDataSource;
 
 
-    public ProjectRepository(Context application) {
-        projectDataSource = new ProjectDataSource();
-        projectLocalDataSource = new ProjectLocalDataSource(application);
+    public ProjectRepository(BaseProjectDataSource projectDataSource, BaseProjectLocalDataSource localDataSource) {
+        this.projectDataSource = projectDataSource;
+        this.projectLocalDataSource = localDataSource;
         projectLocalDataSource.setProjectCallback(this);
         projectDataSource.setProjectCallback(this);
         imagesLiveData = new MutableLiveData<>();
@@ -39,7 +39,13 @@ public class ProjectRepository implements IProjectRepository, ProjectCallback {
         themesLiveData = new MutableLiveData<>();
     }
 
+    public void setProjectLocalDataSource(ProjectLocalDataSource projectLocalDataSource) {
+        this.projectLocalDataSource = projectLocalDataSource;
+    }
 
+    public void setProjectDataSource(ProjectDataSource projectDataSource) {
+        this.projectDataSource = projectDataSource;
+    }
 
     public MutableLiveData<Result> searchForProjects(String filter, Integer nextProjectId, boolean isConnected, String country) {
         projectLocalDataSource.getProjectsByCountry(country);
@@ -79,7 +85,6 @@ public class ProjectRepository implements IProjectRepository, ProjectCallback {
     public void onProjectsLoaded(ProjectsApiResponse projects) {
         //Result.ProjectResponseSuccess result = new Result.ProjectResponseSuccess(projects);
         //projectsLiveData.postValue(result);
-        Log.w("PROJECT REPOSITORY", projects.getSearch().getResponse().getProjectData().getProjectList().get(0).getTitle());
         projectLocalDataSource.insertProjects(projects);
     }
 
@@ -124,4 +129,17 @@ public class ProjectRepository implements IProjectRepository, ProjectCallback {
         Result.ProjectResponseSuccess result = new Result.ProjectResponseSuccess(projectList);
         projectsLiveData.postValue(result);
     }
+
+    public void setProjectsLiveData(MutableLiveData<Result> projectsLiveData) {
+        this.projectsLiveData = projectsLiveData;
+    }
+
+    public void setThemesLiveData(MutableLiveData<Result> themesLiveData) {
+        this.themesLiveData = themesLiveData;
+    }
+
+    public void setImagesLiveData(MutableLiveData<Result> imagesLiveData) {
+        this.imagesLiveData = imagesLiveData;
+    }
+
 }

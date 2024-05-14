@@ -29,10 +29,13 @@ public class HomeViewModel extends ViewModel {
     private int currentResults;
     private int totalResults;
 
-    public HomeViewModel(Context application) {
-        projectRepository = new ProjectRepository(application);
+    public HomeViewModel(ProjectRepository projectRepository) {
+
+        this.projectRepository = projectRepository;
 
     }
+
+
 
     public MutableLiveData<Result> searchForProjects(String filter, Integer nextProjectId, boolean isConnected, String country) {
         Log.e("HOME VIEW MODEL", "HOME CI SONO");
@@ -75,7 +78,6 @@ public class HomeViewModel extends ViewModel {
     public MutableLiveData<Result> getThemesLiveData() {
         if(themesLiveData == null) {
             themesLiveData = projectRepository.getThemesLiveData();
-            return themesLiveData;
         }
         return themesLiveData;
     }
