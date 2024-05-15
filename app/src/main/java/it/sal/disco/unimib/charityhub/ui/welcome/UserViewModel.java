@@ -18,7 +18,7 @@ public class UserViewModel extends ViewModel {
 
     private MutableLiveData<Result> userLiveData;
 
-    private final CountryRepository countryRepository;
+    private CountryRepository countryRepository;
 
     private MutableLiveData<Result> countriesLiveData;
     private MutableLiveData<String> userCountry;
@@ -26,9 +26,9 @@ public class UserViewModel extends ViewModel {
 
     private boolean authenticationError;
 
-    public UserViewModel(UserRepository userRepository) {
+    public UserViewModel(UserRepository userRepository, CountryRepository countryRepository) {
         this.userRepository = userRepository;
-        countryRepository = new CountryRepository();
+        this.countryRepository = countryRepository;
     }
 
     public MutableLiveData<Result> getUserLiveData(String email, String password, String fullName, String country, boolean isUserRegistered) {

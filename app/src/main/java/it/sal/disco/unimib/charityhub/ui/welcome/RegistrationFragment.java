@@ -25,6 +25,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import it.sal.disco.unimib.charityhub.R;
+import it.sal.disco.unimib.charityhub.data.repositories.countries.CountryRepository;
 import it.sal.disco.unimib.charityhub.data.repositories.user.UserRepository;
 import it.sal.disco.unimib.charityhub.data.source.projects.ProjectLocalDataSource;
 import it.sal.disco.unimib.charityhub.data.source.user.UserAuthenticationDataSource;
@@ -59,7 +60,8 @@ public class RegistrationFragment extends Fragment {
         UserDataRemoteDataSource userDataRemoteDataSource = new UserDataRemoteDataSource();
         ProjectLocalDataSource projectLocalDataSource = new ProjectLocalDataSource(requireActivity().getApplicationContext());
         UserRepository userRepository = new UserRepository(userAuthenticationDataSource, userDataRemoteDataSource, projectLocalDataSource);
-        userViewModel = new ViewModelProvider(requireActivity(), new UserViewModelFactory(userRepository)).get(UserViewModel.class);
+        CountryRepository countryRepository = new CountryRepository();
+        userViewModel = new ViewModelProvider(requireActivity(), new UserViewModelFactory(userRepository, countryRepository)).get(UserViewModel.class);
     }
 
     @Override

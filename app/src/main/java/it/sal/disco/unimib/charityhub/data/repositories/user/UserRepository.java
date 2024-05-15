@@ -16,7 +16,7 @@ import it.sal.disco.unimib.charityhub.model.User;
 
 public class UserRepository implements IUserRepository, UserResponseCallback {
 
-    private final MutableLiveData<Result> userLiveData;
+    private  MutableLiveData<Result> userLiveData;
     private final BaseUserAuthenticationDataSource userAuthenticationDataSource;
     private final BaseUserDataRemoteDataSource userDataRemoteDataSource;
     private final BaseProjectLocalDataSource projectLocalDataSource;
@@ -102,5 +102,7 @@ public class UserRepository implements IUserRepository, UserResponseCallback {
         userLiveData.postValue(result);
     }
 
-
+    public void setUserLiveData(MutableLiveData<Result> userLiveData) {
+        this.userLiveData = userLiveData;
+    }
 }

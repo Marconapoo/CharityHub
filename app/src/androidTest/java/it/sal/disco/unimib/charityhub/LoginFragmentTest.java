@@ -26,4 +26,6 @@ public class LoginFragmentTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("it.sal.disco.unimib.charityhub", appContext.getPackageName());
     }
+
+
 }

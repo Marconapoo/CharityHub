@@ -5,12 +5,15 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.util.Objects;
+
 public class User implements Parcelable {
     private String name;
     private String email;
     private String Uid;
     private String countryOfInterest;
 
+    public User() {}
     public User(String name, String email, String uid) {
         this.name = name;
         this.email = email;
@@ -22,6 +25,19 @@ public class User implements Parcelable {
         this.email = email;
         Uid = uid;
         this.countryOfInterest = countryOfInterest;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(Uid, user.Uid) && Objects.equals(countryOfInterest, user.countryOfInterest);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, email, Uid, countryOfInterest);
     }
 
     public String getName() {

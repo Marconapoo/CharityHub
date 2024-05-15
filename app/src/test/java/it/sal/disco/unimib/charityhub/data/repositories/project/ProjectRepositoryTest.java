@@ -175,6 +175,7 @@ public class ProjectRepositoryTest {
 
         ArgumentCaptor<Result.ProjectResponseSuccess> captor = ArgumentCaptor.forClass(Result.ProjectResponseSuccess.class);
         verify(projectsLiveData).postValue(captor.capture());
+        assertNotNull(captor.getValue());
         assertEquals(projectsApiResponse, captor.getValue().getProjectsApiResponse());
     }
 

@@ -9,18 +9,31 @@ import static org.mockito.Mockito.when;
 
 import android.content.Context;
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.robolectric.versioning.AndroidVersions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import it.sal.disco.unimib.charityhub.data.repositories.project.ProjectRepository;
 import it.sal.disco.unimib.charityhub.model.Result;
+import it.sal.disco.unimib.charityhub.model.projects.Project;
 import it.sal.disco.unimib.charityhub.model.projects.Theme;
+import it.sal.disco.unimib.charityhub.model.projects.ThemesApiResponse;
 
 public class HomeViewModelTest {
+
+    @Rule
+    public TestRule rule = new InstantTaskExecutorRule();
 
     @Mock
     private ProjectRepository projectRepository;
@@ -35,35 +48,93 @@ public class HomeViewModelTest {
 
     @Test
     public void testSearchForProjects() {
+
+        List<Project> expectedProjectList = new ArrayList<>();
+        expectedProjectList.add(new Project());
+        expectedProjectList.add(new Project());
         MutableLiveData<Result> expectedLiveData = new MutableLiveData<>();
+        Result.ProjectResponseSuccess expectedResult = new Result.ProjectResponseSuccess(expectedProjectList);
+        expectedLiveData.setValue(expectedResult);
         when(projectRepository.searchForProjects(anyString(), anyInt(), anyBoolean(), anyString())).thenReturn(expectedLiveData);
 
         MutableLiveData<Result> actualLiveData = homeViewModel.searchForProjects("filter", 1, true, "country");
 
-        assertEquals(expectedLiveData, actualLiveData);
+        Observer<Result> observer = result -> {
+            Result actualResult = actualLiveData.getValue();
+            assertTrue(actualResult instanceof Result.ProjectResponseSuccess);
+            Result.ProjectResponseSuccess projectResponse = (Result.ProjectResponseSuccess) actualResult;
+
+            assertEquals(expectedProjectList, projectResponse.getProjectList());
+            assertEquals(expectedLiveData, actualLiveData);
+        };
+
+        actualLiveData.observeForever(observer);
+
         verify(projectRepository).searchForProjects("filter", 1, true, "country");
+
+        actualLiveData.removeObserver(observer);
     }
 
     @Test
     public void testGetDownloadedProjects() {
+
+
+        List<Project> expectedProjectList = new ArrayList<>();
+        expectedProjectList.add(new Project());
+        expectedProjectList.add(new Project());
         MutableLiveData<Result> expectedLiveData = new MutableLiveData<>();
+        Result.ProjectResponseSuccess expectedResult = new Result.ProjectResponseSuccess(expectedProjectList);
+        expectedLiveData.setValue(expectedResult);
         when(projectRepository.getDownloadedProjects()).thenReturn(expectedLiveData);
 
         MutableLiveData<Result> actualLiveData = homeViewModel.getDownloadedProjects();
 
-        assertEquals(expectedLiveData, actualLiveData);
+        Observer<Result> observer = result -> {
+            Result actualResult = actualLiveData.getValue();
+            assertTrue(actualResult instanceof Result.ProjectResponseSuccess);
+            Result.ProjectResponseSuccess projectResponse = (Result.ProjectResponseSuccess) actualResult;
+
+            assertEquals(expectedProjectList, projectResponse.getProjectList());
+            assertEquals(expectedLiveData, actualLiveData);
+        };
+
+        actualLiveData.observeForever(observer);
+
+
         verify(projectRepository).getDownloadedProjects();
+
+        actualLiveData.removeObserver(observer);
     }
 
     @Test
     public void testGetThemesLiveData() {
+        List<Theme> expectedThemes = new ArrayList<>();
+        expectedThemes.add(new Theme("TS", "Test 1"));
+        expectedThemes.add(new Theme("TS2", "Test 2"));
+        ThemesApiResponse expectedThemesApiResponse = new ThemesApiResponse(expectedThemes);
         MutableLiveData<Result> expectedLiveData = new MutableLiveData<>();
+        Result.ThemesResponseSuccess expectedResult = new Result.ThemesResponseSuccess(expectedThemesApiResponse);
+        expectedLiveData.setValue(expectedResult);
+
         when(projectRepository.getThemesLiveData()).thenReturn(expectedLiveData);
 
         MutableLiveData<Result> actualLiveData = homeViewModel.getThemesLiveData();
 
-        assertEquals(expectedLiveData, actualLiveData);
+        // Add an observer to trigger the LiveData update
+        Observer<Result> observer = result -> {
+            assertNotNull(result);
+            assertTrue(result instanceof Result.ThemesResponseSuccess);
+            Result.ThemesResponseSuccess responseSuccess = (Result.ThemesResponseSuccess) result;
+
+            assertEquals(expectedResult, responseSuccess);
+            assertEquals(expectedResult.getThemesApiResponse().getThemeData(), responseSuccess.getThemesApiResponse().getThemeData());
+            assertEquals(expectedLiveData, actualLiveData);
+        };
+        actualLiveData.observeForever(observer);
+
         verify(projectRepository).getThemesLiveData();
+
+        actualLiveData.removeObserver(observer);
     }
 
     @Test

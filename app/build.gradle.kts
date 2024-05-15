@@ -61,6 +61,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     testImplementation("org.mockito:mockito-core:3.+")
     testImplementation ("org.robolectric:robolectric:4.12")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
 
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
