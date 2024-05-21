@@ -4,6 +4,12 @@ import static it.sal.disco.unimib.charityhub.utils.Constants.SHARED_PREFERENCES_
 import static it.sal.disco.unimib.charityhub.utils.Constants.SHARED_PREFERENCES_FILE_NAME;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Patterns;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,17 +17,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-
-import org.checkerframework.checker.units.qual.C;
 
 import it.sal.disco.unimib.charityhub.R;
 import it.sal.disco.unimib.charityhub.data.repositories.countries.CountryRepository;
@@ -31,7 +29,6 @@ import it.sal.disco.unimib.charityhub.data.source.user.UserAuthenticationDataSou
 import it.sal.disco.unimib.charityhub.data.source.user.UserDataRemoteDataSource;
 import it.sal.disco.unimib.charityhub.model.Result;
 import it.sal.disco.unimib.charityhub.model.User;
-import it.sal.disco.unimib.charityhub.ui.main.HomeViewModelFactory;
 import it.sal.disco.unimib.charityhub.utils.SharedPreferencesUtil;
 
 public class LoginFragment extends Fragment {
@@ -80,9 +77,13 @@ public class LoginFragment extends Fragment {
         userViewModel.setAuthenticationError(false);
 
         logInButton.setOnClickListener(v -> {
-            String email = inputEmail.getText().toString();
-            String password = inputPassword.getText().toString();
-            if(!email.isEmpty() && !password.isEmpty()) {
+            String email = "";
+            if(inputEmail.getText() != null)
+                email = inputEmail.getText().toString();
+            String password = "";
+            if(inputPassword.getText() != null)
+                password = inputPassword.getText().toString();
+            if(checkEmail(email) && checkPassword(password)) {
                 circularProgressIndicator.setVisibility(View.VISIBLE);
                 if(!userViewModel.isAuthenticationError()) {
                     userViewModel.getUserLiveData(email, password, null, null, true).observe(getViewLifecycleOwner(), result -> {
@@ -107,19 +108,29 @@ public class LoginFragment extends Fragment {
                 }
             }
             else {
-                if(password.isEmpty()) {
-                    passwordTextField.setError("Please insert a password");
+                if(!checkPassword(password)) {
+                    passwordTextField.setError("Password needs to be at least 6 characters");
                 }
-                if(email.isEmpty()) {
-                    emailTextField.setError(("Please insert an email"));
+                if(!checkEmail(email)) {
+                    emailTextField.setError("Email not valid");
                 }
             }
         });
 
 
-        registerButton.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_registrationFragment);
-        });
+        registerButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_registrationFragment));
+    }
+
+    public boolean checkEmail(String email) {
+        if(email.isEmpty())
+            return false;
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    public boolean checkPassword(String password) {
+        if(password.isEmpty())
+            return false;
+        return password.length() >= 6;
     }
 
     @Override

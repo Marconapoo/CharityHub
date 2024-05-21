@@ -68,7 +68,13 @@ public class RegistrationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_registration, container, false);
+        try {
+            View view = inflater.inflate(R.layout.fragment_registration, container, false);
+            return view;
+        } catch (Exception e) {
+            Log.e("REGISTRATION FRAGMENT", e.getMessage());
+            throw e;
+        }
     }
 
     @Override
