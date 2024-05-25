@@ -4,8 +4,6 @@ public class Image {
 
     private String url;
     private String size;
-
-
     public String getSize() {
         return size;
     }

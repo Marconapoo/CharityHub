@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,7 +107,7 @@ public class RegistrationFragment extends Fragment {
             String fullName = inputFullName.getText().toString();
             String countryCode = countryPicker.getText().toString();
 
-            if(!email.isEmpty() && !password.isEmpty() && !countryCode.isEmpty() && !fullName.isEmpty()) {
+            if(checkEmail(email) && checkPassword(password) && !countryCode.isEmpty() && !fullName.isEmpty()) {
                 if(password.equals(inputConfirmPassword.getText().toString())) {
                     circularProgressIndicator.setVisibility(View.VISIBLE);
                     for (Country country : countries) {
@@ -128,8 +129,8 @@ public class RegistrationFragment extends Fragment {
                                 Navigation.findNavController(v).navigate(R.id.action_registrationFragment_to_mainActivity);
                                 requireActivity().finish();
                             } else {
-                                emailTextField.setError("Email or password are not correct");
-                                passwordTextField.setError("Email or password are not correct");
+                                emailTextField.setError(getString(R.string.email_or_password_are_not_correct));
+                                passwordTextField.setError(getString(R.string.email_or_password_are_not_correct));
                                 userViewModel.setAuthenticationError(true);
                             }
                         });
@@ -138,21 +139,21 @@ public class RegistrationFragment extends Fragment {
                     }
                 }
                 else {
-                    confirmPasswordTextField.setError("Passwords don't match");
+                    confirmPasswordTextField.setError(getString(R.string.passwords_don_t_match));
                 }
             }
             else {
-                if(password.isEmpty()) {
-                    passwordTextField.setError("Please insert a password");
+                if(!checkPassword(password)) {
+                    passwordTextField.setError(getString(R.string.password_must_be_at_least_6_characters));
                 }
-                if(email.isEmpty()) {
-                    emailTextField.setError("Please insert an email");
+                if(!checkEmail(email)) {
+                    emailTextField.setError(getString(R.string.email_is_not_valid));
                 }
                 if(countryCode.isEmpty()) {
-                    countryPicker.setError("Please insert a country");
+                    countryPicker.setError(getString(R.string.please_insert_a_country));
                 }
                 if(fullName.isEmpty()) {
-                    fullNameTextField.setError("Please insert a name");
+                    fullNameTextField.setError(getString(R.string.please_insert_a_name));
                 }
             }
         });
@@ -394,5 +395,17 @@ public class RegistrationFragment extends Fragment {
             Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_mainActivity);
             requireActivity().finish();
         }
+    }
+
+    public boolean checkEmail(String email) {
+        if(email.isEmpty())
+            return false;
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    public boolean checkPassword(String password) {
+        if(password.isEmpty())
+            return false;
+        return password.length() >= 6;
     }
 }

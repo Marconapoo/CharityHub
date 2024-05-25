@@ -46,10 +46,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
         if(images.get(position) != null && images.get(position).getUrl() != null && !images.get(position).getUrl().isEmpty()) {
                 Glide.with(context).load(images.get(position).getUrl())
-                        .placeholder(R.drawable.charityhublogo_senzasfondo)
+                        .placeholder(R.mipmap.ic_launcher_foreground)
                         .into(holder.image);
         } else {
-            Glide.with(context).load(R.drawable.charityhublogo_senzasfondo).into(holder.image);
+            Glide.with(context).load(R.mipmap.ic_launcher_foreground).into(holder.image);
         }
         
         switch (position) {

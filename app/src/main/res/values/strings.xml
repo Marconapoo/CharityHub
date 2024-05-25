@@ -24,4 +24,10 @@
     <string name="solution">Solution</string>
     <string name="long_term_impact">Long Term Impact</string>
     <string name="donate_now">Donate now</string>
+    <string name="email_or_password_are_not_correct">Email or password are not correct</string>
+    <string name="passwords_don_t_match">Passwords don\'t match</string>
+    <string name="password_must_be_at_least_6_characters">Password must be at least 6 characters</string>
+    <string name="email_is_not_valid">Email is not valid</string>
+    <string name="please_insert_a_country">Please insert a country</string>
+    <string name="please_insert_a_name">Please insert a name</string>
 </resources>

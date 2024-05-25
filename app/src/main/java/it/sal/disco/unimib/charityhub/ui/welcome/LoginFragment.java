@@ -96,8 +96,8 @@ public class LoginFragment extends Fragment {
                             Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_mainActivity);
                             requireActivity().finish();
                         } else {
-                            emailTextField.setError("Email or password are not correct");
-                            passwordTextField.setError("Email or password are not correct");
+                            emailTextField.setError(getString(R.string.email_or_password_are_not_correct));
+                            passwordTextField.setError(getString(R.string.email_or_password_are_not_correct));
                             userViewModel.setAuthenticationError(true);
                         }
                     });
@@ -109,10 +109,10 @@ public class LoginFragment extends Fragment {
             }
             else {
                 if(!checkPassword(password)) {
-                    passwordTextField.setError("Password needs to be at least 6 characters");
+                    passwordTextField.setError(getString(R.string.password_must_be_at_least_6_characters));
                 }
                 if(!checkEmail(email)) {
-                    emailTextField.setError("Email not valid");
+                    emailTextField.setError(getString(R.string.email_is_not_valid));
                 }
             }
         });
