@@ -17,7 +17,7 @@ public class DonationOptions implements Parcelable {
         return donationOptionList;
     }
 
-    public static class DonationOption {
+    public static class DonationOption implements Parcelable {
         private int amount;
         private String description;
 
@@ -28,6 +28,42 @@ public class DonationOptions implements Parcelable {
         public String getDescription() {
             return description;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.amount);
+            dest.writeString(this.description);
+        }
+
+        public void readFromParcel(Parcel source) {
+            this.amount = source.readInt();
+            this.description = source.readString();
+        }
+
+        public DonationOption() {
+        }
+
+        protected DonationOption(Parcel in) {
+            this.amount = in.readInt();
+            this.description = in.readString();
+        }
+
+        public static final Creator<DonationOption> CREATOR = new Creator<DonationOption>() {
+            @Override
+            public DonationOption createFromParcel(Parcel source) {
+                return new DonationOption(source);
+            }
+
+            @Override
+            public DonationOption[] newArray(int size) {
+                return new DonationOption[size];
+            }
+        };
     }
 
 

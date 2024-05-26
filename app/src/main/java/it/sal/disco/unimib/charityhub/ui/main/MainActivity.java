@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
-                if(navDestination.getId() == R.id.projectDetailsFragment) {
+                if(navDestination.getId() == R.id.projectDetailsFragment || navDestination.getId() == R.id.donationFragment) {
                     bottomNavigationView.setVisibility(View.GONE);
                     /*
                     bottomNavigationView.getMenu().getItem(0).setVisible(false);
