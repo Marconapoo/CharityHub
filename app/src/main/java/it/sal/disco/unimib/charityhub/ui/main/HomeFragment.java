@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -157,20 +158,36 @@ public class HomeFragment extends Fragment {
     }
 
     private void showThemes() {
-        for(Theme theme : loadedThemes) {
+        for (Theme theme : loadedThemes) {
             Chip chip = new Chip(requireContext());
             chip.setId(ViewCompat.generateViewId());
             chip.setText(theme.getName());
-            ChipDrawable chipDrawable = ChipDrawable.createFromAttributes(requireContext(), null, 0, com.google.android.material.R.style.Widget_Material3_Chip_Filter);
-            chip.setChipDrawable(chipDrawable);
-            if(homeViewModel.getCurrentTheme() != null && homeViewModel.getCurrentTheme().equals(theme)) {
-                currentTheme = theme;
-                chip.setChecked(true);
+
+            ChipDrawable chipDrawable = null;
+            try {
+                chipDrawable = ChipDrawable.createFromAttributes(requireContext(), null, 0, com.google.android.material.R.style.Widget_Material3_Chip_Filter);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
+            if (chipDrawable != null) {
+                chip.setChipDrawable(chipDrawable);
+                if (homeViewModel.getCurrentTheme() != null && homeViewModel.getCurrentTheme().equals(theme)) {
+                    currentTheme = theme;
+                    chip.setChecked(true);
+                }
+            } else {
+                // If chipDrawable creation failed, set fallback attributes
+                chip.setChipBackgroundColorResource(R.color.white);
+                chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
+                // Log an error or show a toast to notify about the fallback
+                Log.e("showThemes", "Failed to create ChipDrawable, using fallback.");
+            }
+
             chipGroup.addView(chip);
         }
-
     }
+
 
     private void loadProjectsByTheme(Theme theme) {
         currentSet = 0;
@@ -355,4 +372,5 @@ public class HomeFragment extends Fragment {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
+
 }

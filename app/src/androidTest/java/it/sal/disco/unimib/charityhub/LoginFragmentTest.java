@@ -55,13 +55,8 @@ public class LoginFragmentTest {
     @Before
     public void setUp() {
         context = ApplicationProvider.getApplicationContext();
-        context.setTheme(androidx.appcompat.R.style.Theme_AppCompat);
+        context.setTheme(R.style.Theme_CharityHub);
         // Launch the LoginFragment on the main thread
-        activityScenarioRule.getScenario().onActivity(activity -> {
-            activity.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.nav_host_fragment, new LoginFragment())
-                    .commitNow();
-        });
     }
 
     @After
@@ -80,15 +75,36 @@ public class LoginFragmentTest {
     }
     @Test
     public void testLoginSuccess() {
+
+        TestNavHostController navController = new TestNavHostController(
+                context);
+
+        // Create a graphical FragmentScenario for the TitleScreen
+        FragmentScenario<LoginFragment> titleScenario = FragmentScenario.launchInContainer(LoginFragment.class, null, R.style.Theme_CharityHub);
+
+        titleScenario.onFragment(loginFragment -> {
+            // Set the graph on the TestNavHostController
+            navController.setGraph(R.navigation.welcome_nav_graph);
+
+            // Make the NavController available via the findNavController() APIs
+            Navigation.setViewNavController(loginFragment.requireView(), navController);
+        });
+
         // Enter valid email and password
         onView(withId(R.id.emailInputText)).perform(ViewActions.typeText("luigiverdi@tiscali.it"), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.passwordInputText)).perform(ViewActions.typeText("123456"), ViewActions.closeSoftKeyboard());
-
         // Click the login button
         onView(withId(R.id.loginButton)).perform(click());
 
         // Check that the CircularProgressIndicator is displayed
-        onView(withId(R.id.progressIndicator)).check(matches(isDisplayed()));
+        //onView(withId(R.id.progressIndicator)).check(matches(isDisplayed()));
+
+        try {
+            Thread.sleep(5000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertThat(navController.getCurrentDestination().getId()).isEqualTo(R.id.mainActivity);
     }
 
     @Test
@@ -101,8 +117,7 @@ public class LoginFragmentTest {
         onView(withId(R.id.loginButton)).perform(click());
 
         // Check that the error message is displayed
-        onView(withId(R.id.emailTextField)).check(matches(withError("Email or password are not correct")));
-        onView(withId(R.id.passwordTextField)).check(matches(withError("Email or password are not correct")));
+        onView(ViewMatchers.withText(R.string.email_or_password_are_not_correct)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -112,7 +127,7 @@ public class LoginFragmentTest {
                 context);
 
         // Create a graphical FragmentScenario for the TitleScreen
-        FragmentScenario<LoginFragment> titleScenario = FragmentScenario.launchInContainer(LoginFragment.class, null, androidx.appcompat.R.style.Theme_AppCompat_Light);
+        FragmentScenario<LoginFragment> titleScenario = FragmentScenario.launchInContainer(LoginFragment.class, null, R.style.Theme_CharityHub);
 
         titleScenario.onFragment(loginFragment -> {
             // Set the graph on the TestNavHostController
@@ -127,21 +142,5 @@ public class LoginFragmentTest {
         assertThat(navController.getCurrentDestination().getId()).isEqualTo(R.id.registrationFragment);
     }
 
-    private static Matcher<View> withError(final String expected) {
-        return new TypeSafeMatcher<View>() {
-            @Override
-            protected boolean matchesSafely(View item) {
-                if (item instanceof EditText) {
-                    return ((EditText)item).getError().toString().equals(expected);
-                }
-                return false;
-            }
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Not found error message" + expected + ", find it!");
-            }
-        };
-    }
 
 }

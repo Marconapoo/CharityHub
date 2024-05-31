@@ -13,9 +13,12 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -129,8 +132,7 @@ public class RegistrationFragment extends Fragment {
                                 Navigation.findNavController(v).navigate(R.id.action_registrationFragment_to_mainActivity);
                                 requireActivity().finish();
                             } else {
-                                emailTextField.setError(getString(R.string.email_or_password_are_not_correct));
-                                passwordTextField.setError(getString(R.string.email_or_password_are_not_correct));
+                                Result.Error error = (Result.Error) result;
                                 userViewModel.setAuthenticationError(true);
                             }
                         });
