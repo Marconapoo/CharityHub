@@ -4,12 +4,12 @@
         android:id="@+id/homeFragment"
         android:enabled="true"
         android:icon="@drawable/home_icon"
-        android:title="Home"/>
+        android:title="@string/home"/>
     <item
         android:id="@+id/accountFragment"
         android:enabled="true"
         android:icon="@drawable/account_icon"
-        android:title="Account"/>
+        android:title="@string/account"/>
 
     <!--
     <item

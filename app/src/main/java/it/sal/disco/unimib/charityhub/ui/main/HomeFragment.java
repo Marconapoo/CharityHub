@@ -83,6 +83,9 @@ public class HomeFragment extends Fragment {
         country = sharedPreferencesUtil.readStringData(
                 Constants.SHARED_PREFERENCES_FILE_NAME, Constants.SHARED_PREFERENCES_COUNTRY_OF_INTEREST);
 
+        if(country == null) {
+            country = "IT";
+        }
         homeViewModel.searchForProjects(Constants.COUNTRY_FILTER + country, null, false, country).observe(this, result -> {
                 if (result.isSuccess()) {
                     homeViewModel.setFirstLoading(false);

@@ -99,6 +99,9 @@ public class AccountFragment extends Fragment {
         Button undoButton = view.findViewById(R.id.undoButton);
         sharedPreferencesUtil = new SharedPreferencesUtil(requireActivity().getApplication());
         currentCountry = sharedPreferencesUtil.readStringData(Constants.SHARED_PREFERENCES_FILE_NAME, Constants.SHARED_PREFERENCES_COUNTRY_OF_INTEREST);
+        if(currentCountry == null) {
+            currentCountry = "IT";
+        }
         firstCountryChange = true;
         countries = new ArrayList<>();
         getCountries();
@@ -107,9 +110,10 @@ public class AccountFragment extends Fragment {
 
         user = userViewModel.getLoggedUser();
 
-        fullName.setText(user.getName());
-        email.setText(user.getEmail());
-
+        if(user != null) {
+            fullName.setText(user.getName());
+            email.setText(user.getEmail());
+        }
         logOutButton.setOnClickListener(v -> userViewModel.logout().observe(getViewLifecycleOwner(), result -> {
             Navigation.findNavController(v).navigate(R.id.action_accountFragment_to_welcomeActivity);
             requireActivity().finish();
