@@ -166,6 +166,13 @@ public class AccountFragment extends Fragment {
                 else {
                     userViewModel.changeUserInformation(new User(user.getName(), user.getEmail(), user.getUid(), newCountry));
                 }
+            } else {
+                countryText.setEnabled(false);
+                circularProgressIndicator.setVisibility(View.GONE);
+                logOutButton.setVisibility(View.VISIBLE);
+                editButton.setVisibility(View.VISIBLE);
+                confirmButton.setVisibility(View.GONE);
+                undoButton.setVisibility(View.GONE);
             }
         });
 

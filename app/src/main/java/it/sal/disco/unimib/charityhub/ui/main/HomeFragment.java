@@ -4,6 +4,10 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,11 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
@@ -32,12 +31,11 @@ import java.util.List;
 import it.sal.disco.unimib.charityhub.R;
 import it.sal.disco.unimib.charityhub.adapter.ProjectAdapter;
 import it.sal.disco.unimib.charityhub.data.repositories.project.ProjectRepository;
-import it.sal.disco.unimib.charityhub.data.source.projects.BaseProjectLocalDataSource;
 import it.sal.disco.unimib.charityhub.data.source.projects.ProjectDataSource;
 import it.sal.disco.unimib.charityhub.data.source.projects.ProjectLocalDataSource;
+import it.sal.disco.unimib.charityhub.model.Result;
 import it.sal.disco.unimib.charityhub.model.projects.Project;
 import it.sal.disco.unimib.charityhub.model.projects.ProjectsApiResponse;
-import it.sal.disco.unimib.charityhub.model.Result;
 import it.sal.disco.unimib.charityhub.model.projects.Theme;
 import it.sal.disco.unimib.charityhub.model.projects.ThemesApiResponse;
 import it.sal.disco.unimib.charityhub.utils.Constants;
@@ -249,10 +247,7 @@ public class HomeFragment extends Fragment {
             homeViewModel.getProjectsByCountry(country);
         }
 
-        if(!projectList.isEmpty()) {
-            Log.w("HOME FRAGMENT", "Ho " + projectList.size());
-        }
-        if(projectList.isEmpty() && homeViewModel.isFirstLoading()) {
+        if(projectList.isEmpty()) {
             circularProgressIndicator.setVisibility(View.VISIBLE);
             homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country, null, true);
         }
@@ -295,13 +290,12 @@ public class HomeFragment extends Fragment {
                         homeViewModel.setLoading(true);
                         circularProgressIndicator.setVisibility(View.VISIBLE);
                         if (currentTheme != null) {
-                            //currentSet = (int) (10 * Math.ceil((double)totalItemCount/10) + 1);
-                            currentSet = (int) (10 * Math.floor((double)totalItemCount/10));
+                            currentSet = (int) (10 * Math.ceil((double)totalItemCount/10));
                             Log.w("HOME FRAGMENT" , "" + currentSet);
                             homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country + "," + Constants.THEME_FILTER + currentTheme.getId(), currentSet, true);
                         }
                         else {
-                            currentSet = (int) (10 * Math.floor((double)totalItemCount/10));
+                            currentSet = (int) (10 * Math.ceil((double)totalItemCount/10));
                             Log.w("HOME FRAGMENT" , "" + currentSet);
                             homeViewModel.searchProjects(Constants.COUNTRY_FILTER + country, currentSet, true);
                         }
