@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:scaleType="centerCrop"
-            android:contentDescription="Image of project" />
+            android:contentDescription="@string/image_of_a_project" />
 
         <TextView
             android:id="@+id/titleDetailTextView"

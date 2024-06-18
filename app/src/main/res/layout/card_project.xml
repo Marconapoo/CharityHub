@@ -14,6 +14,7 @@
 
         <!-- Media -->
         <ImageView
+            android:contentDescription="@string/image_of_a_project"
             android:id="@+id/projectImage"
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -30,7 +31,7 @@
                 android:id="@+id/projectTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Placeholder text"
+                android:text="@string/placeholder_text"
                 android:textAppearance="?attr/textAppearanceTitleMedium" />
 
             <!--
@@ -48,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="Current donation progress"
+                android:text="@string/current_donation_progress"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textStyle="italic" />

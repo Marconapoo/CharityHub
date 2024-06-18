@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="SOLDI"
+            android:text="@string/current_money_amount"
             android:textColor="#087800" />
 
         <TextView
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
-            android:text="QUANTITA" />
+            android:text="@string/total_money_amount" />
     </LinearLayout>
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -70,7 +70,7 @@
         android:layout_marginStart="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="QUANTITA" />
+        android:text="@string/number_of_donations" />
 
     <TextView
         android:id="@+id/moneyRemaining"
@@ -81,7 +81,7 @@
         android:layout_marginEnd="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="QUANTITA" />
+        android:text="@string/money_remaining" />
 
 
     <androidx.recyclerview.widget.RecyclerView

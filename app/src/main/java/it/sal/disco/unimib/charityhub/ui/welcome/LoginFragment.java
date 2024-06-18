@@ -22,7 +22,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import it.sal.disco.unimib.charityhub.R;
-import it.sal.disco.unimib.charityhub.data.repositories.countries.CountryRepository;
 import it.sal.disco.unimib.charityhub.data.repositories.user.UserRepository;
 import it.sal.disco.unimib.charityhub.data.source.projects.ProjectLocalDataSource;
 import it.sal.disco.unimib.charityhub.data.source.user.UserAuthenticationDataSource;
@@ -51,8 +50,7 @@ public class LoginFragment extends Fragment {
         UserDataRemoteDataSource userDataRemoteDataSource = new UserDataRemoteDataSource();
         ProjectLocalDataSource projectLocalDataSource = new ProjectLocalDataSource(requireActivity().getApplicationContext());
         UserRepository userRepository = new UserRepository(userAuthenticationDataSource, userDataRemoteDataSource, projectLocalDataSource);
-        CountryRepository countryRepository = new CountryRepository();
-        userViewModel = new ViewModelProvider(requireActivity(), new UserViewModelFactory(userRepository, countryRepository)).get(UserViewModel.class);
+        userViewModel = new ViewModelProvider(requireActivity(), new UserViewModelFactory(userRepository)).get(UserViewModel.class);
     }
 
     @Override

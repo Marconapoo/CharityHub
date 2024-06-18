@@ -32,4 +32,18 @@
     <string name="please_insert_a_name">Please insert a name</string>
     <string name="home">Home</string>
     <string name="account">Account</string>
+    <string name="current_donation_progress">Current donation progress</string>
+    <string name="placeholder_text">Placeholder text</string>
+    <string name="image_of_a_project">Image of a project</string>
+    <string name="soldi">Soldi</string>
+    <string name="descrizione">Descrizione</string>
+    <string name="change_country_of_interest">Change country of interest</string>
+    <string name="undo_changes">Undo changes</string>
+    <string name="log_out">Log out</string>
+    <string name="confirm_changes">Confirm changes</string>
+    <string name="current_money_amount">Current money amount</string>
+    <string name="total_money_amount">Total money amount</string>
+    <string name="money_remaining">Money remaining</string>
+    <string name="number_of_donations">Number of donations</string>
+    <string name="support_this_project">Support this project</string>
 </resources>

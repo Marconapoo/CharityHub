@@ -27,7 +27,7 @@
             android:layout_marginStart="10dp"
             android:textColor="@color/jasper"
             android:layout_gravity="center"
-            android:text="Soldi" />
+            android:text="@string/soldi" />
 
         <TextView
             android:id="@+id/donationDescription"
@@ -40,7 +40,7 @@
             app:layout_constraintStart_toEndOf="@id/donationAmount"
             android:layout_gravity="center"
             android:layout_marginStart="20dp"
-            android:text="Descrizione" />
+            android:text="@string/descrizione" />
 
     </LinearLayout>
 

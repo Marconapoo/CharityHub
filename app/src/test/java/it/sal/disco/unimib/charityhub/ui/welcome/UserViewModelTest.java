@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import it.sal.disco.unimib.charityhub.data.repositories.countries.CountryRepository;
 import it.sal.disco.unimib.charityhub.data.repositories.user.UserRepository;
 import it.sal.disco.unimib.charityhub.model.Result;
 import it.sal.disco.unimib.charityhub.model.User;
@@ -38,15 +37,13 @@ public class UserViewModelTest {
     @Mock
     UserRepository userRepository;
 
-    @Mock
-    CountryRepository countryRepository;
 
     UserViewModel userViewModel;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        userViewModel = new UserViewModel(userRepository, countryRepository);
+        userViewModel = new UserViewModel(userRepository);
     }
 
     @Test
@@ -107,37 +104,6 @@ public class UserViewModelTest {
         actualLiveData.removeObserver(observer);
     }
 
-    @Test
-    public void testGetCountriesLiveData() {
-        MutableLiveData<Result> expectedLiveData = new MutableLiveData<>();
-        List<Country> countryList = new ArrayList<>();
-        countryList.add(new Country("IT", "Italy"));
-        countryList.add(new Country("FR", "France"));
-
-        Result.CountriesResponseSucccess expectedResult = new Result.CountriesResponseSucccess(countryList);
-        expectedLiveData.setValue(expectedResult);
-        when(countryRepository.getCountriesLiveData()).thenReturn(expectedLiveData);
-
-        MutableLiveData<Result> actualLiveData = userViewModel.getCountriesLiveData();
-
-        Observer<Result> observer =  new Observer<Result>() {
-            @Override
-            public void onChanged(Result result) {
-                Result actualResult =  actualLiveData.getValue();
-                assertNotNull(actualResult);
-                assertTrue(actualResult instanceof Result.CountriesResponseSucccess);
-
-                Result.CountriesResponseSucccess actualResponse = (Result.CountriesResponseSucccess) actualResult;
-                List<Country> actualList = actualResponse.getCountriesResponse();
-                assertEquals(expectedLiveData, actualLiveData);
-                assertEquals(expectedResult.getCountriesResponse(), actualList);
-            }
-        };
-
-        actualLiveData.observeForever(observer);
-        verify(countryRepository).getCountriesLiveData();
-        actualLiveData.removeObserver(observer);
-    }
 
     @Test
     public void testChangeUserCountry() {

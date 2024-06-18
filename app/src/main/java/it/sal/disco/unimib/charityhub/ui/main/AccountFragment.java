@@ -1,6 +1,11 @@
 package it.sal.disco.unimib.charityhub.ui.main;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,27 +13,16 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.TextView;
-
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import it.sal.disco.unimib.charityhub.R;
-import it.sal.disco.unimib.charityhub.data.repositories.countries.CountryRepository;
 import it.sal.disco.unimib.charityhub.data.repositories.user.UserRepository;
 import it.sal.disco.unimib.charityhub.data.source.projects.ProjectLocalDataSource;
 import it.sal.disco.unimib.charityhub.data.source.user.UserAuthenticationDataSource;
@@ -71,8 +65,7 @@ public class AccountFragment extends Fragment {
         UserDataRemoteDataSource userDataRemoteDataSource = new UserDataRemoteDataSource();
         ProjectLocalDataSource projectLocalDataSource = new ProjectLocalDataSource(requireActivity().getApplicationContext());
         UserRepository userRepository = new UserRepository(userAuthenticationDataSource, userDataRemoteDataSource, projectLocalDataSource);
-        CountryRepository countryRepository = new CountryRepository();
-        userViewModel = new ViewModelProvider(requireActivity(), new UserViewModelFactory(userRepository, countryRepository)).get(UserViewModel.class);
+        userViewModel = new ViewModelProvider(requireActivity(), new UserViewModelFactory(userRepository)).get(UserViewModel.class);
     }
 
     @Override

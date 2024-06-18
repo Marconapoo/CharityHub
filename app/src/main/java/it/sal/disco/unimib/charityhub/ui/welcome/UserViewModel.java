@@ -6,7 +6,6 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import it.sal.disco.unimib.charityhub.data.repositories.countries.CountryRepository;
 import it.sal.disco.unimib.charityhub.data.repositories.user.IUserRepository;
 import it.sal.disco.unimib.charityhub.data.repositories.user.UserRepository;
 import it.sal.disco.unimib.charityhub.model.Result;
@@ -18,17 +17,14 @@ public class UserViewModel extends ViewModel {
 
     private MutableLiveData<Result> userLiveData;
 
-    private CountryRepository countryRepository;
-
     private MutableLiveData<Result> countriesLiveData;
     private MutableLiveData<String> userCountry;
 
 
     private boolean authenticationError;
 
-    public UserViewModel(UserRepository userRepository, CountryRepository countryRepository) {
+    public UserViewModel(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.countryRepository = countryRepository;
     }
 
     public MutableLiveData<Result> getUserLiveData(String email, String password, String fullName, String country, boolean isUserRegistered) {
@@ -49,13 +45,6 @@ public class UserViewModel extends ViewModel {
         return userLiveData;
     }
 
-    public MutableLiveData<Result> getCountriesLiveData() {
-        if(countriesLiveData == null) {
-            countriesLiveData = countryRepository.getCountriesLiveData();
-            return countriesLiveData;
-        }
-        return countriesLiveData;
-    }
 
     public boolean isAuthenticationError() {
         return authenticationError;
