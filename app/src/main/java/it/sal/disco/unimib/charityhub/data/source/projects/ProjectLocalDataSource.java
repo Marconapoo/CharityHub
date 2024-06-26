@@ -1,6 +1,5 @@
 package it.sal.disco.unimib.charityhub.data.source.projects;
 
-import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 

@@ -1,7 +1,5 @@
 package it.sal.disco.unimib.charityhub.data.repositories.project;
 
-import android.app.Application;
-import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -13,10 +11,10 @@ import it.sal.disco.unimib.charityhub.data.source.projects.BaseProjectLocalDataS
 import it.sal.disco.unimib.charityhub.data.source.projects.ProjectCallback;
 import it.sal.disco.unimib.charityhub.data.source.projects.ProjectDataSource;
 import it.sal.disco.unimib.charityhub.data.source.projects.ProjectLocalDataSource;
+import it.sal.disco.unimib.charityhub.model.Result;
 import it.sal.disco.unimib.charityhub.model.projects.ImagesApiResponse;
 import it.sal.disco.unimib.charityhub.model.projects.Project;
 import it.sal.disco.unimib.charityhub.model.projects.ProjectsApiResponse;
-import it.sal.disco.unimib.charityhub.model.Result;
 import it.sal.disco.unimib.charityhub.model.projects.ThemesApiResponse;
 
 public class ProjectRepository implements IProjectRepository, ProjectCallback {

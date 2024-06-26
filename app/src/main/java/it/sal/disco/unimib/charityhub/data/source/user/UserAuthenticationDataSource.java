@@ -1,11 +1,7 @@
 package it.sal.disco.unimib.charityhub.data.source.user;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;

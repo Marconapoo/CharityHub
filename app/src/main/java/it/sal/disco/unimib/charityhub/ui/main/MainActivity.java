@@ -1,22 +1,14 @@
 package it.sal.disco.unimib.charityhub.ui.main;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
-
-import java.util.Objects;
 
 import it.sal.disco.unimib.charityhub.R;
 

@@ -3,8 +3,6 @@ package it.sal.disco.unimib.charityhub.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.NonNull;
-
 import java.util.Objects;
 
 public class User implements Parcelable {

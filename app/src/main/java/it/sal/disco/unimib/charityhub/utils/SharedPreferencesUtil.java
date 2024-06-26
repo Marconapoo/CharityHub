@@ -1,6 +1,5 @@
 package it.sal.disco.unimib.charityhub.utils;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 

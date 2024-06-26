@@ -1,16 +1,10 @@
 package it.sal.disco.unimib.charityhub.data.repositories.user;
 
-import android.app.Application;
-import android.content.Context;
-
 import androidx.lifecycle.MutableLiveData;
 
 import it.sal.disco.unimib.charityhub.data.source.projects.BaseProjectLocalDataSource;
-import it.sal.disco.unimib.charityhub.data.source.projects.ProjectLocalDataSource;
 import it.sal.disco.unimib.charityhub.data.source.user.BaseUserAuthenticationDataSource;
 import it.sal.disco.unimib.charityhub.data.source.user.BaseUserDataRemoteDataSource;
-import it.sal.disco.unimib.charityhub.data.source.user.UserAuthenticationDataSource;
-import it.sal.disco.unimib.charityhub.data.source.user.UserDataRemoteDataSource;
 import it.sal.disco.unimib.charityhub.model.Result;
 import it.sal.disco.unimib.charityhub.model.User;
 

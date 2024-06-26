@@ -4,35 +4,22 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static com.google.common.truth.Truth.assertThat;
 
 import android.content.Context;
-import android.view.View;
-import android.widget.EditText;
 
-import androidx.annotation.NonNull;
-import androidx.core.widget.TextViewCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.navigation.Navigation;
 import androidx.navigation.testing.TestNavHostController;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
-import com.google.android.material.textfield.TextInputLayout;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -40,7 +27,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import it.sal.disco.unimib.charityhub.ui.welcome.LoginFragment;
-import it.sal.disco.unimib.charityhub.ui.welcome.RegistrationFragment;
 import it.sal.disco.unimib.charityhub.ui.welcome.WelcomeActivity;
 
 @RunWith(AndroidJUnit4.class)

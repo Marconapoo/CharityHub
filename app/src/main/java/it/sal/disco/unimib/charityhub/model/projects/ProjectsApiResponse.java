@@ -1,7 +1,5 @@
 package it.sal.disco.unimib.charityhub.model.projects;
 
-import androidx.room.Entity;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;

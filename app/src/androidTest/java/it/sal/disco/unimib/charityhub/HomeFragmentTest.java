@@ -1,15 +1,24 @@
 package it.sal.disco.unimib.charityhub;
 
 
-import androidx.annotation.NonNull;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
+import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static com.google.common.truth.Truth.assertThat;
+import static org.hamcrest.Matchers.allOf;
+
+import android.content.Context;
+import android.util.Log;
+import android.view.View;
+
 import androidx.fragment.app.testing.FragmentScenario;
-import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.testing.TestNavHostController;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
@@ -21,6 +30,9 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthSettings;
+
 import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
@@ -28,33 +40,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import it.sal.disco.unimib.charityhub.R;
-import it.sal.disco.unimib.charityhub.ui.main.AccountFragment;
 import it.sal.disco.unimib.charityhub.ui.main.HomeFragment;
 import it.sal.disco.unimib.charityhub.ui.main.MainActivity;
-import it.sal.disco.unimib.charityhub.ui.welcome.LoginFragment;
-
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
-import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.hamcrest.Matchers.allOf;
-
-import android.content.Context;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-
-import com.google.android.material.chip.ChipGroup;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthSettings;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest

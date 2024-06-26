@@ -3,44 +3,29 @@ package it.sal.disco.unimib.charityhub;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-
-import static com.google.android.material.internal.ContextUtils.getActivity;
 import static com.google.common.truth.Truth.assertThat;
-
 import static org.hamcrest.Matchers.anything;
 
 import android.content.Context;
-import android.view.View;
 
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.navigation.Navigation;
 import androidx.navigation.testing.TestNavHostController;
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runner.manipulation.Ordering;
 
-import it.sal.disco.unimib.charityhub.ui.welcome.LoginFragment;
 import it.sal.disco.unimib.charityhub.ui.welcome.RegistrationFragment;
-import it.sal.disco.unimib.charityhub.ui.welcome.WelcomeActivity;
-import it.sal.disco.unimib.charityhub.utils.Constants;
 
 @RunWith(AndroidJUnit4.class)
 public class RegistrationFragmentTest {

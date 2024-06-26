@@ -1,8 +1,5 @@
 package it.sal.disco.unimib.charityhub.ui.welcome;
 
-import android.app.Application;
-import android.content.Context;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 

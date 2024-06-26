@@ -1,14 +1,10 @@
 package it.sal.disco.unimib.charityhub.ui.main;
 
-import android.app.Application;
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import it.sal.disco.unimib.charityhub.data.repositories.project.ProjectRepository;
-import it.sal.disco.unimib.charityhub.ui.welcome.UserViewModel;
 
 public class HomeViewModelFactory implements ViewModelProvider.Factory {
 

@@ -1,13 +1,10 @@
 package it.sal.disco.unimib.charityhub.ui.main;
 
-import android.app.Application;
-import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import it.sal.disco.unimib.charityhub.data.repositories.countries.CountryRepository;
 import it.sal.disco.unimib.charityhub.data.repositories.project.ProjectRepository;
 import it.sal.disco.unimib.charityhub.model.Result;
 import it.sal.disco.unimib.charityhub.model.projects.Theme;

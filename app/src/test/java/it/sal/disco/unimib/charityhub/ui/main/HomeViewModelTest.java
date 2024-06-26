@@ -1,13 +1,13 @@
 package it.sal.disco.unimib.charityhub.ui.main;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import android.content.Context;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
@@ -19,7 +19,6 @@ import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.versioning.AndroidVersions;
 
 import java.util.ArrayList;
 import java.util.List;

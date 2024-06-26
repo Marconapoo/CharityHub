@@ -1,8 +1,9 @@
 package it.sal.disco.unimib.charityhub.utils;
 
 import androidx.room.TypeConverter;
+
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 import it.sal.disco.unimib.charityhub.model.projects.DonationOptions;
 
 public class Converters {
